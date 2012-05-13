@@ -15,7 +15,6 @@
         <p>
             We're moving slow, at least in our wee infancy.
             An email has been sent to our team notifying them of your interest.
-            Please provide your email so we can contact you when your map is ready.
         </p>
         
         <div style="padding:0 0 0 0;">
@@ -25,7 +24,7 @@
                     email_label = 'Email:' if email_value else "Email?"
                     email_submit = 'Update' if email_value else 'Add'
                 ?>
-                <span class="label">${email_label}</span>
+                <span >${email_label}</span>
                 <input type="text" style="text-align:center;" class="text" name="email" value="${email_value}" />
                 <input type="submit" class="submit" value="${email_submit}" />
             </form> 
