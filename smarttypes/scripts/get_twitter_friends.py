@@ -89,7 +89,7 @@ def pull_some_users(user_id):
 
 if __name__ == "__main__":
     postgres_handle = PostgresHandle(smarttypes.connection_string)
-    max_processes = 4
+    max_processes = 8
     i = 0
     for creds in TwitterCredentials.get_all(postgres_handle, order_by='last_root_user_api_query'):
         if i >= max_processes:
