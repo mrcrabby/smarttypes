@@ -31,6 +31,7 @@ def load_user_and_the_people_they_follow(api_handle, user_id, postgres_handle, i
     try:
         api_user = api_handle.get_user(user_id=user_id)
     except TweepError, ex:
+        #handle this one (Got a TweepError: Not found.)
         print "Got a TweepError: %s." % ex
         return None
 
