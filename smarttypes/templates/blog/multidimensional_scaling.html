@@ -16,24 +16,12 @@
 <h2>Multidimensional Scaling (MDS)</h2>
 
 <p>
-<a href="http://www.scribd.com/morgoth12/d/79211249/2-Multidimensional-Scaling">
-	Book on scribd
-</a>
+MDS is dimension reduction geared to our specific goal:
+reducing a similarity matrix to a low-dimensional plain
 </p>
 
 <p>
-Given a set of (dis)similarities of actors (a similarity matrix), 
-find a "good" representation as points in some lower-dimensional space 
-(two-dimensional Euclidean space for our purposes).
-</p>
-
-<p>
-Put simply, we're interested in reducing our similarity matrix to 2 dimensions.
-</p>
-
-<p>
-I won't get into creating our similarity matrix.
-For more on that this, see
+For more on our similarity matrix, see
 <a href="http://faculty.ucr.edu/~hanneman/">Hanneman</a>
 and
 <a href="http://www.unco.edu/sociology/faculty/riddle-mark.html">Riddle's</a>:
@@ -43,10 +31,35 @@ Measures of similarity and structural equivalence
 </p>
 
 <p>
-The essence of MDS is what you'd expect.  
-An objective function that compares the distances in our similarity matrix
-w/ the distances between nodes in our proposed 2d space.
+The essence of MDS is simple:  
+An objective function that compares the explicit distances in our similarity matrix 
+w/ the distances implied in our reduced matrix.
+The goal is to find a reduction that best approximates our original.
 </p>
+
+<p>
+There are a lot of different MDS (and dimension reduction) methods, 
+and new one's being introduced daily it seems. 
+</p>
+
+<p>
+I wanted a method w/ a sound GPU implementation.
+I quickly found, and settled on: 
+<a href="http://www.cs.ubc.ca/labs/imager/tr/2008/glimmer/">
+Glimmer: Multilevel MDS on the GPU
+</a>
+</p>
+
+<p>
+Here are the good people responsible for Glimmer:
+
+<ul>
+<li><a href="http://www.cs.ubc.ca/~sfingram">Stephen Ingram</a></li>
+<li><a href="http://www.cs.ubc.ca/~tmm">Tamara Munzner</a></li>
+<li><a href="http://www.csee.umbc.edu/~olano/">Marc Olano</a></li>
+</ul>
+</p>
+
 
 </body>                                    
 </html>
