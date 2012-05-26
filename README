@@ -5,13 +5,9 @@ About
 
 Smarttypes is an open source library for social network analysis (initially twitter).
 
-We provide automated tools to pull and store social connections and content.  Our scripts pull as much data as they can, while respecting provider rate limits.
+We provide automated tools to pull, store, and analyze social connections and content.  
 
-Data is stored in postgres, and partitioned by year_week.  The db schema is built to scale.
-
-Enough of the boring stuff, our purpose is to explore, highlight, and improve social analysis algos and visualizations.
-
-Please see http://www.smarttypes.org/blog/graph_reduction_linlog_nbody_simulation for info on our first algorithm.
+Our purpose is to build tools that help map our complex social world.
 
 
 ***********************************************************

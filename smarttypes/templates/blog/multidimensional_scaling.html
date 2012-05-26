@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:py="http://genshi.edgewall.org/"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    lang="en">
+
+<xi:include href="../master.html" />      
+<head>
+
+</head>                    
+
+<body>
+
+<h2>Multidimensional Scaling (MDS)</h2>
+
+<p>
+<a href="http://www.scribd.com/morgoth12/d/79211249/2-Multidimensional-Scaling">
+	Book on scribd
+</a>
+</p>
+
+<p>
+Given a set of (dis)similarities of actors (a similarity matrix), 
+find a "good" representation as points in some lower-dimensional space 
+(two-dimensional Euclidean space for our purposes).
+</p>
+
+<p>
+Put simply, we're interested in reducing our similarity matrix to 2 dimensions.
+</p>
+
+<p>
+I won't get into creating our similarity matrix.
+For more on that this, see
+<a href="http://faculty.ucr.edu/~hanneman/">Hanneman</a>
+and
+<a href="http://www.unco.edu/sociology/faculty/riddle-mark.html">Riddle's</a>:
+<a href="http://faculty.ucr.edu/~hanneman/nettext/C13_%20Structural_Equivalence.html">
+Measures of similarity and structural equivalence
+</a>
+</p>
+
+<p>
+The essence of MDS is what you'd expect.  
+An objective function that compares the distances in our similarity matrix
+w/ the distances between nodes in our proposed 2d space.
+</p>
+
+</body>                                    
+</html>
+
