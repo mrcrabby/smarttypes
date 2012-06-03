@@ -20,6 +20,13 @@ MDS is dimension reduction geared to our specific goal:
 reducing a similarity matrix to a low-dimensional plane
 </p>
 
+<blockquote>
+MDS, is a technique for
+dimensionality reduction, where data in a measured high
+dimensional space is mapped into some lower-dimensional target
+space while minimizing spatial distortion.
+</blockquote>
+
 <p>
 For more on our similarity matrix, see
 <a href="http://faculty.ucr.edu/~hanneman/">Hanneman</a>
@@ -44,7 +51,7 @@ and new one's being introduced daily it seems.
 
 <p>
 I wanted a method w/ a sound GPU implementation.
-I quickly found, and settled on: 
+I quickly found: 
 <a href="http://www.cs.ubc.ca/labs/imager/tr/2008/glimmer/">
 Glimmer: Multilevel MDS on the GPU
 </a>
@@ -52,13 +59,26 @@ Glimmer: Multilevel MDS on the GPU
 
 <p>
 Here are the good people responsible for Glimmer:
-
 <ul>
 <li><a href="http://www.cs.ubc.ca/~sfingram">Stephen Ingram</a></li>
 <li><a href="http://www.cs.ubc.ca/~tmm">Tamara Munzner</a></li>
 <li><a href="http://www.csee.umbc.edu/~olano/">Marc Olano</a></li>
 </ul>
 </p>
+
+<p>
+Here's the problem (from the Glimmer README):
+</p>
+
+<blockquote>
+<pre>
+=== 3. GPU Glimmer
+
+3.1.  Building glimmer
+
+	1.  Open the 'glimmer_gpu/gltest.sln' file in Visual Studio
+</pre>
+</blockquote>
 
 
 </body>                                    

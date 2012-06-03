@@ -119,29 +119,13 @@ class GraphReduce(object):
         self.normalize_reduction()
         #self.find_dbscan_groups()
 
-    def reduce_with_particle_filter_simulation():
+    def reduce_with_hitmds():
         """
-        use the following objective function:
-        - produce groups with a lot of link density
+        - Save network to file
+        - Run R package
+        - Parse distance file
+        - Check out the image created
         """
-
-    def generate_objective_score(self):
-        """
-        are goal is to is to find a lot of dense link communities
-
-        we're also interested in the linlog objective:
-
-         - http://www.smarttypes.org/blog/graph_reduction_linlog_nbody_simulation
-
-        need to also look at groups from a high level, related groups 
-        should be close together
-
-        high-level we're interested in link prediction
-        """
-        all_distances_sum = np.sum(self.reduction_distances)
-        connected_distances_sum = 1 #use in_degrees here
-        obj_measure = all_distances_sum - np.log(connected_distances_sum)
-        return obj_measure
 
     def find_dbscan_groups(self, eps=0.42, min_samples=12):
         self.figure_out_reduction_distances()
