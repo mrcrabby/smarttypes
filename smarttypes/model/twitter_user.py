@@ -211,7 +211,7 @@ class TwitterUser(PostgresBaseModel):
     @classmethod
     def get_network(cls, postgres_handle):
         network = {}
-        go_back_this_many_weeks = 10
+        go_back_this_many_weeks = 3
         start_w_this_date = datetime.now() - timedelta(days=go_back_this_many_weeks * 7)
         year_weeknum_strs = time_utils.year_weeknum_strs(start_w_this_date, go_back_this_many_weeks) 
         qry = """
@@ -222,7 +222,9 @@ class TwitterUser(PostgresBaseModel):
         """
         for year_weeknum in year_weeknum_strs:
             print qry % year_weeknum
-            for result in postgres_handle.execute_query(qry % year_weeknum):
+            results = postgres_handle.execute_query(qry % year_weeknum)
+            print 'done w/ query'
+            for result in results:
                 if result['id'] not in network:
                     network[result['id']] = result['following_ids']
         return network
