@@ -212,7 +212,7 @@ class TwitterUser(PostgresBaseModel):
             print 'done w/ query'
             for result in results:
                 if result['id'] not in network:
-                    network[result['id']] = result['following_ids']
+                    network[result['id']] = set(result['following_ids'])
         return network
 
     @classmethod
