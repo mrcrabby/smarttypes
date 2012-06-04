@@ -26,7 +26,6 @@ class PostgresHandle(object):
             cursor_results = cursor.fetchall()
         cursor.close()
 
-        print 'done'
         #if results have two columns with the same name, for
         #example you join two tables that both have id columns
         #this thang will raise an Exception

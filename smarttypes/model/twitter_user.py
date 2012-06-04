@@ -144,21 +144,6 @@ class TwitterUser(PostgresBaseModel):
                 else:
                     tried_to_load_these_ids.append(random_following_id)
 
-    ##############################################
-    ##group related stuff
-    ##############################################
-    def top_groups(self, num_groups=10):
-        from smarttypes.model.twitter_group import TwitterGroup
-        return_list = []
-        i = 0
-        for score, group_id in sorted(self.scores_groups, reverse=True):
-            if i <= num_groups and score > .001:
-                return_list.append((score, TwitterGroup.get_by_index(group_id, self.postgres_handle)))
-            else:
-                break
-            i += 1
-        return return_list
-
     def save_following_ids(self, following_ids):
         pre_params = {
             'postfix': datetime.now().strftime('%Y_%U'),

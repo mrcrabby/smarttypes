@@ -19,4 +19,5 @@ if __name__ == "__main__":
     }
 
     twitter_network = TwitterUser.get_network(postgres_handle)
-    print len(twitter_network)
+
+    graphreduce_utils.make_adjanceny_matrix_file(twitter_network)
