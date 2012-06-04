@@ -30,7 +30,8 @@ Here's how this is broken down:
 def make_adjanceny_matrix_file(network, adjanceny_matrix_file):
     sorted_keys = sorted(network.keys())
     writer = csv.writer(adjanceny_matrix_file)
-    writer.writerow(['user_id'] + sorted_keys)
+    writer.writerow(sorted_keys)
+    counter = 0
     for user in sorted_keys:
         following_list = []
         for maybe_following in sorted_keys:
@@ -38,7 +39,11 @@ def make_adjanceny_matrix_file(network, adjanceny_matrix_file):
         		following_list.append(1)
         	else:
         		following_list.append(0)
-        writer.writerow([user] + following_list)
+        writer.writerow(following_list)
+        counter += 1
+        if counter % 1000 == 0:
+        	print counter
+
 
 def make_similarity_matrix_file(adjanceny_matrix_file):
     """"""
