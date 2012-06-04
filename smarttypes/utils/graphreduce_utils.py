@@ -29,6 +29,7 @@ Here's how this is broken down:
 
 def make_adjanceny_matrix_file(network, adjanceny_matrix_file):
     sorted_keys = sorted(network.keys())
+    number_of_users = len(sorted_keys)
     writer = csv.writer(adjanceny_matrix_file)
     writer.writerow(sorted_keys)
     counter = 0
@@ -42,7 +43,7 @@ def make_adjanceny_matrix_file(network, adjanceny_matrix_file):
         writer.writerow(following_list)
         counter += 1
         if counter % 1000 == 0:
-        	print counter
+        	print '%s of %s users processed' % (counter, number_of_users)
 
 
 def make_similarity_matrix_file(adjanceny_matrix_file):
