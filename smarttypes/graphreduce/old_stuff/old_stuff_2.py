@@ -6,7 +6,6 @@ from scipy.spatial import distance
 from sklearn.cluster import DBSCAN, MeanShift, estimate_bandwidth
 import networkx
 import ctypes
-EPS = 1e-6
 
 
 class GraphReduce(object):

@@ -1,13 +1,12 @@
 
-
 from smarttypes.model.postgres_base_model import PostgresBaseModel
-# from smarttypes import model
 from types import NoneType
 from datetime import datetime, timedelta
 import numpy, random, heapq
 import collections, csv, sys
 from copy import copy
 import codecs
+from smarttypes.utils import time_utils
 
 
 class TwitterUser(PostgresBaseModel):
@@ -119,14 +118,13 @@ class TwitterUser(PostgresBaseModel):
     def get_random_followie_id(self, not_in_this_list=[], attempts=0):
         random_index = random.randrange(0, len(self.following_ids))
         random_id = self.following_ids[random_index]
-        if random_id in not_in_this_list and attempts < sys.getrecursionlimit():
+        if random_id in not_in_this_list and attempts < (sys.getrecursionlimit() - 10):
             attempts += 1
             return self.get_random_followie_id(not_in_this_list, attempts)
         else:
             return random_id
 
     def get_id_of_someone_in_my_network_to_load(self):
-        #get_id_of_someone_in_my_network_to_load
         """
         'loading' a user means storing all the edges to the people they follow (followies)
         """
@@ -134,11 +132,10 @@ class TwitterUser(PostgresBaseModel):
         following_and_expired_list = self.following_and_expired_ids
         if following_and_expired_list:
             return following_and_expired_list[0]
-
         #the people self follows follows
         else:
             tried_to_load_these_ids = []
-            for i in range(200):  # give up at some point (this could be anything)
+            for i in range(150):  # give up at some point (this could be anything)
                 random_following_id = self.get_random_followie_id(tried_to_load_these_ids)
                 random_following = TwitterUser.get_by_id(random_following_id, self.postgres_handle)
                 random_following_following_and_expired_list = random_following.following_and_expired_ids
@@ -146,23 +143,6 @@ class TwitterUser(PostgresBaseModel):
                     return random_following_following_and_expired_list[0]
                 else:
                     tried_to_load_these_ids.append(random_following_id)
-
-    def get_graph_info(self, distance=100, min_followers=60):
-        unique_followers = set([self.id])
-        follower_followies_map = {self.id: set(self.following_ids)}
-        for following in self.following:
-            if following.followers_count < min_followers:
-                continue
-            if following.following_ids and following.id not in unique_followers:
-                unique_followers.add(following.id)
-                follower_followies_map[following.id] = set(following.following_ids)
-            for following_following in following.following[:distance]:
-                if following_following.followers_count < min_followers:
-                    continue
-                if following_following.following_ids and following_following.id not in unique_followers:
-                    unique_followers.add(following_following.id)
-                    follower_followies_map[following_following.id] = set(following_following.following_ids)
-        return follower_followies_map
 
     ##############################################
     ##group related stuff
@@ -227,6 +207,18 @@ class TwitterUser(PostgresBaseModel):
             return results[0]
         else:
             return None
+
+    @classmethod
+    def get_network(cls, postgres_handle):
+        #create a list of weeks
+        go_back_this_many_weeks = 10
+        start_w_this_date = datetime.now() - timedelta(days=go_back_this_many_weeks * 7)
+        year_weeknum_strs = time_utils.year_weeknum_strs(start_w_this_date, go_back_this_many_weeks) 
+        qry = """
+        select
+        from 
+        """
+
 
     @classmethod
     def mk_following_following_csv(cls, screen_name, file_like, postgres_handle):
