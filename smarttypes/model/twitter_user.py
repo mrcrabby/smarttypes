@@ -203,6 +203,7 @@ class TwitterUser(PostgresBaseModel):
         select u.id, f.following_ids
         from twitter_user u
         join twitter_user_following_%s f on u.id = f.twitter_user_id
+        where array_length(f.following_ids, 1) > 50;
         ;
         """
         for year_weeknum in year_weeknum_strs:
