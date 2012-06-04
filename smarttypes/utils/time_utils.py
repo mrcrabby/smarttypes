@@ -14,6 +14,7 @@ def year_weeknum_strs(start_w_this_dt, number_of_weeks):
     for i in range(number_of_weeks):
         new_week = start_w_this_dt + (i * timedelta(days=7))
         return_list.append(new_week.strftime('%Y_%U'))
+    return_list.reverse()
     return return_list
     
 

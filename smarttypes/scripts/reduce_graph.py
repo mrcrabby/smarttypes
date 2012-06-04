@@ -19,4 +19,4 @@ if __name__ == "__main__":
     }
 
     twitter_network = TwitterUser.get_network(postgres_handle)
-
+    print len(twitter_network)
