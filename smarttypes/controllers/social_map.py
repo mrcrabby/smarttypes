@@ -4,9 +4,9 @@
 # from genshi.core import Markup
 # from genshi import HTML
 import smarttypes
-from smarttypes.model.twitter_group import TwitterGroup
+#from smarttypes.model.twitter_group import TwitterGroup
 from smarttypes.model.twitter_user import TwitterUser
-from smarttypes.model.twitter_reduction import TwitterReduction
+#from smarttypes.model.twitter_reduction import TwitterReduction
 # from smarttypes.model.twitter_credentials import TwitterCredentials
 # import numpy as np
 

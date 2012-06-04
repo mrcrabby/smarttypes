@@ -21,11 +21,13 @@ mod_wsgi loads wsgi.py
 wsgi.py imports this, which should import everything else
 """
 
+import os
 import utils  # need this
 import model  # need this
 import controllers  # need this
 from config import DB_USER, DB_PASSWORD
 connection_string = "host=localhost dbname='smarttypes' user='%s' password='%s'" % (DB_USER, DB_PASSWORD)
+root_dir = os.path.dirname(os.path.abspath(__file__))
 
 site_name = 'SmartTypes'
 site_mantra = 'A tool for social discovery.'

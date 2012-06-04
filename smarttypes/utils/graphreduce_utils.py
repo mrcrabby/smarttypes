@@ -1,5 +1,5 @@
 
-import os
+import os, csv
 from collections import defaultdict
 import numpy as np
 from scipy.spatial import distance
@@ -27,9 +27,18 @@ Here's how this is broken down:
   for polymaps display
 """
 
-def make_adjanceny_matrix_file(network):
+def make_adjanceny_matrix_file(network, adjanceny_matrix_file):
     sorted_keys = sorted(network.keys())
-    
+    writer = csv.writer(adjanceny_matrix_file)
+    writer.writerow(['user_id'] + sorted_keys)
+    for user in sorted_keys:
+        following_list = []
+        for maybe_following in sorted_keys:
+        	if maybe_following in network[user]:
+        		following_list.append(1)
+        	else:
+        		following_list.append(0)
+        writer.writerow([user] + following_list)
 
 def make_similarity_matrix_file(adjanceny_matrix_file):
     """"""
