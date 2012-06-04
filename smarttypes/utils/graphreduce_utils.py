@@ -28,7 +28,8 @@ Here's how this is broken down:
 """
 
 def make_adjanceny_matrix_file(network):
-    """"""
+    sorted_keys = sorted(network.keys())
+    
 
 def make_similarity_matrix_file(adjanceny_matrix_file):
     """"""
