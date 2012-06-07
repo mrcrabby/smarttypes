@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:py="http://genshi.edgewall.org/"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    lang="en">
+
+<xi:include href="../master.html" />      
+<head>
+
+</head>                    
+<body>
+
+<h2>Similarity Measures</h2>
+
+<pre>
+Local measures
+- Number of Common Neighbors
+
+- Jaccard’s coefficient: not biased toward higher degree nodes or popular nodes
+  + igraph -- Graph.similarity_jaccard()
+
+- Adamic / Adar: weighting rarer neighbors more heavily
+  + igraph -- Graph.similarity_inverse_log_weighted()
+</pre>
+
+
+
+</body>                                    
+</html>
+

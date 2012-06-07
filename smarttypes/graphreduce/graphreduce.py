@@ -11,20 +11,27 @@ We want to produce a bunch of tiled images to use w/
 http://polymaps.org/
 
 Here's how this is broken down:
-- Step 1: Pull network info from the db, and write to an 
-  adjanceny_matrix_file
+- Step 1: Pull network into memory, looks like this:
 
-- Step 2: Use adjanceny_matrix_file to make a 
-  similarity_matrix_file
+  {'id':set['id', 'id'], ...}
 
-- Step 3: Use similarity_matrix_file to make a reduction_file
+- Step 2: Randomly pick landmarks for Landmark MDS
 
-- Step 4: Compare similarity_to_reduction 
+- Step 3: Use custom similarity measure (like Jaccard's) to compare every
+  node to every landmark, results in len(network) x len(landmarks)
+  matrix
+
+- Step 4: Landmark MDS, and print the difference between 2d reduction
+  and similarity meaures
 
 - Step 5: Load reduction into postgis
 
-- Step 6: Use reduction info in postgis to make tiled images 
-  for polymaps display
+- Step 7: Community detection
+
+- Step 8: Pagerank within communities
+
+- Step 7: Use reduction, community, and pagerank to make nice 
+  tiled images w/ ggplot2 
 """
 
 def make_adjanceny_matrix_file(network, adjanceny_matrix_file):
