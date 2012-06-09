@@ -21,8 +21,8 @@ Here's how this is broken down:
   node to every landmark, results in len(network) x len(landmarks)
   matrix
 
-- Step 4: Landmark MDS, and print the difference between 2d reduction
-  and similarity meaures
+- Step 4: Do landmark MDS, and print the difference between 2d reduction
+  and similarity matrix
 
 - Step 5: Load reduction into postgis
 

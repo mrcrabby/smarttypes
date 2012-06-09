@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:py="http://genshi.edgewall.org/"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    lang="en">
+
+<xi:include href="../master.html" />      
+<head>
+
+</head>                    
+<body>
+
+<h2>Graph based similarity</h2>
+
+<pre>
+Local measures
+- Number of Common Neighbors
+
+- Jaccard’s coefficient: not biased toward higher degree nodes or popular nodes
+  + igraph -- Graph.similarity_jaccard()
+
+- Adamic / Adar: weighting rarer neighbors more heavily
+  + igraph -- Graph.similarity_inverse_log_weighted()
+</pre>
+
+<pre>
+GLobal measures
+- Katz
+- Rooted pagerank
+</pre>
+
+<pre>
+http://social.cs.uiuc.edu/class/cs591kgk/friendsadamic.pdf
+
+The weighting scheme we use is the inverse log frequency of
+their occurrence. For example, if only two people mention an item, 
+then the weight of that item is 1/log(2) or 1.4, if five people mention 
+the item, then its weight drops down to 1/log(5) or 0.62.
+</pre>
+
+<pre>
+following (out), followers (in)
+
+following_weight = .5
+followers_weight = 1 - following_weight
+
+def similarity(a,b):
+	adamic_score = 0
+	jaccard_score = 0
+
+	out_intersect = following_intersect(a,b)
+	in_intersect = followers_intersect(a,b)
+
+    for x in out_intersect:
+    	adamic_score += (1/log(len(x.followers))) * following_weight
+
+    for x in in_intersect:
+    	adamic_score += (1/log(len(x.following))) * followers_weight
+
+    jaccard_score += (len(out_intersect) / len(set(a.following + b.following))) * following_weight
+    jaccard_score += (len(in_intersect) / len(set(a.followers + b.followers))) * followers_weight
+
+    #normalize and weight the two scores
+
+</pre>
+
+
+</body>                                    
+</html>
+
