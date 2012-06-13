@@ -34,21 +34,30 @@ def get_signin_w_twitter_url(postgres_handle):
 def complete_signin(request_key, verifier, postgres_handle):
     auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
     session = TwitterSession.get_by_request_key(request_key, postgres_handle)
-    auth.set_request_token(request_key, session.request_secret)
-    try:
+    if session.access_key:
+        #this happens if we get multiple same exact responses from twitter
+        #perhaps crazy clicking or back / forward browsing 
+        credentials = TwitterCredentials.get_by_access_key(session.access_key, postgres_handle)
+    else:
+        auth.set_request_token(request_key, session.request_secret)
         auth.get_access_token(verifier)
-    except:
-        return None
-    # may have signed up already
-    credentials = TwitterCredentials.get_by_access_key(auth.access_token.key, postgres_handle)
-    if not credentials:
-        credentials = TwitterCredentials.create(auth.access_token.key, auth.access_token.secret, postgres_handle)
-    session.access_key = credentials.access_key
+        # may have signed up already
+        credentials = TwitterCredentials.get_by_access_key(auth.access_token.key, postgres_handle)
+        if not credentials:
+            credentials = TwitterCredentials.create(auth.access_token.key, auth.access_token.secret, postgres_handle)
+        session.access_key = credentials.access_key
     if not credentials.twitter_user:
+        #probably don't have the user in our db yet
         user = TwitterUser.upsert_from_api_user(credentials.api_handle.me(), postgres_handle)
         credentials.twitter_id = user.id
         credentials.save()
+
+    #email
     screen_name = credentials.twitter_user.screen_name
     email_utils.send_email('signup@smarttypes.org', ['timmyt@smarttypes.org'],
                            '%s signed up' % screen_name, 'smarttypes signup!')
+
     return session.save()
+
+
+

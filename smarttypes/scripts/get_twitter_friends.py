@@ -11,10 +11,7 @@ import tweepy
 from tweepy import TweepError
 
 MAX_FOLLOWING_COUNT = TwitterUser.MAX_FOLLOWING_COUNT
-AVG_PEOPLE_RETURNED_PER_QUERY = 80
 REMAINING_HITS_THRESHOLD = 10
-if (MAX_FOLLOWING_COUNT / AVG_PEOPLE_RETURNED_PER_QUERY) > REMAINING_HITS_THRESHOLD:
-    raise Exception("get_twitter_friends script error: the code assumes this wont happen.")
 
 
 def continue_or_exit(api_handle, put_this_in_the_error_message):
@@ -72,11 +69,11 @@ def load_user_and_the_people_they_follow(api_handle, user_id, postgres_handle, i
     return model_user
 
 
-def pull_some_users(user_id):
+def pull_some_users(creds_user_id):
     postgres_handle = PostgresHandle(smarttypes.connection_string)
-    creds_user = TwitterUser.get_by_id(user_id, postgres_handle)
+    creds_user = TwitterUser.get_by_id(creds_user_id, postgres_handle)
     if not creds_user:
-        raise Exception('User ID: %s not in our DB!' % user_id)
+        raise Exception('Creds User ID: %s not in our DB!' % creds_user_id)
     if not creds_user.credentials:
         raise Exception('%s does not have api credentials!' % creds_user.screen_name)
     api_handle = creds_user.credentials.api_handle
@@ -89,6 +86,7 @@ def pull_some_users(user_id):
         #load_this_user_id = None
     print "Finshed loading all related users for %s!" % root_user.screen_name
 
+
 if __name__ == "__main__":
     postgres_handle = PostgresHandle(smarttypes.connection_string)
     max_processes = 8
@@ -96,9 +94,16 @@ if __name__ == "__main__":
     for creds in TwitterCredentials.get_all(postgres_handle, order_by='last_root_user_api_query'):
         if i >= max_processes:
             break
-        root_user = creds.root_user
-        if root_user:
-            print "Starting a process to load root user: %s" % root_user.screen_name
+
+        #this can happen because this script is run on a different db than the webserver
+        #this is only a temp problem because i'm poor
+        #see scripts/check_for_db_updates.py - root_user code for a better fix to this
+        if creds.twitter_id and not creds.twitter_user:
+            TwitterUser.upsert_from_api_user(creds.api_handle.me(), postgres_handle)
+            postgres_handle.connection.commit()
+
+        if creds.root_user_id:
+            print "Starting a process to load root user: %s" % creds.root_user_id
             creds.last_root_user_api_query = datetime.now()
             creds.save()
             postgres_handle.connection.commit()
