@@ -12,7 +12,7 @@ from tweepy import TweepError
 
 MAX_FOLLOWING_COUNT = TwitterUser.MAX_FOLLOWING_COUNT
 AVG_PEOPLE_RETURNED_PER_QUERY = 80
-REMAINING_HITS_THRESHOLD = 20
+REMAINING_HITS_THRESHOLD = 10
 if (MAX_FOLLOWING_COUNT / AVG_PEOPLE_RETURNED_PER_QUERY) > REMAINING_HITS_THRESHOLD:
     raise Exception("get_twitter_friends script error: the code assumes this wont happen.")
 
