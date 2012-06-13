@@ -80,7 +80,7 @@ def pull_some_users(user_id):
     if not creds_user.credentials:
         raise Exception('%s does not have api credentials!' % creds_user.screen_name)
     api_handle = creds_user.credentials.api_handle
-    root_user = load_user_and_the_people_they_follow(api_handle, creds_user.root_user_id, 
+    root_user = load_user_and_the_people_they_follow(api_handle, creds_user.credentials.root_user_id, 
         postgres_handle, is_root_user=True)
     load_this_user_id = root_user.get_id_of_someone_in_my_network_to_load()
     while load_this_user_id:
