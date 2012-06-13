@@ -16,4 +16,5 @@ local_postgres_handle = PostgresHandle(smarttypes.connection_string)
 for creds in TwitterCredentials.get_all(remote_postgres_handle):
     creds.postgres_handle = local_postgres_handle
     creds.save()
+    local_postgres_handle.connection.commit()
 
