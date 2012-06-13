@@ -41,10 +41,8 @@ class TwitterUser(PostgresBaseModel):
     def credentials(self):
         from smarttypes.model.twitter_credentials import TwitterCredentials
         creds = TwitterCredentials.get_by_twitter_id(self.id, self.postgres_handle)
-        if not creds:
-            creds = TwitterCredentials.get_by_root_user_id(self.id, self.postgres_handle)
         return creds
-
+        
     def set_graph_time_context(self, at_this_datetime):
         self._at_this_datetime = at_this_datetime
 

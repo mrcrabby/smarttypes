@@ -35,7 +35,10 @@ def complete_signin(request_key, verifier, postgres_handle):
     auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
     session = TwitterSession.get_by_request_key(request_key, postgres_handle)
     auth.set_request_token(request_key, session.request_secret)
-    auth.get_access_token(verifier)
+    try:
+        auth.get_access_token(verifier)
+    except:
+        return None
     # may have signed up already
     credentials = TwitterCredentials.get_by_access_key(auth.access_token.key, postgres_handle)
     if not credentials:

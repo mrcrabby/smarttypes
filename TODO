@@ -1,0 +1,26 @@
+
+* Write a script to pull user updates from cottie:
+  - New auth users
+  - Updated data collection preferences
+
+* Fix signup bug:
+
+Traceback (most recent call last):
+ File "/home/timmyt/projects/smarttypes/smarttypes/wsgi.py", line 48, in application
+   response_dict = controller(request, session, postgres_handle)
+ File "/home/timmyt/projects/smarttypes/smarttypes/controllers/__init__.py", line 23, in my_account
+   req.params['oauth_verifier'], postgres_handle)
+ File "/home/timmyt/projects/smarttypes/smarttypes/utils/twitter_api_utils.py", line 38, in complete_signin
+   auth.get_access_token(verifier)
+ File "build/bdist.linux-i686/egg/tweepy/auth.py", line 126, in get_access_token
+   raise TweepError(e)
+TweepError: HTTP Error 401: Unauthorized
+
+* Abstract collection 
+  - First i need to approve the user (good chance to talk to them on twitter)
+  - Spread collection across accounts
+
+* New collection management ui
+  - Configure collection across different accounts
+  - Show collection stats
+

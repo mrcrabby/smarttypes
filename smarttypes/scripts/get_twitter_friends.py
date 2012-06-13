@@ -74,13 +74,14 @@ def load_user_and_the_people_they_follow(api_handle, user_id, postgres_handle, i
 
 def pull_some_users(user_id):
     postgres_handle = PostgresHandle(smarttypes.connection_string)
-    root_user = TwitterUser.get_by_id(user_id, postgres_handle)
-    if not root_user:
+    creds_user = TwitterUser.get_by_id(user_id, postgres_handle)
+    if not creds_user:
         raise Exception('User ID: %s not in our DB!' % user_id)
-    if not root_user.credentials:
-        raise Exception('%s does not have api credentials!' % root_user.screen_name)
-    api_handle = root_user.credentials.api_handle
-    root_user = load_user_and_the_people_they_follow(api_handle, root_user.id, postgres_handle, is_root_user=True)
+    if not creds_user.credentials:
+        raise Exception('%s does not have api credentials!' % creds_user.screen_name)
+    api_handle = creds_user.credentials.api_handle
+    root_user = load_user_and_the_people_they_follow(api_handle, creds_user.root_user_id, 
+        postgres_handle, is_root_user=True)
     load_this_user_id = root_user.get_id_of_someone_in_my_network_to_load()
     while load_this_user_id:
         load_user_and_the_people_they_follow(api_handle, load_this_user_id, postgres_handle)
@@ -101,6 +102,6 @@ if __name__ == "__main__":
             creds.last_root_user_api_query = datetime.now()
             creds.save()
             postgres_handle.connection.commit()
-            p = Process(target=pull_some_users, args=(root_user.id,))
+            p = Process(target=pull_some_users, args=(creds.twitter_id,))
             p.start()
             i += 1
