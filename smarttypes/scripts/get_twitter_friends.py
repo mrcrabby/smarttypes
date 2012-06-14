@@ -41,7 +41,7 @@ def load_user_and_the_people_they_follow(api_handle, user_id, postgres_handle, i
 
     print "Loading the people %s follows." % screen_name
     try:
-        following_ids = api_handle.friends_ids
+        following_ids = api_handle.friends_ids()
         following_ids = [str(x) for x in following_ids]
     except TweepError, ex:
         print "Got a TweepError: %s." % ex
