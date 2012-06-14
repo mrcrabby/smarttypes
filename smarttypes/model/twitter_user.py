@@ -33,7 +33,6 @@ class TwitterUser(PostgresBaseModel):
         #'following_ids':[],
     }
 
-    MAX_FOLLOWING_COUNT = 1000
     RELOAD_FOLLOWING_THRESHOLD = timedelta(days=14)
     TRY_AGAIN_AFTER_FAILURE_THRESHOLD = timedelta(days=31)
 
@@ -109,7 +108,6 @@ class TwitterUser(PostgresBaseModel):
            (datetime.now() - self.last_loaded_following_ids) < self.RELOAD_FOLLOWING_THRESHOLD:
             expired = False
         return expired and \
-               self.following_count <= self.MAX_FOLLOWING_COUNT and \
                not self.caused_an_error and \
                not self.protected
 

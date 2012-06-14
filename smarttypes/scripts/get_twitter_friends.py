@@ -10,7 +10,6 @@ from datetime import datetime
 import tweepy
 from tweepy import TweepError
 
-MAX_FOLLOWING_COUNT = TwitterUser.MAX_FOLLOWING_COUNT
 REMAINING_HITS_THRESHOLD = 10
 
 
@@ -40,17 +39,10 @@ def load_user_and_the_people_they_follow(api_handle, user_id, postgres_handle, i
         print "\t %s is protected." % screen_name
         return model_user
 
-    if not is_root_user and api_user.friends_count > MAX_FOLLOWING_COUNT:
-        print "\t %s follows too many people, %s." % (screen_name, api_user.friends_count)
-        model_user.save_following_ids([])
-        postgres_handle.connection.commit()
-        return model_user
-
     print "Loading the people %s follows." % screen_name
-    following_ids = []
-    api_following_list = []
     try:
-        api_following_list = list(tweepy.Cursor(api_handle.friends, screen_name).items())
+        following_ids = api_handle.friends_ids
+        following_ids = [str(x) for x in following_ids]
     except TweepError, ex:
         print "Got a TweepError: %s." % ex
         if str(ex) == "Not authorized":
@@ -59,11 +51,6 @@ def load_user_and_the_people_they_follow(api_handle, user_id, postgres_handle, i
             model_user.save()
             postgres_handle.connection.commit()
             return model_user
-
-    for api_following in api_following_list:
-        if api_following.protected:
-            continue
-        following_ids.append(api_following.id_str)
     model_user.save_following_ids(following_ids)
     postgres_handle.connection.commit()
     return model_user
