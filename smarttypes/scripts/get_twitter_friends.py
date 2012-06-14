@@ -90,8 +90,13 @@ if __name__ == "__main__":
             TwitterUser.upsert_from_api_user(creds.api_handle.me(), postgres_handle)
             postgres_handle.connection.commit()
 
+        if creds.root_user_id and not creds.root_user:
+            root_user = creds.api_handle.get_user(user_id=creds.root_user_id)
+            TwitterUser.upsert_from_api_user(root_user, postgres_handle)
+            postgres_handle.connection.commit()
+
         if creds.root_user_id:
-            print "Starting a process to load root user: %s" % creds.root_user_id
+            print "Starting a process to load root user: %s" % creds.root_user.screen_name
             creds.last_root_user_api_query = datetime.now()
             creds.save()
             postgres_handle.connection.commit()

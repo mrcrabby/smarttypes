@@ -114,7 +114,7 @@ class TwitterUser(PostgresBaseModel):
     def get_random_followie_id(self, not_in_this_list=[], attempts=0):
         random_index = random.randrange(0, len(self.following_ids))
         random_id = self.following_ids[random_index]
-        if random_id in not_in_this_list and attempts < (sys.getrecursionlimit() - 10):
+        if random_id in not_in_this_list and attempts < 500:
             attempts += 1
             return self.get_random_followie_id(not_in_this_list, attempts)
         else:
