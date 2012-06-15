@@ -36,5 +36,5 @@ site_description = """SmartTypes is an open lab for social network analysis (ini
 
 We provide free, automated tools to pull and store social connections and content.
 
-Our goal (kinda like old 'geographic' cartographers) is to map of our 'social' world."""
+Our goal (kinda like geographic cartographers of old) is to map of our social world."""
 site_description = site_description.strip()
