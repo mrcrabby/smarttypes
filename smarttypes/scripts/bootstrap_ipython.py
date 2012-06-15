@@ -12,9 +12,7 @@ from smarttypes.model.twitter_user import TwitterUser
 from smarttypes.model.twitter_credentials import TwitterCredentials
 
 model_user = TwitterUser.by_screen_name('SmartTypes', postgres_handle)
-api_handle = model_user.credentials.api_handle
-api_user = api_handle.get_user(screen_name='SmartTypes')
+# api_handle = model_user.credentials.api_handle
+# api_user = api_handle.get_user(screen_name='SmartTypes')
 
-tweepy.Cursor(api_handle.friends, screen_name)
 
-#print os.path.dirname(os.path.abspath(__file__))

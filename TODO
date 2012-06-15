@@ -1,26 +1,15 @@
 
+fix problem related to 'orphaned last_loaded_following_ids'
+ - throw delete trigger ??
+ - just don't delete shit ??
 
-Traceback (most recent call last):
-  File "/usr/lib/python2.7/multiprocessing/process.py", line 258, in _bootstrap
-    self.run()
-  File "/usr/lib/python2.7/multiprocessing/process.py", line 114, in run
-    self._target(*self._args, **self._kwargs)
-  File "get_twitter_friends.py", line 85, in pull_some_users
-    load_this_user_id = root_user.get_id_of_someone_in_my_network_to_load()
-  File "/home/timmyt/projects/smarttypes/smarttypes/model/twitter_user.py", line 137, in get_id_of_someone_in_my_network_to_load
-    random_following_id = self.get_random_followie_id(tried_to_load_these_ids)
-  File "/home/timmyt/projects/smarttypes/smarttypes/model/twitter_user.py", line 117, in get_random_followie_id
-    random_index = random.randrange(0, len(self.following_ids))
-  File "/usr/lib/python2.7/random.py", line 217, in randrange
-    raise ValueError, "empty range for randrange() (%d,%d, %d)" % (istart, istop, width)
-ValueError: empty range for randrange() (0,0, 0)
+backup db
 
+write more tests
 
-* Abstract collection 
-  - First i need to approve the user (good chance to talk to them on twitter)
-  - Spread collection across accounts
+simple ui to configure collection
 
-* New collection management ui
-  - Configure collection across different accounts
-  - Show collection stats
+show collection stats 
+ - can drill in to get details (nice way of making sure shit's right)
+
 

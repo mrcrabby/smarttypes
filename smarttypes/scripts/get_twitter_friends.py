@@ -42,8 +42,10 @@ def load_user_and_the_people_they_follow(api_handle, user_id, postgres_handle, i
     following_ids = []
     print "Loading the people %s follows." % screen_name
     try:
-        following_ids = api_handle.friends_ids()
-        following_ids = [str(x) for x in following_ids]
+        max_pages = 5 if is_root_user else 1
+        following_id_pages = tweepy.Cursor(api_handle.friends_ids, user_id=user_id).pages(max_pages)
+        for following_ids_page in following_id_pages:
+            following_ids += [str(x) for x in following_ids_page]
     except TweepError, ex:
         print "Got a TweepError: %s." % ex
         if str(ex) == "Not authorized":
