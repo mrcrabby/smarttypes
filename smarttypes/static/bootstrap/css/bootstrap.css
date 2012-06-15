@@ -1,3 +1,5 @@
+
+
 /*!
  * Bootstrap v2.0.2
  *
@@ -7,6 +9,12 @@
  *
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
+
+.header_underline{ text-decoration:underline; }
+
+
+/*---------------------------------------------------------------------*/
+
 .clearfix {
   *zoom: 1;
 }

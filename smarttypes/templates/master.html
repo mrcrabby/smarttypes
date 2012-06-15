@@ -39,17 +39,17 @@
               Explore
             </a>
           </li>-->
-          <li class="${'active' if active_tab == 'blog' else ''}">
+          <li class="${'header_underline' if active_tab == 'blog' else ''}">
             <a href="/blog">
               Read 
             </a>
           </li>
-          <li class="${'active' if active_tab == 'contact' else ''}">
+          <li class="${'header_underline' if active_tab == 'contact' else ''}">
             <a href="/contact">
               Contact
             </a>
           </li>
-          <li py:if="not logged_in_user" class="${'active' if active_tab == 'about' else 'sign_in'}">
+          <li py:if="not logged_in_user" >
             <a href="/sign_in">
               Sign in w/ twitter
               <!--This is causing a spacing issue
@@ -57,7 +57,7 @@
               -->
             </a>
           </li>
-          <li py:if="logged_in_user" class="${'active' if active_tab == 'my_account' else ''}">
+          <li py:if="logged_in_user" class="${'header_underline' if active_tab == 'my_account' else ''}">
             <a href="/my_account">
               ${logged_in_user.screen_name}
               <!--<img src="/static/images/twitter_16_gray.png" style="border:none;padding:0;" alt="twitter"/>-->
