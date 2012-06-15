@@ -530,7 +530,6 @@ pre {
   font-family: Menlo, Monaco, "Courier New", monospace;
   font-size: 15px;
   color: #333333;
-  overflow: auto;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
