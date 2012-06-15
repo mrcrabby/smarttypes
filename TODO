@@ -1,15 +1,14 @@
 
-fix problem related to 'orphaned last_loaded_following_ids'
- - throw delete trigger ??
- - just don't delete shit ??
+backup db -- get another hard-drive
 
-backup db
+write blog posts
 
-write more tests
+write tests as i need them
 
 simple ui to configure collection
 
-show collection stats 
- - can drill in to get details (nice way of making sure shit's right)
+show collection stats (nice way of making sure shit's right)
 
-
+fix problem related to 'orphaned last_loaded_following_ids'
+ - delete trigger, throw exception ??
+ - just don't delete shit ??
