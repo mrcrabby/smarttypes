@@ -39,12 +39,12 @@
               Explore
             </a>
           </li>-->
-          <li class="${'header_bold' if active_tab == 'blog' else ''}">
+          <li class="${'active' if active_tab == 'blog' else ''}">
             <a href="/blog">
               Read 
             </a>
           </li>
-          <li class="${'header_bold' if active_tab == 'contact' else ''}">
+          <li class="${'active' if active_tab == 'contact' else ''}">
             <a href="/contact">
               Contact
             </a>
@@ -57,7 +57,7 @@
               -->
             </a>
           </li>
-          <li py:if="logged_in_user" class="${'header_bold' if active_tab == 'my_account' else ''}">
+          <li py:if="logged_in_user" class="${'active' if active_tab == 'my_account' else ''}">
             <a href="/my_account">
               ${logged_in_user.screen_name}
               <!--<img src="/static/images/twitter_16_gray.png" style="border:none;padding:0;" alt="twitter"/>-->
