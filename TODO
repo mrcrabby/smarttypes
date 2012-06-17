@@ -10,6 +10,8 @@ decouple web code and database code
 
 all web code needs to communicate w/ the db via an isolated db module
 
+assume db could be down - fail gracefully 
+
 (also) this module needs to separate db reads and writes
 
 make it easy to spread these across machines
