@@ -10,25 +10,19 @@ from datetime import datetime
 import tweepy
 from tweepy import TweepError
 
-REMAINING_HITS_THRESHOLD = 10
 
-
-def continue_or_exit(api_handle, put_this_in_the_error_message):
-    remaining_hits, reset_time = get_rate_limit_status(api_handle)
-    if remaining_hits < REMAINING_HITS_THRESHOLD:
-        raise Exception("remaining_hits less than threshold %s" % put_this_in_the_error_message)
-
-
-def load_user_and_the_people_they_follow(api_handle, user_id, postgres_handle, is_root_user=False):
+def load_user_and_the_people_they_follow(api_handle, user_id, postgres_handle, 
+        is_root_user=False, remaining_hits_threshold=10):
 
     print "Attempting to load user %s." % user_id
-    continue_or_exit(api_handle, user_id)
+    remaining_hits, reset_time = get_rate_limit_status(api_handle)
+    if remaining_hits < remaining_hits_threshold:
+        raise Exception("remaining_hits less than threshold %s" % user_id)
 
     try:
         api_user = api_handle.get_user(user_id=user_id)
     except TweepError, ex:
-        #handle this one (Got a TweepError: Not found.)
-        print "Got a TweepError: %s." % ex
+        print "**api_handle.get_user got a TweepError: %s." % ex
         return None
 
     model_user = TwitterUser.upsert_from_api_user(api_user, postgres_handle)
@@ -47,8 +41,8 @@ def load_user_and_the_people_they_follow(api_handle, user_id, postgres_handle, i
         for following_ids_page in following_id_pages:
             following_ids += [str(x) for x in following_ids_page]
     except TweepError, ex:
-        print "Got a TweepError: %s." % ex
-        if str(ex) == "Not authorized":
+        print "**Loading the people %s follows, got a TweepError: %s" % (screen_name, ex) 
+        if str(ex) in ["Not authorized", "Sorry, that page does not exist"]:
             print "\t Setting caused_an_error for %s." % screen_name
             model_user.caused_an_error = datetime.now()
             model_user.save()
@@ -74,7 +68,7 @@ def pull_some_users(creds_user_id):
         load_user_and_the_people_they_follow(api_handle, load_this_user_id, postgres_handle)
         load_this_user_id = root_user.get_id_of_someone_in_my_network_to_load()
         #load_this_user_id = None
-    print "Finshed loading all related users for %s!" % root_user.screen_name
+    print "Finished loading all related users for %s!" % root_user.screen_name
 
 
 if __name__ == "__main__":
@@ -86,8 +80,8 @@ if __name__ == "__main__":
             break
 
         #this can happen because this script is run on a different db than the webserver
-        #this is only a temp problem because i'm poor
-        #see scripts/check_for_db_updates.py - root_user code for a better fix to this
+        #this is only a temporary problem because i'm poor
+        #see scripts/check_for_db_updates.py - root_user code for related research
         if creds.twitter_id and not creds.twitter_user:
             TwitterUser.upsert_from_api_user(creds.api_handle.me(), postgres_handle)
             postgres_handle.connection.commit()

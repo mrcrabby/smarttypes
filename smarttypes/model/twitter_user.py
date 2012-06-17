@@ -7,7 +7,7 @@ import collections, csv, sys
 from copy import copy
 import codecs
 from smarttypes.utils import time_utils
-
+from psycopg2 import IntegrityError
 
 class TwitterUser(PostgresBaseModel):
     table_name = 'twitter_user'
@@ -127,7 +127,8 @@ class TwitterUser(PostgresBaseModel):
         #the people self follows
         following_and_expired_list = self.following_and_expired_ids
         if following_and_expired_list:
-            return following_and_expired_list[0]
+            random_index = random.randrange(0, len(following_and_expired_list))
+            return following_and_expired_list[random_index]
         #the people self follows follows
         else:
             tried_to_load_these_ids = []
@@ -144,26 +145,27 @@ class TwitterUser(PostgresBaseModel):
         pre_params = {
             'postfix': datetime.now().strftime('%Y_%U'),
             'user_id': '%(user_id)s',
-            'following_ids': '%(following_ids)s',
-        }
-        insert_sql = """
-        insert into twitter_user_following_%(postfix)s (twitter_user_id, following_ids)
-        values(%(user_id)s, %(following_ids)s);
-        """ % pre_params
-
-        update_sql = """
-        update twitter_user_following_%(postfix)s
-        set following_ids = %(following_ids)s
-        where twitter_user_id = %(user_id)s;
-        """ % pre_params
+            'following_ids': '%(following_ids)s',}
 
         select_sql = """
         select * from twitter_user_following_%(postfix)s
         where twitter_user_id = %(user_id)s;
         """ % {
             'postfix': datetime.now().strftime('%Y_%U'),
-            'user_id': '%(user_id)s',
-        }
+            'user_id': '%(user_id)s',}
+
+        insert_sql = """
+        insert into twitter_user_following_%(postfix)s (twitter_user_id, following_ids)
+        values(%(user_id)s, %(following_ids)s);
+        """ % pre_params
+        
+        update_sql = """
+        update twitter_user_following_%(postfix)s
+        set following_ids = %(following_ids)s
+        where twitter_user_id = %(user_id)s;
+        """ % pre_params
+
+
         results = self.postgres_handle.execute_query(select_sql, {'user_id': self.id})
         if len(results):
             use_this_sql = update_sql
@@ -172,11 +174,24 @@ class TwitterUser(PostgresBaseModel):
 
         params = {
             'user_id': self.id,
-            'following_ids': following_ids,
-        }
-        self.postgres_handle.execute_query(use_this_sql, params, return_results=False)
-        self.last_loaded_following_ids = datetime.now()
-        self.save()
+            'following_ids': following_ids,}
+
+        #this errors occasionally, @ seemingly random times:
+        #'DETAIL:  Key (twitter_user_id)=(35514918) already exists.'
+        #twitter_user_id is seemingly random
+        #i'm guessing this is a multiprocess race condition
+        #may want to just swallow these ??
+        #or maybe use a select lock, need to research how to handle this kind of thing
+        try:
+            self.postgres_handle.execute_query(use_this_sql, params, return_results=False)
+            self.last_loaded_following_ids = datetime.now()
+            self.save()
+        except IntegrityError, ex:
+            print """Swallowing an ERROR. 
+            Assuming this was caused by a multiprocess race condition:
+            %s
+            """ % (ex, )
+
 
     ##############################################
     ##class methods

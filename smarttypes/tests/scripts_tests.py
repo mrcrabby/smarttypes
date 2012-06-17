@@ -19,8 +19,9 @@ cocacola = TwitterUser.by_screen_name('CocaCola', postgres_handle)
 ########################
 #tests
 
+#load smarttypes
 get_twitter_friends.load_user_and_the_people_they_follow(smarttypes_api_handle, 
-	smarttypes.id, postgres_handle, is_root_user=True)
+	smarttypes.id, postgres_handle, is_root_user=True, remaining_hits_threshold=9)
 
 
 
