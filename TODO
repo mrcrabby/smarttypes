@@ -1,6 +1,29 @@
 ########################################################################################
 ########################################################################################
 
+do a better job w/ data collection test
+
+########################################################################################
+########################################################################################
+
+decouple web code and database code
+
+all web code needs to communicate w/ the db via an isolated db module
+
+(also) this module needs to separate db reads and writes
+
+make it easy to spread these across machines
+
+get rid of linode db dependency
+
+########################################################################################
+########################################################################################
+
+test db network failure (power outage) -- get a better UPS
+
+########################################################################################
+########################################################################################
+
 backup db -- get another hard-drive
 
 ########################################################################################
@@ -9,40 +32,34 @@ backup db -- get another hard-drive
 use logging to report data collection
  - get proper logging (get rid of print statements)
 
- - build a web ui + email subscription
+ - build a web ui w/ email subscription option
 
 ########################################################################################
 ########################################################################################
 
 blog post ideas:
- - 'Using python logging to account for asynchronous jobs':
+
+ - 'Building a datacenter in your basement'
+
+ - 'Using python logging to account for asynchronous jobs'
    + http://blog.tplus1.com/index.php/2007/09/28/the-python-logging-module-is-much-better-than-print-statements/
-   + http://plumberjack.blogspot.com/2009/09/python-logging-101.html
 
- - add to 'Graph based node similarity'
+ - 'Graph based node similarity'
 
- - new one 'Using node similarity to find communities'
-
-########################################################################################
-########################################################################################
-
-switch to a simplier css system -- http://goldengridsystem.com/
+ - 'Using node similarity to find communities'
 
 ########################################################################################
 ########################################################################################
 
-write tests for:
- - 
+write continuous test runner to make sure shit's working
 
 ########################################################################################
 ########################################################################################
 
-simple ui to configure collection
+switch to a simpler css system -- http://goldengridsystem.com/
 
 ########################################################################################
 ########################################################################################
-
-show collection stats (nice way of making sure shit's right)
 
 fix problem related to 'orphaned last_loaded_following_ids'
  - delete trigger, throw exception ??
