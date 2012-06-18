@@ -47,10 +47,7 @@ def application(environ, start_response):
                     if request.cookies.get('session'):
                         session = TwitterSession.get_by_request_key(request.cookies['session'], postgres_handle)
                     response_dict = controller(request, session, postgres_handle)
-
-                    import locale
-                    locale.setlocale(locale.LC_ALL, '')
-                    response_dict['total_user_count'] = locale.format("%d", TwitterUser.get_user_count(postgres_handle), grouping=True)
+                    response_dict['total_user_count'] = '{0:,}'.format(TwitterUser.get_user_count(postgres_handle))
                     
                     web_response = WebResponse(request, controller.__name__, response_dict, session)
                     response_headers = web_response.get_response_headers()
