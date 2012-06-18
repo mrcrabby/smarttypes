@@ -1,5 +1,30 @@
+
+
+algo:
+
+- pagerank (requiers walking the graph, do whatever else is nessicary)
+
+- similarity
+
+- landmark mds
+
+- cluster 2d reduction
+
+- pagerank in each group
+
+- similarity between groups
+
+- pagerank between groups
+
+
+
+http://pycogent.sourceforge.net/cookbook/multivariate_data_analysis.html
+ - look for Landmark-MDS (Nystrom)
+
 ########################################################################################
 ########################################################################################
+
+write continuous test runner to make sure things are working
 
 do a better job w/ data collection test
 
@@ -10,7 +35,7 @@ decouple web code and database code
 
 all web code needs to communicate w/ the db via an isolated db module
 
-assume db could be down - fail gracefully 
+assume db goes down - fail gracefully 
 
 (also) this module needs to separate db reads and writes
 
@@ -58,7 +83,7 @@ blog post ideas:
 ########################################################################################
 ########################################################################################
 
-write continuous test runner to make sure shit's working
+
 
 ########################################################################################
 ########################################################################################

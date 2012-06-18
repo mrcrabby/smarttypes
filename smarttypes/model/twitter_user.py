@@ -205,6 +205,15 @@ class TwitterUser(PostgresBaseModel):
             return None
 
     @classmethod
+    def get_user_count(cls, postgres_handle):
+        qry = """
+        select count(*) as user_count
+        from twitter_user
+        ;
+        """
+        return postgres_handle.execute_query(qry)[0]['user_count']
+
+    @classmethod
     def get_network(cls, postgres_handle):
         network = {}
         go_back_this_many_weeks = 2

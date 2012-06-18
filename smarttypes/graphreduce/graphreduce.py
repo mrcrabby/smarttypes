@@ -1,82 +1,88 @@
-import numpy as np
-from scipy.sparse import lil_matrix
-from scipy.sparse import cs_graph_components
 
-"""
-Our goal is to reduce a social graph to 2 dimensions
+import np
+from cogent.cluster.approximate_mds import nystrom
+from scipy.spatial import distance
+from sklearn.cluster import DBSCAN
+from collections import OrderedDict
 
-We want to produce a bunch of tiled images to use w/ 
-http://polymaps.org/
+def load_network_from_the_db():
+  """
+  network is an ordereddict of nodes:
 
-Here's how this is broken down:
-- Step 1: Pull network into memory:
+  {
+    '12345':node,
+    }
 
-  http://docs.scipy.org/doc/scipy/reference/tutorial/csgraph.html
+  a node is a dict that looks like this:
 
-  (search for 'Computing the adjacency matrix')
-  http://scikit-learn.org/dev/_downloads/wikipedia_principal_eigenvector.py
+  {
+    'id':'', 
+    'following_count':0,
+    'followers_count':0,
+    'following_ids':set([]),
+    'x_dim':0,
+    'y_dim':0,
+    }
+  """
+  OrderedDict
 
-  http://etudiant.istic.univ-rennes1.fr/current/m2mitic/AMI/src/scikits.learn-0.6/scikits/learn/cluster/spectral.py
+def get_landmarks(network):
+  """
+  if the network has been reduced pick landmarks via reduction
+  otherwise pick randomly
+  """
 
-  http://etudiant.istic.univ-rennes1.fr/current/m2mitic/AMI/src/scikits.learn-0.6/scikits/learn/utils/graph.py
+def mk_similarity_matrix(network, landmarks):
+  """
+  similarity_matrix is len(network) x len(landmarks)
+  """
+  similarity_matrix = []
+  for landmark_id in landmarks:
+    landmark_node = network[landmark_id]
+    landmark_similarities = []
+    for node_id, node in network.items():
+      adamic_score = 0
+      following_intersect = intersect(node['following_ids'], landmark_node['following_ids'])
+      for intersect_id in following_intersect:
+        intersect_node = network.get(intersect_id)
+        if intersect_node:
+          adamic_score += (1/log(intersect_node['followers_count']))
+      landmark_similarities.append(adamic_score)
+    similarity_matrix.append(landmark_similarities)
+  similarity_matrix = np.array(similarity_matrix)
+  return similarity_matrix
 
-  http://www.sagemath.org/doc/reference/sage/graphs/digraph.html
+def normalize_similarity_matrix():
+  """
 
-- Step 2: Randomly pick landmarks for Landmark MDS
+  """
 
-- Step 3: Use custom similarity measure (like Jaccard's) to compare every
-  node to every landmark, results in len(network) x len(landmarks)
-  matrix
+def reduce_similarity_matrix(similarity_matrix):
+  """
 
-- Step 4: Do landmark MDS, and print the difference between 2d reduction
-  and similarity matrix
-
-- Step 5: Load reduction into postgis
-
-- Step 7: Community detection
-
-- Step 8: Pagerank within communities
-
-- Step 7: Use reduction, community, and pagerank to make nice 
-  tiled images w/ ggplot2 
-"""
-
-def make_sparse_adjanceny_matrix(network):
-    sorted_keys = sorted(network.keys())
-    number_of_users = len(sorted_keys)
-    counter = 0
-    list_of_lists = []
-    for user in sorted_keys:
-        following_list = []
-        for maybe_following in sorted_keys:
-            if maybe_following in network[user]:
-                following_list.append(1)
-            else:
-                following_list.append(0)
-        list_of_lists.append(following_list)
-        counter += 1
-        if counter % 1000 == 0:
-            print '%s of %s users processed' % (counter, number_of_users)
-    sparse_matrix = lil_matrix(list_of_lists)
-    del list_of_lists
-    sparse_matrix = sparse_matrix.tocsr()
-    N_components, component_list = cs_graph_components(sparse_matrix)
-    print N_components
-    return sparse_matrix
+  """
+  graph_reduction = nystrom(similarity_matrix, 2)
 
 
-def make_similarity_matrix_file(adjanceny_matrix_file):
-    """"""
+def identify_communities(graph_reduction):
 
-def make_reduction_file(similarity_matrix_file):
-    """"""
 
-def compare_similarity_to_reduction(similarity_matrix_file, reduction_file):
-    """"""
+  # self.reduction_distances = distance.squareform(distance.pdist(self.reduction, 'euclidean'))
+  # def find_dbscan_groups(self, eps=0.42, min_samples=12):
+  #     self.figure_out_reduction_distances()
+  #     S = 1 - (self.reduction_distances / np.max(self.reduction_distances))
+  #     db = DBSCAN().fit(S, eps=eps, min_samples=min_samples)
+  #     self.groups = db.labels_
+  #     self.n_groups = len(set(self.groups)) - (1 if -1 in self.groups else 0)
 
-def save_reduction_to_postgis(reduction_file, postgres_handle):
-    """"""
 
-def make_tiled_images(postgres_handle):
-    """"""
+
+
+
+
+
+
+
+
+
 

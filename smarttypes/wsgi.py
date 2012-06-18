@@ -9,6 +9,7 @@ from smarttypes.utils.web_response import WebResponse
 from smarttypes.utils.exceptions import RedirectException
 from smarttypes.utils.postgres_handle import PostgresHandle
 from smarttypes.model.twitter_session import TwitterSession
+from smarttypes.model.twitter_user import TwitterUser
 
 urls = [
 
@@ -46,6 +47,11 @@ def application(environ, start_response):
                     if request.cookies.get('session'):
                         session = TwitterSession.get_by_request_key(request.cookies['session'], postgres_handle)
                     response_dict = controller(request, session, postgres_handle)
+
+                    import locale
+                    locale.setlocale(locale.LC_ALL, '')
+                    response_dict['total_user_count'] = locale.format("%d", TwitterUser.get_user_count(postgres_handle), grouping=True)
+                    
                     web_response = WebResponse(request, controller.__name__, response_dict, session)
                     response_headers = web_response.get_response_headers()
                     response_string = web_response.get_response_str()
