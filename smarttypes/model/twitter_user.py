@@ -211,7 +211,7 @@ class TwitterUser(PostgresBaseModel):
         from twitter_user
         ;
         """
-        return int(postgres_handle.execute_query(qry)[0]['user_count'])
+        return postgres_handle.execute_query(qry)[0]['user_count']
 
     @classmethod
     def get_network(cls, postgres_handle):
