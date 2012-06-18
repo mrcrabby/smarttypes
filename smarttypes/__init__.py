@@ -32,7 +32,7 @@ root_dir = os.path.dirname(os.path.abspath(__file__))
 site_name = 'SmartTypes'
 site_mantra = 'A tool for social discovery.'
 default_title = '%s - %s' % (site_name, site_mantra)
-site_description = """SmartTypes is an open lab for social network analysis (initially twitter).
-We provide free, automated tools to pull and store social connections and content.
-Our goal (like geographic cartographers of old) is to map of our 'social' world."""
+site_description = """SmartTypes is an open lab for online social analysis (initially twitter).
+We provide free, automated tools to pull and store social relations and content.
+Our goal (like geographic cartographers of old) is to map our complex social world."""
 site_description = site_description.strip()
