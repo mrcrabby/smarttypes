@@ -207,7 +207,7 @@ class TwitterUser(PostgresBaseModel):
     @classmethod
     def get_user_count(cls, postgres_handle):
         qry = """
-        select count(*) as user_count
+        select to_char(count(*),'999G999G999G990D') as user_count
         from twitter_user
         ;
         """
