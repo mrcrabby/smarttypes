@@ -22,7 +22,7 @@ def load_network_from_the_db(postgres_handle):
   twitter_user = TwitterUser.by_screen_name('SmartTypes', postgres_handle)
   add_user_to_network(twitter_user)
   for following in twitter_user.following:
-    add_user_to_network(twitter_user)
+    add_user_to_network(following)
   return network
 
 def get_landmarks(network, num_of_landmarks=50):
@@ -38,16 +38,16 @@ def mk_similarity_matrix(network, landmarks):
   similarity_matrix is len(network) x len(landmarks)
   """
   similarity_matrix = []
-  for landmark_id in landmarks:
-    landmark_node = network[landmark_id]
+  for node_id, node in network.items():
     landmark_similarities = []
-    for node_id, node in network.items():
-      adamic_score = 0
+    for landmark_id in landmarks:
+      landmark_node = network[landmark_id]    
+      adamic_score = 0.0
       following_intersect = node['following_ids'].intersection(landmark_node['following_ids'])
       for intersect_id in following_intersect:
         intersect_node = network.get(intersect_id)
         if intersect_node:
-          adamic_score += (1/log(intersect_node['followers_count']))
+          adamic_score += (1/np.log(intersect_node['followers_count']))
       landmark_similarities.append(adamic_score)
     similarity_matrix.append(landmark_similarities)
   similarity_matrix = np.array(similarity_matrix)
@@ -63,10 +63,19 @@ def normalize_similarity_matrix(similarity_matrix):
 def get_square_distance_matrix(similarity_matrix):
   return distance.squareform(distance.pdist(similarity_matrix, 'euclidean'))
 
-def identify_communities(similarity_matrix, eps=0.42, min_samples=12):
+def identify_communities(similarity_matrix, node_ids, eps=0.005, min_samples=2):
   db = DBSCAN().fit(similarity_matrix, eps=eps, min_samples=min_samples)
-  groups = db.labels_
-  print len(set(groups)) - (1 if -1 in groups else 0)
+  raw_communities = db.labels_
+  num_communities = len(set(raw_communities)) - (1 if -1 in raw_communities else 0)
+  communities = dict([(x,[]) for x in range(num_communities)])
+  for i in range(len(node_ids)):
+    community_idx = raw_communities[i]
+    if community_idx != -1:
+      communities[community_idx].append(node_ids[i])
+  return communities
+  
+def get_users_in_a_community(member_ids, postgres_handle):
+  return TwitterUser.get_by_ids(member_ids, postgres_handle)
 
 
 if __name__ == "__main__":
@@ -77,7 +86,13 @@ if __name__ == "__main__":
   similarity_matrix = mk_similarity_matrix(network, landmarks)
   similarity_matrix = normalize_similarity_matrix(similarity_matrix)
   similarity_matrix = get_square_distance_matrix(similarity_matrix)
-  identify_communities(similarity_matrix)
+  communities = identify_communities(similarity_matrix, network.keys())
+
+
+
+
+
+
 
 
 
