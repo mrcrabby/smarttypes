@@ -65,8 +65,8 @@ def get_square_distance_matrix(similarity_matrix):
 
 def identify_communities(similarity_matrix, eps=0.42, min_samples=12):
   db = DBSCAN().fit(similarity_matrix, eps=eps, min_samples=min_samples)
-  #db.labels_
-  print len(set(self.groups)) - (1 if -1 in self.groups else 0)
+  groups = db.labels_
+  print len(set(groups)) - (1 if -1 in groups else 0)
 
 
 if __name__ == "__main__":
