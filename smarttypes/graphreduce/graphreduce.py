@@ -1,36 +1,33 @@
 
-import np
-from cogent.cluster.approximate_mds import nystrom
+import copy
+import numpy as np
+#from cogent.cluster.approximate_mds import nystrom
 from scipy.spatial import distance
 from sklearn.cluster import DBSCAN
 from collections import OrderedDict
+import numpy.random as nprnd
+from smarttypes.model.twitter_user import TwitterUser
 
 def load_network_from_the_db():
-  """
-  network is an ordereddict of nodes:
+  network = OrderedDict()
+  def add_user_to_network(user):
+    network[user.id] = {}
+    network[user.id]['following_ids'] = set(user.following_ids)
+    network[user.id]['following_count'] = user.following_count
+    network[user.id]['followers_count'] = user.followers_count
+  twitter_user = TwitterUser.by_screen_name('SmartTypes')
+  add_user_to_network(twitter_user)
+  for following in twitter_user.following:
+    add_user_to_network(twitter_user)
+  return network
 
-  {
-    '12345':node,
-    }
-
-  a node is a dict that looks like this:
-
-  {
-    'id':'', 
-    'following_count':0,
-    'followers_count':0,
-    'following_ids':set([]),
-    'x_dim':0,
-    'y_dim':0,
-    }
+def get_landmarks(network, num_of_landmarks=50):
   """
-  OrderedDict
-
-def get_landmarks(network):
+  figure out how to pick good landmarks
   """
-  if the network has been reduced pick landmarks via reduction
-  otherwise pick randomly
-  """
+  node_ids = np.array(network.keys())
+  random_idxs = nprnd.randint(len(network), size=num_of_landmarks)
+  return node_ids[random_idxs]
 
 def mk_similarity_matrix(network, landmarks):
   """
@@ -42,7 +39,7 @@ def mk_similarity_matrix(network, landmarks):
     landmark_similarities = []
     for node_id, node in network.items():
       adamic_score = 0
-      following_intersect = intersect(node['following_ids'], landmark_node['following_ids'])
+      following_intersect = node['following_ids'].intersection(landmark_node['following_ids'])
       for intersect_id in following_intersect:
         intersect_node = network.get(intersect_id)
         if intersect_node:
@@ -52,29 +49,30 @@ def mk_similarity_matrix(network, landmarks):
   similarity_matrix = np.array(similarity_matrix)
   return similarity_matrix
 
-def normalize_similarity_matrix():
-  """
-
-  """
-
 def reduce_similarity_matrix(similarity_matrix):
-  """
-
-  """
   graph_reduction = nystrom(similarity_matrix, 2)
 
+def normalize_similarity_matrix(similarity_matrix):
+  similarity_matrix = 1 - (similarity_matrix / np.max(similarity_matrix))
+  return similarity_matrix
 
-def identify_communities(graph_reduction):
+def get_square_distance_matrix(similarity_matrix):
+  return distance.squareform(distance.pdist(similarity_matrix, 'euclidean'))
+
+def identify_communities(similarity_matrix, eps=0.42, min_samples=12):
+  db = DBSCAN().fit(S, eps=eps, min_samples=min_samples)
+  #db.labels_
+  print len(set(self.groups)) - (1 if -1 in self.groups else 0)
 
 
-  # self.reduction_distances = distance.squareform(distance.pdist(self.reduction, 'euclidean'))
-  # def find_dbscan_groups(self, eps=0.42, min_samples=12):
-  #     self.figure_out_reduction_distances()
-  #     S = 1 - (self.reduction_distances / np.max(self.reduction_distances))
-  #     db = DBSCAN().fit(S, eps=eps, min_samples=min_samples)
-  #     self.groups = db.labels_
-  #     self.n_groups = len(set(self.groups)) - (1 if -1 in self.groups else 0)
+if __name__ == "__main__":
 
+  network = load_network_from_the_db()
+  landmarks = get_landmarks(network, 50)
+  similarity_matrix = mk_similarity_matrix(network, landmarks)
+  similarity_matrix = normalize_similarity_matrix(similarity_matrix)
+  similarity_matrix = get_square_distance_matrix(similarity_matrix)
+  identify_communities(similarity_matrix)
 
 
 
