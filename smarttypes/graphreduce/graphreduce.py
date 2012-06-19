@@ -6,7 +6,12 @@ from scipy.spatial import distance
 from sklearn.cluster import DBSCAN
 from collections import OrderedDict
 import numpy.random as nprnd
+
+import smarttypes
 from smarttypes.model.twitter_user import TwitterUser
+from smarttypes.utils.postgres_handle import PostgresHandle
+postgres_handle = PostgresHandle(smarttypes.connection_string)
+
 
 def load_network_from_the_db():
   network = OrderedDict()
