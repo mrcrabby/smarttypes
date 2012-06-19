@@ -10,17 +10,16 @@ import numpy.random as nprnd
 import smarttypes
 from smarttypes.model.twitter_user import TwitterUser
 from smarttypes.utils.postgres_handle import PostgresHandle
-postgres_handle = PostgresHandle(smarttypes.connection_string)
 
 
-def load_network_from_the_db():
+def load_network_from_the_db(postgres_handle):
   network = OrderedDict()
   def add_user_to_network(user):
     network[user.id] = {}
     network[user.id]['following_ids'] = set(user.following_ids)
     network[user.id]['following_count'] = user.following_count
     network[user.id]['followers_count'] = user.followers_count
-  twitter_user = TwitterUser.by_screen_name('SmartTypes')
+  twitter_user = TwitterUser.by_screen_name('SmartTypes', postgres_handle)
   add_user_to_network(twitter_user)
   for following in twitter_user.following:
     add_user_to_network(twitter_user)
@@ -72,7 +71,8 @@ def identify_communities(similarity_matrix, eps=0.42, min_samples=12):
 
 if __name__ == "__main__":
 
-  network = load_network_from_the_db()
+  postgres_handle = PostgresHandle(smarttypes.connection_string)
+  network = load_network_from_the_db(postgres_handle)
   landmarks = get_landmarks(network, 50)
   similarity_matrix = mk_similarity_matrix(network, landmarks)
   similarity_matrix = normalize_similarity_matrix(similarity_matrix)
