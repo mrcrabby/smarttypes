@@ -64,7 +64,7 @@ def get_square_distance_matrix(similarity_matrix):
   return distance.squareform(distance.pdist(similarity_matrix, 'euclidean'))
 
 def identify_communities(similarity_matrix, eps=0.42, min_samples=12):
-  db = DBSCAN().fit(S, eps=eps, min_samples=min_samples)
+  db = DBSCAN().fit(similarity_matrix, eps=eps, min_samples=min_samples)
   #db.labels_
   print len(set(self.groups)) - (1 if -1 in self.groups else 0)
 
