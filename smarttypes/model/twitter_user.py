@@ -216,7 +216,7 @@ class TwitterUser(PostgresBaseModel):
     @classmethod
     def get_network(cls, postgres_handle):
         network = {}
-        go_back_this_many_weeks = 2
+        go_back_this_many_weeks = 1
         start_w_this_date = datetime.now() - timedelta(days=go_back_this_many_weeks * 7)
         year_weeknum_strs = time_utils.year_weeknum_strs(start_w_this_date, go_back_this_many_weeks) 
         qry = """
