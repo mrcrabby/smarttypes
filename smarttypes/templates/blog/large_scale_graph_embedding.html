@@ -1,0 +1,109 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:py="http://genshi.edgewall.org/"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    lang="en">
+
+<xi:include href="../master.html" />      
+<head>
+
+</head>                    
+
+<body>
+
+<h1>Distributed graph embedding</h1>
+
+<p>
+It's a simple idea, but it took this paper to get me to go for it: 
+</p>
+
+<ul>
+<ol>
+<a href="http://research.google.com/pubs/archive/36923.pdf">
+Large-Scale Community Detection on YouTube for Topic Discovery and Exploration
+</a>
+</ol>
+</ul>
+
+<p>
+My original thought was to randomly select 'seed nodes' (their term).
+But i rather like their idea of selecting popular and distant seed nodes.
+I'm assuming you've read the paper.  If you haven't here's a brief synopsis:
+</p>
+
+<p>
+Large scale community detection is hard.  
+'Global methods' require knowledge of the entire graph, 
+which is practically impossible for web scale graphs.
+'Local methods' get stuck in a local minima.  
+This paper suggests a multi-stage approach:
+</p>
+
+<ul>
+<li>Step 1: Seed node identification (simple graph partitioning)</li>
+<li>Step 2: Use seed node as root for distributed community detection</li>
+<li>Step 3: Intelligently stitch everything together</li>
+</ul>
+
+<p>
+A big difference between their implementation and 
+the smarttypes implementation is:
+</p>
+
+<ul>
+<ol>
+We're concerned w/ community detection 
+<span style="font-weight:bold;">and graph embedding</span>.
+The referenced paper is only concerned w/ community detection.
+</ol>
+</ul>
+
+<p>
+If you're interested, here's 
+<a href="http://www.smarttypes.org/blog/graph_reduction_linlog_nbody_simulation">
+a little diddy about graph embedding and the linlog energy model</a>
+</p>
+
+<p>This is from the paper 'Large-Scale Community Detection' paper
+	referenced at the start:</p>
+
+<blockquote>
+instead of attempting to formulate an optimization problem and finding
+the optimum set of seed videos, we take a heuristic approach
+on seed video selection and use a post-processing step later
+on to improve the quality of clustering...
+In our heuristic approach, we rank
+the videos in the graph by its popularity and select the most
+popular videos as seed videos to expand.
+</blockquote>
+
+<blockquote>
+After splitting all the clusters into more coherent
+subclusters, we apply an iterative global algorithm to combine 
+highly overlapping clusters and remove clusters that are
+too small to stand on their own.
+</blockquote>
+
+<pre>
+And here's an outline of what i'm imagining:
+
+1. Rank by popularity (pagerank)
+
+2. Identify seed nodes
+   - Popular nodes far away from existing seed nodes
+   - See above heuristic approach
+
+3. Distributed linlog energy model
+   - Use neighborhoods saved in Step 2
+   - See linlog energy model post:
+     + http://www.smarttypes.org/blog/graph_reduction_linlog_nbody_simulation
+
+4. Stitch 2d reductions together with some sort of eigenvector least-squared transformation
+</pre>
+
+</body>                                    
+</html>
+

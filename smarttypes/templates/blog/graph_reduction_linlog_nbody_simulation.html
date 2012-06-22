@@ -19,19 +19,22 @@ For now let's just say that graphs are convenient abstractions that can be used 
 <div style="text-align:left;">
 
 <h1>
-Graph reduction via linlog n-body simulation 
+Graph reduction via the linlog energy model 
 </h1>
 
 <p>
-At a high level, the following is about reducing the dimensionality of a graph. 
+The following is about reducing the dimensionality of a graph. 
 Explaining the value of graph reduction is a task left for another day. 
-For now let's say that graphs are a convenient way to represent complex problems. 
-If you're curious, check out this from <a href="http://networkscience.wordpress.com/2011/11/21/why-everything-is-a-network/">A Recent Network Science Postdoc</a>. 
+For now let's say that graphs are a convenient way to represent complex problems.  
+If you're curious, check this out: <a href="http://networkscience.wordpress.com/2011/11/21/why-everything-is-a-network/">from a recent Network Science Postdoc</a>. 
 </p>
 
 <p>
 Assuming then, the inherit value in graphs. 
-Reducing the dimensionality of a graph (squeezing out it's essence, it's juice) is also valuable. 
+Reducing the dimensionality of a graph (squeezing out it's essence -- it's juice) is also valuable. 
+</p>
+
+<p>
 There are a lot of dimension reduction methods. 
 There are a lot of graph analysis methods. 
 The method/model described here uses <a href="http://en.wikipedia.org/wiki/N-body">N-body Simulation</a> to reduce a graph to 2 dimensions.
@@ -39,10 +42,9 @@ Reducing the dimensionality of our graph this much has the nice effect of making
 </p>
 
 <p>
-We're interested in a 2d graph layout. 
-Stay w/ me for a second. 
+We're interested in a 2d graph layout.
 We're going to scatter all the nodes in our graph on a 2d surface. 
-Our nodes interact w/ each other until they settle down to an equilibrium. 
+Our nodes interact w/ each other until they settle to an equilibrium. 
 This is known generally as <a href="http://en.wikipedia.org/wiki/Energy_minimization">Energy Minimization</a>, and is commonly used to model complex physical systems. 
 Fans of complexity and social science will see similarities between this and 
 <a href="http://en.wikipedia.org/wiki/Agent-based_model">Agent Based Modeling</a>.
