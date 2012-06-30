@@ -7,12 +7,21 @@ similarity (similar communities are close together)
 We assume the entire graph won't fit into memory, which makes for an interesting 
 challenge.  We use a learning (evolving) approach to meet this challenge.
 
+Here are the methods:
+
+- start_new_reduction
+- get_seed_nodes
+
+
 Step 1: 
  Pick seed nodes, seed nodes serve as roots of our graph partitions.  If 
  we have a previously created reduction use that for seed picking, else 
  pick randomly.
 
-Step 2: 
+Step 2:
+ Load network with seed node
+
+Step 3: 
  Cluster all the nodes in each of our partitions (say 10,000 nodes), and
  save the discovered communities to disk (in our case a postgres database).
 
@@ -24,6 +33,10 @@ Step 4:
 
 Step 5: 
  Clean up duplicate nodes and such
+
+
+
+
 
 
 
