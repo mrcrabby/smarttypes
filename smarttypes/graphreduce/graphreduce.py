@@ -1,5 +1,5 @@
 
-import copy, csv
+import copy, csv, os
 import numpy as np
 from cogent.cluster.nmds import NMDS
 from cogent.cluster.approximate_mds import nystrom
@@ -24,7 +24,7 @@ def load_network_from_the_db(postgres_handle, distance):
   def add_user_to_network(user):
     network[user.id] = {}
     network[user.id]['following_ids'] = set(user.following_ids)
-    network[user.id]['following_ids'].add(user.id)
+    #network[user.id]['following_ids'].add(user.id)
     network[user.id]['follower_ids'] = set([])
     network[user.id]['following_count'] = user.following_count
     network[user.id]['followers_count'] = user.followers_count
@@ -35,6 +35,38 @@ def load_network_from_the_db(postgres_handle, distance):
     for following_following in following.following[:distance]:
       add_user_to_network(following_following)
   return network
+
+def reduce_with_linloglayout(network):
+    input_file = open('io/graph_reduction_input.csv', 'w') 
+    for node_id in network:
+        for following_id in network[node_id]['following_ids']:
+            if following_id in network:
+              input_file.write('%s %s \n' % (node_id, following_id))
+    input_file.close()
+    #to recompile
+    #$ cd smarttypes/smarttypes/graphreduce/LinLogLayout/src/
+    #$ javac -d ../bin LinLogLayout.java
+    os.system('cd LinLogLayout; java -cp bin LinLogLayout 2 %s %s;' % (
+        '../io/graph_reduction_input.csv',
+        '../io/graph_reduction_output.csv'
+    ))
+
+def load_linlog_reduction_from_file():
+    communities = OrderedDict()
+    f = open('io/graph_reduction_output.csv')
+    graph_reduction = []
+    for line in f:
+        line_pieces = line.split(' ')
+        node_id = line_pieces[0]
+        x_value = float(line_pieces[1])
+        y_value = float(line_pieces[2])
+        graph_reduction.append([x_value, y_value])
+        group_num = int(line_pieces[4])
+        if group_num in communities:
+          communities[group_num].append(node_id)
+        else:
+          communities[group_num] = [node_id]
+    return np.array(graph_reduction), communities
 
 def store_follower_ids(network):
   for user_id in network:
@@ -58,17 +90,19 @@ def mk_similarity_matrix(network, landmarks):
   """
 
   #where the magic happens
-  def scoring_function(intersect_group):
+  def scoring_function(intersect_group, intersect_node_discount):
     total_score = 0
     for intersect_id in intersect_group:
       intersect_node = network.get(intersect_id)
       if intersect_node:
-        intersect_node_popularity = intersect_node['followers_count']
+        intersect_node_popularity = intersect_node[intersect_node_discount]
+        if intersect_node_popularity < 2:
+          intersect_node_popularity = 2
         try:
           total_score += 1.0 / np.log(intersect_node_popularity) #/ (np.log(len_following_difference) / 2)
         except FloatingPointError, ex:
           print "This shouldnt happen"
-          print intersect_id, intersect_node_popularity, intersect_node['followers_count'], 
+          print intersect_id, intersect_node_popularity, intersect_node[intersect_node_discount], 
           return 0
     return total_score
 
@@ -81,8 +115,8 @@ def mk_similarity_matrix(network, landmarks):
       landmark_node = network[landmark_id]
       following_intersect = node['following_ids'].intersection(landmark_node['following_ids'])
       follower_intersect = node['follower_ids'].intersection(landmark_node['follower_ids'])
-      total_score += (scoring_function(following_intersect) * 1)
-      total_score += (scoring_function(follower_intersect) * .75)
+      total_score += (scoring_function(following_intersect, 'followers_count') * 1)
+      total_score += (scoring_function(follower_intersect, 'following_count') * .75)
       # following_difference = node['following_ids'].symmetric_difference(landmark_node['following_ids'])
       # len_following_difference = len(following_difference)
       # if len_following_difference == 0:
@@ -99,6 +133,12 @@ def mk_similarity_matrix(network, landmarks):
   # similarity_matrix[similarity_matrix > ceiling] = ceiling
   # similarity_matrix = similarity_matrix / ceiling
   return similarity_matrix
+
+def write_similarity_matrix_to_csv(similarity_matrix):
+  similarity_matrix_file = open('io/similarity_matrix.csv', 'w')  
+  writer = csv.writer(similarity_matrix_file)
+  for row in similarity_matrix:
+    writer.writerow(row)
 
 def reduce_similarity_matrix(similarity_matrix):
   #distance_matrix = dist_euclidean(similarity_matrix)
@@ -131,32 +171,39 @@ def identify_communities(number_of_communities, similarity_matrix, node_ids):
 def print_user_details(user_ids, postgres_handle):
   for user in TwitterUser.get_by_ids(user_ids, postgres_handle):
     print "%s -- %s" % (user.screen_name, 
-      user.description[:100].replace('\n', ' '))
+      user.description[:100].replace('\n', ' ') if user.description else '')
 
+def do_linlog_reduction():
+  postgres_handle = PostgresHandle(smarttypes.connection_string)
+  network = load_network_from_the_db(postgres_handle, 5)
+  reduce_with_linloglayout(network)
+  graph_reduction, communities = load_linlog_reduction_from_file()
+  write_reduction_to_csv(network, graph_reduction)
+
+def write_distance_matrix_to_csv():
+  postgres_handle = PostgresHandle(smarttypes.connection_string)
+  network = load_network_from_the_db(postgres_handle, 5)
+  landmarks = get_landmarks(network)
+  similarity_matrix = mk_similarity_matrix(network, landmarks)
+  distance_matrix = dist_euclidean(similarity_matrix)
+  write_similarity_matrix_to_csv(distance_matrix)
 
 if __name__ == "__main__":
 
-  postgres_handle = PostgresHandle(smarttypes.connection_string)
-  network = load_network_from_the_db(postgres_handle, 10)
-  store_follower_ids(network)
-  landmarks = get_landmarks(network)
-  similarity_matrix = mk_similarity_matrix(network, landmarks)
-  summary_stats(similarity_matrix)
+  #do_linlog_reduction()
+  write_distance_matrix_to_csv()
 
-  #reduce
-  graph_reduction = reduce_similarity_matrix(similarity_matrix)
-  write_reduction_to_csv(network, graph_reduction)
+  # # #reduce
+  # # graph_reduction = reduce_similarity_matrix(similarity_matrix)
 
-  #communities
-  communities = identify_communities(20, similarity_matrix, network.keys())
-  #communities = identify_communities(20, graph_reduction, network.keys())
-  print "%s communities" % len(communities)
-  for community_idx, member_ids in communities.items():
-    print "community: %s" % community_idx
-    print_user_details(member_ids, postgres_handle)
-    print ""
-
-
+  # #communities
+  # communities = identify_communities(20, similarity_matrix, network.keys())
+  # #communities = identify_communities(20, graph_reduction, network.keys())
+  # print "%s communities" % len(communities)
+  # for community_idx, member_ids in communities.items():
+  #   print "community: %s" % community_idx
+  #   print_user_details(member_ids, postgres_handle)
+  #   print ""
 
   # #test similarity_matrix
   # twitter_user = TwitterUser.by_screen_name('SmartTypes', postgres_handle)
