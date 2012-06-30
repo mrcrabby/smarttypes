@@ -1,0 +1,29 @@
+
+Graphreduce is designed to identify 'natural' communities in large network,
+and to create a map of said communities (that is reduce the network) to a 
+2d space where each communities location in this space is representative of 
+similarity (similar communities are close together)
+
+We assume the entire graph won't fit into memory, which makes for an interesting 
+challenge.  We use a learning (evolving) approach to meet this challenge.
+
+Step 1: 
+ Pick seed nodes, seed nodes serve as roots of our graph partitions.  If 
+ we have a previously created reduction use that for seed picking, else 
+ pick randomly.
+
+Step 2: 
+ Cluster all the nodes in each of our partitions (say 10,000 nodes), and
+ save the discovered communities to disk (in our case a postgres database).
+
+Step 3: 
+ Treat each community as a node in it's own right (blockmodels).
+
+Step 4: 
+ Run linlog reduction + community finding method on these new blockmodels.
+
+Step 5: 
+ Clean up duplicate nodes and such
+
+
+
