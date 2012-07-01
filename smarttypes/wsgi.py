@@ -22,10 +22,10 @@ urls = [
     (r'^blog/?', controllers.blog),
 
     (r'^social_map/?$', controllers.social_map.index),
-    (r'^social_map/map_data.json', controllers.social_map.map_data),
-    (r'^social_map/group_details/?$', controllers.social_map.group_details),
-    (r'^social_map/node_details/?$', controllers.social_map.node_details),
-    (r'^social_map/next_or_previous_reduction_id', controllers.social_map.next_or_previous_reduction_id),
+    #(r'^social_map/map_data.json', controllers.social_map.map_data),
+    #(r'^social_map/group_details/?$', controllers.social_map.group_details),
+    #(r'^social_map/node_details/?$', controllers.social_map.node_details),
+    #(r'^social_map/next_or_previous_reduction_id', controllers.social_map.next_or_previous_reduction_id),
 
     (r'^about/?$', controllers.contact),
     (r'^contact/?$', controllers.contact),
