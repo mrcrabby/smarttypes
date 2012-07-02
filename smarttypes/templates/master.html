@@ -45,14 +45,14 @@
               Read 
             </a>
           </li>
-          <li class="${'active' if active_tab == 'social_map' else ''}">
+          <!--<li class="${'active' if active_tab == 'social_map' else ''}">
             <a href="/social_map">
               Explore 
             </a>
-          </li>
-          <li class="${'active' if active_tab == 'contact' else ''}">
-            <a href="/contact">
-              Contact
+          </li>-->
+          <li class="${'active' if active_tab == 'about' else ''}">
+            <a href="/about">
+              About
             </a>
           </li>
           <li py:if="not logged_in_user" >
@@ -84,18 +84,18 @@
     </div>
 
     <!--footer-->
-    <div class="row-fluid" style="margin:35px 0;">
+    <div class="row-fluid" style="margin:45px 0;">
 
       <div class="span2">&nbsp;</div>
       <div class="span8" style="text-align:center;">
 
         <div>
-          ${total_user_count} twitter users saved
+          <a target="_blank" href="http://twitter.com/smarttypes">@SmartTypes</a>
         </div>
 
-        <div style="line-height:30%; width:120px; margin:0 auto 2px auto; 
+        <div style="line-height:30%; width:160px; margin:0 auto 2px auto; 
           border-bottom: double 3px #999999;">&nbsp;</div>
-        <div style="line-height:30%; width:128px; margin:2px auto 0 auto; 
+        <div style="line-height:30%; width:168px; margin:2px auto 0 auto; 
           border-top: solid 1px #999999;">&nbsp;</div>
 
         <div>
@@ -104,9 +104,9 @@
           </a>
         </div> 
         
-        <div style="line-height:30%; width:92%; margin:35px auto 2px auto; 
+        <div style="line-height:30%; width:220px; margin:0 auto 2px auto; 
           border-bottom: double 3px #999999;">&nbsp;</div>
-        <div style="line-height:30%; width:94%; margin:2px auto 0 auto; 
+        <div style="line-height:30%; width:228px; margin:2px auto 0 auto; 
           border-top: solid 1px #999999;">&nbsp;</div>
 
       </div>

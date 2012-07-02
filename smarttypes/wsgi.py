@@ -27,8 +27,8 @@ urls = [
     #(r'^social_map/node_details/?$', controllers.social_map.node_details),
     #(r'^social_map/next_or_previous_reduction_id', controllers.social_map.next_or_previous_reduction_id),
 
-    (r'^about/?$', controllers.contact),
-    (r'^contact/?$', controllers.contact),
+    (r'^about/?$', controllers.about),
+    (r'^contact/?$', controllers.about),
 
     (r'^static/?', controllers.static),
 ]
