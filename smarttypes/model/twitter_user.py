@@ -98,7 +98,7 @@ class TwitterUser(PostgresBaseModel):
     def following_following_ids(self):
         print "Loading following_following_ids!"
         return_ids = set(self.following_ids)
-        for following in self.following[:100]:
+        for following in self.following[:1000]:
             for following_following_id in following.following_ids:
                 return_ids.add(following_following_id)
         return list(return_ids)
@@ -253,6 +253,7 @@ class TwitterUser(PostgresBaseModel):
     def mk_following_following_csv(cls, root_user_id, file_like, postgres_handle):
         root_user = cls.get_by_id(root_user_id, postgres_handle)
         network = cls.get_rooted_network(root_user, postgres_handle, go_back_this_many_weeks = 3)
+        print "writing %s users to a csv" % len(network)
 
         properties = copy(cls.table_columns)
         properties[0:0] = ['createddate', 'modifieddate']
@@ -261,7 +262,7 @@ class TwitterUser(PostgresBaseModel):
             writer = csv.writer(file_like)
             writer.writerow(properties + ['following_ids'])
             for write_this_id in network:
-                write_this_user = cls.get_by_id(write_this_id)
+                write_this_user = cls.get_by_id(write_this_id, postgres_handle)
                 initial_stuff = []
                 for x in properties:
                     try:
