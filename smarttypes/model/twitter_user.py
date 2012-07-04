@@ -1,5 +1,6 @@
 
 from smarttypes.model.postgres_base_model import PostgresBaseModel
+from collections import OrderedDict
 from types import NoneType
 from datetime import datetime, timedelta
 import numpy, random, heapq
@@ -81,14 +82,6 @@ class TwitterUser(PostgresBaseModel):
     @property
     def following(self):
         return self.get_by_ids(self.following_ids, self.postgres_handle)
-
-    @property
-    def following_following_ids(self):
-        return_ids = set(self.following_ids)
-        for following in self.following:
-            for following_following_id in following.following_ids:
-                return_ids.add(following_following_id)
-        return list(return_ids)
 
     @property
     def following_and_expired_ids(self):
@@ -214,37 +207,52 @@ class TwitterUser(PostgresBaseModel):
         return postgres_handle.execute_query(qry)[0]['user_count']
 
     @classmethod
-    def get_network(cls, postgres_handle):
-        network = {}
-        go_back_this_many_weeks = 1
+    def get_network(cls, postgres_handle, go_back_this_many_weeks = 1):
+        print 'Loading network in memory!'
+        network = OrderedDict()
         start_w_this_date = datetime.now() - timedelta(days=go_back_this_many_weeks * 7)
         year_weeknum_strs = time_utils.year_weeknum_strs(start_w_this_date, go_back_this_many_weeks) 
         qry = """
-        select u.id, f.following_ids
+        select u.*, f.following_ids
         from twitter_user u
         join twitter_user_following_%s f on u.id = f.twitter_user_id
-        where array_length(f.following_ids, 1) > 50;
+        where array_length(f.following_ids, 1) >= 20;
         ;
         """
         for year_weeknum in year_weeknum_strs:
-            print qry % year_weeknum
+            print 'Starting %s query!' % year_weeknum
             results = postgres_handle.execute_query(qry % year_weeknum)
-            print 'done w/ query'
+            print 'Done w/ %s query!' % year_weeknum
             for result in results:
                 if result['id'] not in network:
-                    network[result['id']] = set(result['following_ids'])
+                    network[result['id']] = result
+                    network[result['id']]['following_ids'] = set(network[result['id']]['following_ids'])
         return network
 
     @classmethod
-    def mk_following_following_csv(cls, screen_name, file_like, postgres_handle):
-        user = cls.by_screen_name(screen_name, postgres_handle)
+    def get_following_following_ids(cls, root_user_id, network):
+        following_following_ids = set([])
+        for following_id in network[root_user_id]['following_ids']:
+            if following_id in network:
+                following_following_ids.add(following_id)
+                for following_following_id in network[following_id]['following_ids']:
+                    if following_following_id in network:
+                        following_following_ids.add(following_following_id)
+
+    @classmethod
+    def mk_following_following_csv(cls, root_user_id, file_like, postgres_handle):
+        root_user = cls.get_by_id(root_user_id, postgres_handle)
+        network = cls.get_network(postgres_handle, go_back_this_many_weeks = 3)
+        write_these_ids = cls.get_following_following_ids(root_user_id, network)
+        write_these_ids += [root_user_id]
+
         properties = copy(cls.table_columns)
         properties[0:0] = ['createddate', 'modifieddate']
         properties.remove('caused_an_error')
         try:
             writer = csv.writer(file_like)
             writer.writerow(properties + ['following_ids'])
-            for following in cls.get_by_ids(user.following_following_ids, postgres_handle):
+            for write_this_id in write_these_ids:
                 initial_stuff = []
                 for x in properties:
                     try:

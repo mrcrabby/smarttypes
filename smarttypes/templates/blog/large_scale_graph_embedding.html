@@ -79,11 +79,11 @@ this challenge.
 
 Here are the steps:
 
- 1. Kick off a new reduction (log progress in the db).
+ 1. Kick off a new reduction (log progress along the way).
 
  2. Intelligently select N seed nodes. Select nodes that are far apart, 2nd 
-    level (degree) has little overlap w/ other seed node 2nd level (can't 
-    measure @ this point)
+    level (degree) has little overlap w/ other seed 2nd level (it's a guess,
+    not going to measure @ this point)
 
  3. Use N seed nodes to get N 'seed networks' -- pull in the people seed node 
     follows and the people those people follow (2 degrees) -- if each person 
@@ -129,10 +129,6 @@ Here's how it all maps to code:
 
   Step 9: measure_community_embedding_performance(reduction_job, community_stats, 
             2d_embedding)
-
-
-
- 
 </pre>
 
 </body>                                    

@@ -64,7 +64,7 @@ if __name__ == "__main__":
     if not twitter_user.credentials:
         raise Exception('%s does not have api credentials.' % screen_name)
     
-    monitor_these_user_ids = twitter_user.following_following_ids[:4900]
+    monitor_these_user_ids = ''
     monitor_these_user_ids.append(twitter_user.id)
     print "Num of users to monitor: %s" % len(monitor_these_user_ids)
     listener = Listener(monitor_these_user_ids)
