@@ -224,12 +224,14 @@ class TwitterUser(PostgresBaseModel):
         qry = """
         select u.id, f.following_ids
         from twitter_user u
-        join twitter_user_following_%s f on u.id = f.twitter_user_id
-        where --array_length(f.following_ids, 1) >= 20
-            u.id in %s;
+        join twitter_user_following_%s f on u.id = f.twitter_user_id 
+            and f.twitter_user_id = ANY(%s)
+        --where array_length(f.following_ids, 1) >= 20
+        ;
         ;
         """
-        params = {'following_following_ids':tuple(root_user.following_following_ids)}
+        following_following_ids = root_user.following_following_ids
+        params = {'following_following_ids':following_following_ids}
         for year_weeknum in year_weeknum_strs:
             print 'Starting %s query!' % year_weeknum
             results = postgres_handle.execute_query(qry % (year_weeknum, '%(following_following_ids)s'), params)
