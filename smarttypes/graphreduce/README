@@ -1,7 +1,6 @@
 
 Graphreduce is designed to identify communities (or clusters) in large 
-biological networks (graphs), and map these clusters to a 2-dimensional 
-space.
+biological networks, and map these clusters to a 2-dimensional space.
 
 We assume the entire graph won't fit into memory, which makes for an 
 interesting challenge.  We use a distributed learning algorithm to meet 
