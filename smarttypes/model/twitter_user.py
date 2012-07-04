@@ -242,7 +242,7 @@ class TwitterUser(PostgresBaseModel):
     @classmethod
     def mk_following_following_csv(cls, root_user_id, file_like, postgres_handle):
         root_user = cls.get_by_id(root_user_id, postgres_handle)
-        network = cls.get_network(postgres_handle, go_back_this_many_weeks = 3)
+        network = cls.get_network(postgres_handle, go_back_this_many_weeks = 1)
         write_these_ids = cls.get_following_following_ids(root_user_id, network)
         write_these_ids += [root_user_id]
 
