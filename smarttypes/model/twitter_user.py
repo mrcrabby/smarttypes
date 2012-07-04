@@ -228,7 +228,7 @@ class TwitterUser(PostgresBaseModel):
         # - http://archives.postgresql.org/pgsql-novice/2009-01/msg00092.php
         qry = """
         WITH only_these_ids as (
-            select element from unnest(%s) as id;
+            select element from unnest(%s) as id
         )
         select u.id, f.following_ids
         from twitter_user u
