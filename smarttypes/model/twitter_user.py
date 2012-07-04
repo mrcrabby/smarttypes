@@ -238,6 +238,7 @@ class TwitterUser(PostgresBaseModel):
                 for following_following_id in network[following_id]['following_ids']:
                     if following_following_id in network:
                         following_following_ids.add(following_following_id)
+        return following_following_ids
 
     @classmethod
     def mk_following_following_csv(cls, root_user_id, file_like, postgres_handle):
