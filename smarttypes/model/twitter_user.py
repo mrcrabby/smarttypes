@@ -213,7 +213,7 @@ class TwitterUser(PostgresBaseModel):
         start_w_this_date = datetime.now() - timedelta(days=go_back_this_many_weeks * 7)
         year_weeknum_strs = time_utils.year_weeknum_strs(start_w_this_date, go_back_this_many_weeks) 
         qry = """
-        select u.*, f.following_ids
+        select u.id, f.following_ids
         from twitter_user u
         join twitter_user_following_%s f on u.id = f.twitter_user_id
         where array_length(f.following_ids, 1) >= 20;
@@ -225,17 +225,16 @@ class TwitterUser(PostgresBaseModel):
             print 'Done w/ %s query!' % year_weeknum
             for result in results:
                 if result['id'] not in network:
-                    network[result['id']] = result
-                    network[result['id']]['following_ids'] = set(network[result['id']]['following_ids'])
+                    network[result['id']] = set(result['following_ids'])
         return network
 
     @classmethod
     def get_following_following_ids(cls, root_user_id, network):
         following_following_ids = set([])
-        for following_id in network[root_user_id]['following_ids']:
+        for following_id in network[root_user_id]:
             if following_id in network:
                 following_following_ids.add(following_id)
-                for following_following_id in network[following_id]['following_ids']:
+                for following_following_id in network[following_id]:
                     if following_following_id in network:
                         following_following_ids.add(following_following_id)
         return following_following_ids
@@ -243,9 +242,9 @@ class TwitterUser(PostgresBaseModel):
     @classmethod
     def mk_following_following_csv(cls, root_user_id, file_like, postgres_handle):
         root_user = cls.get_by_id(root_user_id, postgres_handle)
-        network = cls.get_network(postgres_handle, go_back_this_many_weeks = 1)
+        network = cls.get_network(postgres_handle, go_back_this_many_weeks = 4)
         write_these_ids = cls.get_following_following_ids(root_user_id, network)
-        write_these_ids += [root_user_id]
+        write_these_ids.add(root_user_id)
 
         properties = copy(cls.table_columns)
         properties[0:0] = ['createddate', 'modifieddate']
@@ -254,15 +253,16 @@ class TwitterUser(PostgresBaseModel):
             writer = csv.writer(file_like)
             writer.writerow(properties + ['following_ids'])
             for write_this_id in write_these_ids:
+                write_this_user = cls.get_by_id(write_this_id)
                 initial_stuff = []
                 for x in properties:
                     try:
-                        value = str(following.__dict__.get(x))
+                        value = str(write_this_user.__dict__.get(x))
                     except UnicodeEncodeError:
-                        value = following.__dict__.get(x)
+                        value = write_this_user.__dict__.get(x)
                         value = value.encode('ascii', 'ignore')
                     initial_stuff.append(value)
-                following_ids_str = '::'.join(following.following_ids)
+                following_ids_str = '::'.join(write_this_user.following_ids)
                 writer.writerow(initial_stuff + [following_ids_str])
         finally:
             file_like.close()
