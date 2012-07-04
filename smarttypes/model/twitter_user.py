@@ -95,6 +95,14 @@ class TwitterUser(PostgresBaseModel):
         return return_list
 
     @property
+    def following_following_ids(self):
+        return_ids = set(self.following_ids)
+        for following in self.following:
+            for following_following_id in following.following_ids:
+                return_ids.add(following_following_id)
+        return list(return_ids)
+
+    @property
     def is_expired(self):
         expired = True
         if self.last_loaded_following_ids and \
@@ -207,21 +215,24 @@ class TwitterUser(PostgresBaseModel):
         return postgres_handle.execute_query(qry)[0]['user_count']
 
     @classmethod
-    def get_network(cls, postgres_handle, go_back_this_many_weeks = 1):
+    def get_rooted_network(cls, root_user, postgres_handle, go_back_this_many_weeks = 1):
         print 'Loading network in memory!'
         network = OrderedDict()
+        network[root_user.id] = set(root_user.following_ids)
         start_w_this_date = datetime.now() - timedelta(days=go_back_this_many_weeks * 7)
-        year_weeknum_strs = time_utils.year_weeknum_strs(start_w_this_date, go_back_this_many_weeks) 
+        year_weeknum_strs = time_utils.year_weeknum_strs(start_w_this_date, go_back_this_many_weeks + 1)
         qry = """
         select u.id, f.following_ids
         from twitter_user u
         join twitter_user_following_%s f on u.id = f.twitter_user_id
-        where array_length(f.following_ids, 1) >= 20;
+        where --array_length(f.following_ids, 1) >= 20
+            u.id in %s;
         ;
         """
+        params = {'following_following_ids':root_user.following_following_ids}
         for year_weeknum in year_weeknum_strs:
             print 'Starting %s query!' % year_weeknum
-            results = postgres_handle.execute_query(qry % year_weeknum)
+            results = postgres_handle.execute_query(qry % (year_weeknum, '%(following_following_ids)s'), params)
             print 'Done w/ %s query!' % year_weeknum
             for result in results:
                 if result['id'] not in network:
@@ -229,22 +240,9 @@ class TwitterUser(PostgresBaseModel):
         return network
 
     @classmethod
-    def get_following_following_ids(cls, root_user_id, network):
-        following_following_ids = set([])
-        for following_id in network[root_user_id]:
-            if following_id in network:
-                following_following_ids.add(following_id)
-                for following_following_id in network[following_id]:
-                    if following_following_id in network:
-                        following_following_ids.add(following_following_id)
-        return following_following_ids
-
-    @classmethod
     def mk_following_following_csv(cls, root_user_id, file_like, postgres_handle):
         root_user = cls.get_by_id(root_user_id, postgres_handle)
-        network = cls.get_network(postgres_handle, go_back_this_many_weeks = 4)
-        write_these_ids = cls.get_following_following_ids(root_user_id, network)
-        write_these_ids.add(root_user_id)
+        network = cls.get_rooted_network(root_user, postgres_handle, go_back_this_many_weeks = 3)
 
         properties = copy(cls.table_columns)
         properties[0:0] = ['createddate', 'modifieddate']
@@ -252,7 +250,7 @@ class TwitterUser(PostgresBaseModel):
         try:
             writer = csv.writer(file_like)
             writer.writerow(properties + ['following_ids'])
-            for write_this_id in write_these_ids:
+            for write_this_id in network:
                 write_this_user = cls.get_by_id(write_this_id)
                 initial_stuff = []
                 for x in properties:
