@@ -228,8 +228,7 @@ class TwitterUser(PostgresBaseModel):
         # - http://archives.postgresql.org/pgsql-novice/2009-01/msg00092.php
         qry = """
         WITH only_these_ids as (
-            select %s[i] as id
-            FROM generate_series(1, array_upper(%s,0)) as i
+            select element from unnest(%s) as id;
         )
         select u.id, f.following_ids
         from twitter_user u
@@ -242,8 +241,8 @@ class TwitterUser(PostgresBaseModel):
         params = {'following_following_ids':following_following_ids}
         for year_weeknum in year_weeknum_strs:
             print 'Starting %s query!' % year_weeknum
-            results = postgres_handle.execute_query(qry % (
-                '%(following_following_ids)s', '%(following_following_ids)s', year_weeknum), params)
+            results = postgres_handle.execute_query(qry % ('%(following_following_ids)s', 
+                year_weeknum), params)
             print 'Done w/ %s query!' % year_weeknum
             for result in results:
                 if result['id'] not in network:
