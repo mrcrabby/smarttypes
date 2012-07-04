@@ -8,6 +8,8 @@ from smarttypes.utils.postgres_handle import PostgresHandle
 
 if __name__ == "__main__":
 
+    start_time = datetime.now()
+
     postgres_handle = PostgresHandle(smarttypes.connection_string)
 
     if not len(sys.argv) > 1:
@@ -18,6 +20,8 @@ if __name__ == "__main__":
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
     friends_file = open('/tmp/%s_twitter_friends.csv' % screen_name, 'w')
     TwitterUser.mk_following_following_csv(root_user.id, friends_file, postgres_handle)
+
+    print "mk_user_csv took %s to execute" % (datetime.now() - start_time)
     
     #tweets_file = open('/tmp/%s_twitter_tweets.csv')
     #TwitterUser.mk_following_tweets_csv(screen_name, tweets_file)

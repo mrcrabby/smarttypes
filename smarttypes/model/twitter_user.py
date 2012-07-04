@@ -98,7 +98,7 @@ class TwitterUser(PostgresBaseModel):
     def following_following_ids(self):
         print "Loading following_following_ids!"
         return_ids = set(self.following_ids)
-        for following in self.following[:1000]:
+        for following in self.following[:10000]:
             for following_following_id in following.following_ids:
                 return_ids.add(following_following_id)
         return list(return_ids)
