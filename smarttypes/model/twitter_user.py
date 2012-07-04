@@ -96,6 +96,7 @@ class TwitterUser(PostgresBaseModel):
 
     @property
     def following_following_ids(self):
+        print "Loading following_following_ids!"
         return_ids = set(self.following_ids)
         for following in self.following:
             for following_following_id in following.following_ids:
@@ -221,20 +222,28 @@ class TwitterUser(PostgresBaseModel):
         network[root_user.id] = set(root_user.following_ids)
         start_w_this_date = datetime.now() - timedelta(days=go_back_this_many_weeks * 7)
         year_weeknum_strs = time_utils.year_weeknum_strs(start_w_this_date, go_back_this_many_weeks + 1)
+
+        #see these:
+        # - http://www.postgresql.org/docs/current/static/queries-with.html
+        # - http://archives.postgresql.org/pgsql-novice/2009-01/msg00092.php
         qry = """
+        WITH only_these_ids as (
+            select %s[i] as id
+            FROM generate_series(1, array_upper(%s,0)) as i
+        )
         select u.id, f.following_ids
         from twitter_user u
         join twitter_user_following_%s f on u.id = f.twitter_user_id 
-            and f.twitter_user_id = ANY(%s)
+        join only_these_ids on only_these_ids.id = u.id
         --where array_length(f.following_ids, 1) >= 20
-        ;
         ;
         """
         following_following_ids = root_user.following_following_ids
         params = {'following_following_ids':following_following_ids}
         for year_weeknum in year_weeknum_strs:
             print 'Starting %s query!' % year_weeknum
-            results = postgres_handle.execute_query(qry % (year_weeknum, '%(following_following_ids)s'), params)
+            results = postgres_handle.execute_query(qry % (
+                '%(following_following_ids)s', '%(following_following_ids)s', year_weeknum), params)
             print 'Done w/ %s query!' % year_weeknum
             for result in results:
                 if result['id'] not in network:
