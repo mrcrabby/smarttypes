@@ -5,10 +5,13 @@ from smarttypes.config import *
 from smarttypes.utils.exceptions import RedirectException
 from smarttypes.utils import twitter_api_utils
 from smarttypes.utils import validation_utils
+from smarttypes.model.twitter_user import TwitterUser
 
 
 def index(req, session, postgres_handle):
-    return {}
+    return {
+        'total_user_count':TwitterUser.get_user_count_str(postgres_handle),
+    }
 
 
 def sign_in(req, session, postgres_handle):

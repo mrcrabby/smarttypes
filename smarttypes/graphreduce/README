@@ -1,42 +1,65 @@
 
-Graphreduce is designed to identify 'natural' communities in large network,
-and to create a map of said communities (that is reduce the network) to a 
-2d space where each communities location in this space is representative of 
-similarity (similar communities are close together)
+Graphreduce is designed to identify communities (or clusters) in large 
+biological networks (graphs), and map these clusters to a 2-dimensional 
+space.
 
-We assume the entire graph won't fit into memory, which makes for an interesting 
-challenge.  We use a learning (evolving) approach to meet this challenge.
+We assume the entire graph won't fit into memory, which makes for an 
+interesting challenge.  We use a distributed learning algorithm to meet 
+this challenge.
 
-Here are the methods:
+Here are the steps:
 
-- start_new_reduction
-- get_seed_nodes
+ 1. Kick off a new reduction (log progress in the db).
+
+ 2. Intelligently select N seed nodes. Select nodes that are far apart, 2nd 
+    level (degree) has little overlap w/ other seed node 2nd level (can't 
+    measure @ this point)
+
+ 3. Use N seed nodes to get N 'seed networks' -- pull in the people seed node 
+    follows and the people those people follow (2 degrees) -- if each person 
+    follows 100 people on average it's 10,000 nodes
+
+ 4. Measure seed node selection performance (use seed networks)
+
+ 5. Use seed networks for distributed community detection -- see 'Community 
+    detection improvements' in the igraph 0.6 release notes: 
+    http://igraph.sourceforge.net/relnotes-0.6.html
+
+ 6. Generate 'local' community stats (assume we only know about a single 
+    community at a time -- we iterate over the communities, or do in parallel)
+
+ 7. Remove duplicate nodes (use local community stats)
+
+ 8. Embed community nodes (use local community stats)
+
+ 9. Measure community embedding performance (use local community stats + 
+    community embedding)
+
+ 10. Rinse, wash, repeat -- Step 2. looks at previous reduction to select seed 
+    nodes (this is the much-hyped learning bit)
+
+Here's how it all maps to code:
+
+  Step 1: reduction_job = start_new_reduction()
+
+  Step 2: seed_nodes = get_seed_nodes(reduction_job)
+
+  Step 3: seed_networks = get_seed_networks(reduction_job, seed_nodes)
+
+  Step 4: measure_seed_node_selection_performance(reduction_job, seed_networks)
+
+  Step 5: communities = do_distributed_community_detection(reduction_job, 
+                          seed_networks)
+
+  Step 6: community_stats = gen_community_stats(reduction_job, communities) 
+
+  Step 7: communities = remove_dup_nodes(reduction_job, community_stats)
+
+  Step 8: 2d_embedding = embed_community_nodes(reduction_job, community_stats)
+
+  Step 9: measure_community_embedding_performance(reduction_job, community_stats, 
+            2d_embedding)
 
 
-Step 1: 
- Pick seed nodes, seed nodes serve as roots of our graph partitions.  If 
- we have a previously created reduction use that for seed picking, else 
- pick randomly.
 
-Step 2:
- Load network with seed node
-
-Step 3: 
- Cluster all the nodes in each of our partitions (say 10,000 nodes), and
- save the discovered communities to disk (in our case a postgres database).
-
-Step 3: 
- Treat each community as a node in it's own right (blockmodels).
-
-Step 4: 
- Run linlog reduction + community finding method on these new blockmodels.
-
-Step 5: 
- Clean up duplicate nodes and such
-
-
-
-
-
-
-
+ 

@@ -66,57 +66,70 @@ If you're interested, here's
 a little diddy about graph embedding and the linlog energy model</a>
 </p>
 
-<p>This is from 'Large-Scale Community Detection..', the paper
-	referenced at the start:</p>
-
-<blockquote>
-instead of attempting to formulate an optimization problem and finding
-the optimum set of seed videos, we take a heuristic approach
-on seed video selection and use a post-processing step later
-on to improve the quality of clustering...
-In our heuristic approach, we rank
-the videos in the graph by its popularity and select the most
-popular videos as seed videos to expand.
-</blockquote>
-
-<blockquote>
-After splitting all the clusters into more coherent
-subclusters, we apply an iterative global algorithm to combine 
-highly overlapping clusters and remove clusters that are
-too small to stand on their own.
-</blockquote>
+<p></p>
 
 <pre>
-And here's an outline of what i'm imagining:
+Graphreduce is designed to identify communities (or clusters) in large 
+biological networks (graphs), and map these clusters to a 2-dimensional 
+space.
 
-1. Rank by popularity (pagerank)
+We assume the entire graph won't fit into memory, which makes for an 
+interesting challenge.  We use a distributed learning algorithm to meet 
+this challenge.
 
-2. Identify seed nodes
-   - Popular nodes far away from existing seed nodes
-   - See above heuristic approach
+Here are the steps:
 
-3. Distributed linlog energy model
-   - Use neighborhoods saved in Step 2
-   - See linlog energy model post:
-     + http://www.smarttypes.org/blog/graph_reduction_linlog_nbody_simulation
+ 1. Kick off a new reduction (log progress in the db).
 
-4. Stitch 2d reductions together 
-   - Some sort of eigenvector least-squared transformation
-   - Overlapping nodes is the key
+ 2. Intelligently select N seed nodes. Select nodes that are far apart, 2nd 
+    level (degree) has little overlap w/ other seed node 2nd level (can't 
+    measure @ this point)
+
+ 3. Use N seed nodes to get N 'seed networks' -- pull in the people seed node 
+    follows and the people those people follow (2 degrees) -- if each person 
+    follows 100 people on average it's 10,000 nodes
+
+ 4. Measure seed node selection performance (use seed networks)
+
+ 5. Use seed networks for distributed community detection -- see 'Community 
+    detection improvements' in the igraph 0.6 release notes: 
+    http://igraph.sourceforge.net/relnotes-0.6.html
+
+ 6. Generate 'local' community stats (assume we only know about a single 
+    community at a time -- we iterate over the communities, or do in parallel)
+
+ 7. Remove duplicate nodes (use local community stats)
+
+ 8. Embed community nodes (use local community stats)
+
+ 9. Measure community embedding performance (use local community stats + 
+    community embedding)
+
+ 10. Rinse, wash, repeat -- Step 2. looks at previous reduction to select seed 
+    nodes (this is the much-hyped learning bit)
+
+Here's how it all maps to code:
+
+  Step 1: reduction_job = start_new_reduction()
+
+  Step 2: seed_nodes = get_seed_nodes(reduction_job)
+
+  Step 3: seed_networks = get_seed_networks(reduction_job, seed_nodes)
+
+  Step 4: measure_seed_node_selection_performance(reduction_job, seed_networks)
+
+  Step 5: communities = do_distributed_community_detection(reduction_job, 
+                          seed_networks)
+
+  Step 6: community_stats = gen_community_stats(reduction_job, communities) 
+
+  Step 7: communities = remove_dup_nodes(reduction_job, community_stats)
+
+  Step 8: 2d_embedding = embed_community_nodes(reduction_job, community_stats)
+
+  Step 9: measure_community_embedding_performance(reduction_job, community_stats, 
+            2d_embedding)
 </pre>
-
-<p>Still trying to figure this out:</p>
-
-<blockquote>
-	Here, Ti is the subset of C whose videos contain the ith most
-frequent text term of the cluster. A coherent cluster will have
-high coherence(t) for small t, i.e., a few text terms cover
-majority of the videos in the cluster. This text coherence
-can be considered as an application level metric to evaluate
-cluster quality for real-world applications.
-</blockquote>
-
-
 
 </body>                                    
 </html>

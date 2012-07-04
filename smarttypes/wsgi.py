@@ -47,8 +47,6 @@ def application(environ, start_response):
                     if request.cookies.get('session'):
                         session = TwitterSession.get_by_request_key(request.cookies['session'], postgres_handle)
                     response_dict = controller(request, session, postgres_handle)
-                    response_dict['total_user_count'] = TwitterUser.get_user_count_str(postgres_handle)
-                    
                     web_response = WebResponse(request, controller.__name__, response_dict, session)
                     response_headers = web_response.get_response_headers()
                     response_string = web_response.get_response_str()
