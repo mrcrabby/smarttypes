@@ -8,7 +8,7 @@ from smarttypes.utils.postgres_handle import PostgresHandle
 
 if __name__ == "__main__":
 
-	postgres_handle = PostgresHandle(smarttypes.connection_string)
+    postgres_handle = PostgresHandle(smarttypes.connection_string)
 
     if not len(sys.argv) > 1:
         raise Exception('Need a twitter handle.')
