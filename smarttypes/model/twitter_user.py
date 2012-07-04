@@ -95,15 +95,6 @@ class TwitterUser(PostgresBaseModel):
         return return_list
 
     @property
-    def following_following_ids(self):
-        print "Loading following_following_ids!"
-        return_ids = set(self.following_ids)
-        for following in self.following[:10000]:
-            for following_following_id in following.following_ids:
-                return_ids.add(following_following_id)
-        return list(return_ids)
-
-    @property
     def is_expired(self):
         expired = True
         if self.last_loaded_following_ids and \
@@ -216,7 +207,16 @@ class TwitterUser(PostgresBaseModel):
         return postgres_handle.execute_query(qry)[0]['user_count']
 
     @classmethod
-    def get_rooted_network(cls, root_user, postgres_handle, go_back_this_many_weeks = 1):
+    def get_following_following_ids(cls, root_user, distance=100):
+        print "Loading following_following_ids!"
+        return_ids = set(root_user.following_ids)
+        for following in root_user.following:
+            for following_following_id in following.following_ids[:distance]:
+                return_ids.add(following_following_id)
+        return list(return_ids)
+
+    @classmethod
+    def get_rooted_network(cls, root_user, postgres_handle, go_back_this_many_weeks=2, distance=100):
         print 'Loading network in memory!'
         network = OrderedDict()
         network[root_user.id] = set(root_user.following_ids)
@@ -237,7 +237,7 @@ class TwitterUser(PostgresBaseModel):
         --where array_length(f.following_ids, 1) >= 20
         ;
         """
-        following_following_ids = root_user.following_following_ids
+        following_following_ids = cls.get_following_following_ids(root_user, distance=distance)
         params = {'following_following_ids':following_following_ids}
         for year_weeknum in year_weeknum_strs:
             print 'Starting %s query!' % year_weeknum
@@ -252,7 +252,7 @@ class TwitterUser(PostgresBaseModel):
     @classmethod
     def mk_following_following_csv(cls, root_user_id, file_like, postgres_handle):
         root_user = cls.get_by_id(root_user_id, postgres_handle)
-        network = cls.get_rooted_network(root_user, postgres_handle, go_back_this_many_weeks = 3)
+        network = cls.get_rooted_network(root_user, postgres_handle)
         print "writing %s users to a csv" % len(network)
 
         properties = copy(cls.table_columns)
