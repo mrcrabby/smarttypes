@@ -98,7 +98,7 @@ class TwitterUser(PostgresBaseModel):
     def following_following_ids(self):
         print "Loading following_following_ids!"
         return_ids = set(self.following_ids)
-        for following in self.following:
+        for following in self.following[:100]:
             for following_following_id in following.following_ids:
                 return_ids.add(following_following_id)
         return list(return_ids)
@@ -228,7 +228,7 @@ class TwitterUser(PostgresBaseModel):
         # - http://archives.postgresql.org/pgsql-novice/2009-01/msg00092.php
         qry = """
         WITH only_these_ids as (
-            select element from unnest(%s) as id
+            select id from unnest(%s) as id
         )
         select u.id, f.following_ids
         from twitter_user u
