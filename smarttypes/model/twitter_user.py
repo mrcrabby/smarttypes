@@ -229,7 +229,7 @@ class TwitterUser(PostgresBaseModel):
             u.id in %s;
         ;
         """
-        params = {'following_following_ids':root_user.following_following_ids}
+        params = {'following_following_ids':tuple(root_user.following_following_ids)}
         for year_weeknum in year_weeknum_strs:
             print 'Starting %s query!' % year_weeknum
             results = postgres_handle.execute_query(qry % (year_weeknum, '%(following_following_ids)s'), params)
