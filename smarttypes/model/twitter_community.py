@@ -9,7 +9,11 @@ class TwitterCommunity(PostgresBaseModel):
     table_name = 'twitter_community'
     table_key = 'id'
     table_columns = [
+        'reduction_id',
         'index',
+        'x_coordinate',
+        'y_coordinate',
+        'node_size',
         'user_ids',
         'scores',
         'tag_cloud',
@@ -42,30 +46,29 @@ class TwitterCommunity(PostgresBaseModel):
     ##class methods
     ##############################################
     @classmethod
-    def get_all(cls, postgres_handle):
-        qry = """
-        select * 
-        from twitter_community;
-        """
-        results = postgres_handle.execute_query(qry)
-        return [cls(postgres_handle=postgres_handle, **x) for x in results]
+    def get_all(cls, reduction_id, postgres_handle):
+        return cls.get_by_name_value('reduction_id', reduction_id, postgres_handle)
     
     @classmethod
-    def create_community(cls, index, user_ids, scores, postgres_handle):
+    def create_community(cls, reduction_id, index, x_coordinate, y_coordinate, 
+        node_size, user_ids, scores, postgres_handle):
         twitter_community = cls(postgres_handle=postgres_handle)
+        twitter_community.reduction_id = reduction_id
         twitter_community.index = index
+        twitter_community.x_coordinate = x_coordinate
+        twitter_community.y_coordinate = y_coordinate
+        twitter_community.node_size = node_size
         twitter_community.user_ids = user_ids
         twitter_community.scores = scores
         twitter_community.save()
         return twitter_community
         
     @classmethod
-    def mk_tag_clouds(cls, postgres_handle):
-        
+    def mk_tag_clouds(cls, reduction_id, postgres_handle):
         print "starting community_wordcounts loop"
         community_wordcounts = {}
         all_words = set()
-        for community in cls.get_all(postgres_handle):
+        for community in cls.get_all(reduction_id, postgres_handle):
             community_wordcounts[community.index] = (community, collections.defaultdict(int))
             for score, user in community.top_users(num_users=25):
                 if not user.description:

@@ -83,7 +83,24 @@ EXECUTE PROCEDURE ts_modifieddate();
 for year_week_st in time_utils.year_weeknum_strs(datetime.now(), 50):
     postgres_handle.execute_query(twitter_user_following % {'postfix':year_week_st}, return_results=False)
     postgres_handle.connection.commit()
-    
+
+################################################
+##twitter_reduction
+################################################    
+twitter_reduction = """
+create table twitter_reduction(
+    createddate timestamp not null default now(),
+    modifieddate timestamp not null default now(),
+    id serial unique,
+    root_user_id text not null references twitter_user(id)
+);
+CREATE TRIGGER twitter_reduction_modified BEFORE UPDATE
+ON twitter_reduction FOR EACH ROW
+EXECUTE PROCEDURE ts_modifieddate();  
+"""
+postgres_handle.execute_query(twitter_reduction, return_results=False)
+postgres_handle.connection.commit()
+
 ################################################
 ##twitter_community
 ################################################    
@@ -91,11 +108,16 @@ twitter_community = """
 create table twitter_community(
     createddate timestamp not null default now(),
     modifieddate timestamp not null default now(),
-    id serial unique, 
+    id serial unique,
+    reduction_id integer not null references twitter_reduction(id), 
     index integer not null,
+    x_coordinate real[] not null,
+    y_coordinate real[] not null,
+    node_size real not null,
     user_ids text[] not null,
     scores real[] not null,
-    tag_cloud text[]
+    tag_cloud text[],
+    unique (reduction_id, index)
 );
 CREATE TRIGGER twitter_community_modified BEFORE UPDATE
 ON twitter_community FOR EACH ROW

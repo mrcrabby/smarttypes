@@ -23,6 +23,7 @@
             <ul>
                 <li py:for="score, user in community.top_users()">
                     ${score} --
+                    ${user.screen_name} --
                     ${user.location_name} --
                     ${user.description}
                 </li>
