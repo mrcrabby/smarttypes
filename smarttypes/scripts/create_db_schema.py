@@ -83,53 +83,25 @@ EXECUTE PROCEDURE ts_modifieddate();
 for year_week_st in time_utils.year_weeknum_strs(datetime.now(), 50):
     postgres_handle.execute_query(twitter_user_following % {'postfix':year_week_st}, return_results=False)
     postgres_handle.connection.commit()
-
-################################################
-##twitter_reduction
-################################################    
-twitter_reduction = """
-create table twitter_reduction(
-    createddate timestamp not null default now(),
-    modifieddate timestamp not null default now(),
-    
-    id serial unique,
-    root_user_id text not null references twitter_user(id),
-    user_ids text[] not null,
-    x_coordinates real[] not null,
-    y_coordinates real[] not null,
-    group_indices real[],
-    group_scores real[],
-    in_links text[],
-    out_links text[]
-);
-CREATE TRIGGER twitter_reduction_modified BEFORE UPDATE
-ON twitter_reduction FOR EACH ROW
-EXECUTE PROCEDURE ts_modifieddate();  
-"""
-postgres_handle.execute_query(twitter_reduction, return_results=False)
-postgres_handle.connection.commit()
     
 ################################################
-##twitter_group
+##twitter_community
 ################################################    
-twitter_group = """
-create table twitter_group(
+twitter_community = """
+create table twitter_community(
     createddate timestamp not null default now(),
     modifieddate timestamp not null default now(),
-
-    id serial unique,
-    reduction_id integer not null references twitter_reduction(id), 
+    id serial unique, 
     index integer not null,
     user_ids text[] not null,
     scores real[] not null,
-    tag_cloud text[],
-    unique (reduction_id, index)
+    tag_cloud text[]
 );
-CREATE TRIGGER twitter_group_modified BEFORE UPDATE
-ON twitter_group FOR EACH ROW
+CREATE TRIGGER twitter_community_modified BEFORE UPDATE
+ON twitter_community FOR EACH ROW
 EXECUTE PROCEDURE ts_modifieddate();  
 """
-postgres_handle.execute_query(twitter_group, return_results=False)
+postgres_handle.execute_query(twitter_community, return_results=False)
 postgres_handle.connection.commit()
 
 ################################################

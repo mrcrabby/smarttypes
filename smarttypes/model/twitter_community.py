@@ -3,14 +3,12 @@ from smarttypes.model.postgres_base_model import PostgresBaseModel
 from datetime import datetime, timedelta
 from smarttypes.utils import time_utils, text_parsing
 import re, string, heapq, random, collections, numpy
-import networkx
 
-class TwitterGroup(PostgresBaseModel):
+class TwitterCommunity(PostgresBaseModel):
         
-    table_name = 'twitter_group'
+    table_name = 'twitter_community'
     table_key = 'id'
     table_columns = [
-        'reduction_id',
         'index',
         'user_ids',
         'scores',
@@ -44,43 +42,32 @@ class TwitterGroup(PostgresBaseModel):
     ##class methods
     ##############################################
     @classmethod
-    def all_groups(cls, reduction_id, postgres_handle):
-        return cls.get_by_name_value('reduction_id', reduction_id, postgres_handle)
-    
-    @classmethod
-    def get_by_index(cls, reduction_id, index, postgres_handle):
+    def get_all(cls, postgres_handle):
         qry = """
         select * 
-        from twitter_group
-        where reduction_id = %(reduction_id)s
-            and index = %(index)s;
+        from twitter_community;
         """
-        params = {'reduction_id':reduction_id, 'index':index}
-        results = postgres_handle.execute_query(qry, params)
-        if results:
-            return cls(postgres_handle=postgres_handle, **results[0])
-        else:
-            return None
+        results = postgres_handle.execute_query(qry)
+        return [cls(postgres_handle=postgres_handle, **x) for x in results]
     
     @classmethod
-    def create_group(cls, reduction_id, index, user_ids, scores, postgres_handle):
-        twitter_group = cls(postgres_handle=postgres_handle)
-        twitter_group.reduction_id = reduction_id
-        twitter_group.index = index
-        twitter_group.user_ids = user_ids
-        twitter_group.scores = scores
-        twitter_group.save()
-        return twitter_group
+    def create_community(cls, index, user_ids, scores, postgres_handle):
+        twitter_community = cls(postgres_handle=postgres_handle)
+        twitter_community.index = index
+        twitter_community.user_ids = user_ids
+        twitter_community.scores = scores
+        twitter_community.save()
+        return twitter_community
         
     @classmethod
-    def mk_tag_clouds(cls, reduction_id, postgres_handle):
+    def mk_tag_clouds(cls, postgres_handle):
         
-        print "starting group_wordcounts loop"
-        group_wordcounts = {}
+        print "starting community_wordcounts loop"
+        community_wordcounts = {}
         all_words = set()
-        for group in cls.all_groups(reduction_id, postgres_handle):
-            group_wordcounts[group.index] = (group, collections.defaultdict(int))
-            for score, user in group.top_users(num_users=25):
+        for community in cls.get_all(postgres_handle):
+            community_wordcounts[community.index] = (community, collections.defaultdict(int))
+            for score, user in community.top_users(num_users=25):
                 if not user.description:
                     continue
                 regex = re.compile(r'[%s\s]+' % re.escape(string.punctuation))
@@ -93,38 +80,38 @@ class TwitterGroup(PostgresBaseModel):
                     if len(word) > 2 and word not in user_words:
                         user_words.add(word)
                         all_words.add(word)
-                        group_wordcounts[group.index][1][word] += (1 + (score * 5))
+                        community_wordcounts[community.index][1][word] += (1 + (score * 5))
                         
         print "starting avg_wordcounts loop"            
         avg_wordcounts = {} #{word:avg}
         sum_words = []#[(sum,word)]
         for word in all_words:
-            group_usage = []
-            for group_index in group_wordcounts:
-                group_usage.append(group_wordcounts[group_index][1][word])
-            avg_wordcounts[word] = numpy.average(group_usage)
-            sum_words.append((numpy.sum(group_usage), word))        
+            community_usage = []
+            for community_index in community_wordcounts:
+                community_usage.append(community_wordcounts[community_index][1][word])
+            avg_wordcounts[word] = numpy.average(community_usage)
+            sum_words.append((numpy.sum(community_usage), word))        
         
         print "starting delete stop words loop"
-        for group_index in group_wordcounts:
+        for community_index in community_wordcounts:
             for word in text_parsing.STOPWORDS:
-                if word in group_wordcounts[group_index][1]:
-                    del group_wordcounts[group_index][1][word]     
+                if word in community_wordcounts[community_index][1]:
+                    del community_wordcounts[community_index][1][word]     
                 
-        print "starting groups_unique_words loop"
-        groups_unique_words = {} #{group_index:[(score, word)]}
-        for group_index in group_wordcounts:
-            groups_unique_words[group_index] = []
-            for word, times_used in group_wordcounts[group_index][1].items():
+        print "starting communities_unique_words loop"
+        communities_unique_words = {} #{community_index:[(score, word)]}
+        for community_index in community_wordcounts:
+            communities_unique_words[community_index] = []
+            for word, times_used in community_wordcounts[community_index][1].items():
                 if times_used > 2.5:
                     usage_diff = times_used - avg_wordcounts[word]
-                    groups_unique_words[group_index].append((usage_diff, word))
+                    communities_unique_words[community_index].append((usage_diff, word))
         
         print "starting save tag_cloud loop"
-        for group_index, unique_scores in groups_unique_words.items():
-            group = group_wordcounts[group_index][0]
-            group.tag_cloud = [x[1] for x in heapq.nlargest(10, unique_scores)]
-            group.save()
+        for community_index, unique_scores in communities_unique_words.items():
+            community = community_wordcounts[community_index][0]
+            community.tag_cloud = [x[1] for x in heapq.nlargest(10, unique_scores)]
+            community.save()
         
         return "All done!"
         

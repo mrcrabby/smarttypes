@@ -6,6 +6,7 @@ from smarttypes.utils.exceptions import RedirectException
 from smarttypes.utils import twitter_api_utils
 from smarttypes.utils import validation_utils
 from smarttypes.model.twitter_user import TwitterUser
+from smarttypes.model.twitter_community import TwitterCommunity
 
 
 def index(req, session, postgres_handle):
@@ -67,6 +68,14 @@ def blog(req, session, postgres_handle):
 
 def about(req, session, postgres_handle):
     return {}
+
+
+def communities(req, session, postgres_handle):
+
+    communities = TwitterCommunity.get_all(postgres_handle)
+    return {
+        'communities':communities
+    }
 
 
 def static(req, session, postgres_handle):
