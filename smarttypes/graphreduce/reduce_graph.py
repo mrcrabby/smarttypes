@@ -32,14 +32,10 @@ def reduce_and_save_communities(root_user, distance=10):
     g.add_vertices(network.keys())
     g.vs["id"] = network.keys() #need this for pajek format
     print 'iterative load into igraph'
-    i = 0
     edges = []
     for source in network:
         for target in network[source].intersection(keys_set):
             edges.append((source, target))
-        if i % 1000 == 0:
-            print i
-        i += 1
     g.add_edges(edges)
 
     print 'write to pajek format'
