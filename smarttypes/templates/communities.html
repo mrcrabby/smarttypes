@@ -15,19 +15,24 @@
 <body>
 
     <div style="text-align:left;">
+        <?python
+            communities = reduction.communities()
+        ?>
         <h2>
-            Some example communities!
+            ${len(communities)} example communities!
         </h2>
         <p py:for="community in communities">
-            ${community.index}
+            <p>${', '.join(community.community_edges)}</p>
+            ${len(community.member_ids)} -- ${', '.join(community.tag_cloud)}
             <ul>
                 <li py:for="score, user in community.top_users()">
                     ${score} --
-                    ${user.screen_name} --
+                    <span style="font-weight:bold;">${user.screen_name}</span> --
                     ${user.location_name} --
                     ${user.description}
                 </li>
             </ul>
+            <p>-------------------------------------------------------</p>
         </p>
     </div>
 

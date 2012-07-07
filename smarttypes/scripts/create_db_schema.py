@@ -111,17 +111,15 @@ create table twitter_community(
     id serial unique,
     reduction_id integer not null references twitter_reduction(id), 
     index integer not null,
-    x_coordinate real[] not null,
-    y_coordinate real[] not null,
-    node_size real not null,
-    user_ids text[] not null,
-    scores real[] not null,
+    community_edges text[] not null,
+    member_ids text[] not null,
+    member_scores real[] not null,
     tag_cloud text[],
     unique (reduction_id, index)
 );
 CREATE TRIGGER twitter_community_modified BEFORE UPDATE
 ON twitter_community FOR EACH ROW
-EXECUTE PROCEDURE ts_modifieddate();  
+EXECUTE PROCEDURE ts_modifieddate();
 """
 postgres_handle.execute_query(twitter_community, return_results=False)
 postgres_handle.connection.commit()

@@ -11,20 +11,18 @@ class TwitterCommunity(PostgresBaseModel):
     table_columns = [
         'reduction_id',
         'index',
-        'x_coordinate',
-        'y_coordinate',
-        'node_size',
-        'user_ids',
-        'scores',
+        'community_edges',
+        'member_ids',
+        'member_scores',
         'tag_cloud',
     ]    
     table_defaults = {}
     
     def get_members(self):
         return_list = []
-        for i in range(len(self.user_ids)):
-            user_id = self.user_ids[i]
-            score = self.scores[i]
+        for i in range(len(self.member_ids)):
+            user_id = self.member_ids[i]
+            score = self.member_scores[i]
             return_list.append((score, user_id))
         return return_list
     
@@ -50,16 +48,14 @@ class TwitterCommunity(PostgresBaseModel):
         return cls.get_by_name_value('reduction_id', reduction_id, postgres_handle)
     
     @classmethod
-    def create_community(cls, reduction_id, index, x_coordinate, y_coordinate, 
-        node_size, user_ids, scores, postgres_handle):
+    def create_community(cls, reduction_id, index, community_edges, 
+            member_ids, member_scores, postgres_handle):
         twitter_community = cls(postgres_handle=postgres_handle)
         twitter_community.reduction_id = reduction_id
         twitter_community.index = index
-        twitter_community.x_coordinate = x_coordinate
-        twitter_community.y_coordinate = y_coordinate
-        twitter_community.node_size = node_size
-        twitter_community.user_ids = user_ids
-        twitter_community.scores = scores
+        twitter_community.community_edges = community_edges
+        twitter_community.member_ids = member_ids
+        twitter_community.member_scores = member_scores
         twitter_community.save()
         return twitter_community
         

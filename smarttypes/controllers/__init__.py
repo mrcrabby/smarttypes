@@ -7,6 +7,7 @@ from smarttypes.utils import twitter_api_utils
 from smarttypes.utils import validation_utils
 from smarttypes.model.twitter_user import TwitterUser
 from smarttypes.model.twitter_community import TwitterCommunity
+from smarttypes.model.twitter_reduction import TwitterReduction
 
 
 def index(req, session, postgres_handle):
@@ -71,10 +72,10 @@ def about(req, session, postgres_handle):
 
 
 def communities(req, session, postgres_handle):
-
-    communities = TwitterCommunity.get_all(postgres_handle)
+    root_user = TwitterUser.by_screen_name('SmartTypes', postgres_handle)
+    reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
     return {
-        'communities':communities
+        'reduction':reduction
     }
 
 
