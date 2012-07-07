@@ -19,62 +19,37 @@ def print_user_details(user_ids, postgres_handle):
 		except Exception, e:
 			""
 
-def do_igraph_community_detection():
-    #see these:
-    # - http://www.tp.umu.se/~rosvall/downloads/
-    # - http://igraph.sourceforge.net/doc-0.6/html/ch22s08.html#igraph_community_infomap
-    communities = g.community_infomap() #modularity: 0.354382989825
-    #communities = g.community_fastgreedy().as_clustering() #undirected graphs only
-    #communities = g.community_label_propagation() #modularity: 0.325206216866
-    #communities = g.community_walktrap().as_clustering() #modularity: 0.417456600391
-    #communities = g.community_spinglass() #modularity: 0.448054107192
-    #communities = g.community_edge_betweenness().as_clustering() #modularity: 0.0039106707787
-    print "modularity: %s" % communities.modularity
-    print "sizes: %s" % communities.sizes()
-    print "----------------------------------------"
-    print ""
-    for community_graph in communities.subgraphs():
-        dyad_census = community_graph.dyad_census()
-        if dyad_census[2]:
-            dyad_score = float(dyad_census[0]) / float(dyad_census[2])
-            print "%s : %s" % (len(community_graph.vs), dyad_score)
-            member_ids = community_graph.vs["name"]
-            print_user_details(member_ids, postgres_handle)
-            print "--end---------------------------------------"
+def reduce_and_save_communities(root_user, distance=10):
 
+    network = TwitterUser.get_rooted_network(root_user, postgres_handle, distance=distance)
 
-if __name__ == "__main__":
-
-    start_time = datetime.now()
-    postgres_handle = PostgresHandle(smarttypes.connection_string)
-    if not len(sys.argv) > 1:
-        raise Exception('Need a twitter handle.')
-    else:
-        screen_name = sys.argv[1]
-    root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
-    network = TwitterUser.get_rooted_network(root_user, postgres_handle, distance=8)
-    #del network
-
-    #load in igraph
+    print 'load %s users into igraph' % len(network)
     g = Graph(directed=True)
+    keys_set = set(network.keys())
     g.add_vertices(network.keys())
     g.vs["id"] = network.keys() #need this for pajek format
+    print 'iterative load into igraph'
+    i = 0
+    edges = []
     for source in network:
-        for target in network[source]:
-            if target in network:
-                g.add_edge(source, target)
+        for target in network[source].intersection(keys_set):
+            edges.append((source, target))
+        if i % 1000 == 0:
+            print i
+        i += 1
+    g.add_edges(edges)
 
-    #write to pajek format
+    print 'write to pajek format'
     root_file_name = 'partition_0'
     f = open('io/%s.net' % root_file_name, 'w')
     g.write(f, format='pajek')
 
-    #run infomap
+    print 'run infomap'
     #infomap_command = 'infomap_dir/infomap 345234 io/%s.net 10'
-    infomap_command = 'conf-infomap_dir/conf-infomap 344 io/%s.net 15 10 0.45'
+    infomap_command = 'conf-infomap_dir/conf-infomap 344 io/%s.net 10 10 0.50'
     os.system(infomap_command % root_file_name)
 
-    #read into memory
+    print 'read into memory'
     f = open('io/%s.smap' % root_file_name)
 
     section_header = ''
@@ -124,19 +99,33 @@ if __name__ == "__main__":
             edge_weight = line.split(' ')[2]
             communities[community_idx][0].append('%s:%s' % (target_community_idx, edge_weight))
         
-    #insert into the db
+    print 'save final to disk'
     twitter_reduction = TwitterReduction.create_reduction(root_user.id, postgres_handle)
     postgres_handle.connection.commit()
     for community_idx, id_rank_tup in communities.items():
         #params:
         #reduction_id, index, 
         #community_edges, member_ids, member_scores, postgres_handle
-        if len(id_rank_tup[2]) > 4:
+        if len(id_rank_tup[2]) > 5:
             TwitterCommunity.create_community(twitter_reduction.id, community_idx, 
                 id_rank_tup[0], id_rank_tup[1], id_rank_tup[2], postgres_handle)
         postgres_handle.connection.commit()
     TwitterCommunity.mk_tag_clouds(twitter_reduction.id, postgres_handle)
     postgres_handle.connection.commit()
+
+
+if __name__ == "__main__":
+
+    start_time = datetime.now()
+    postgres_handle = PostgresHandle(smarttypes.connection_string)
+    if not len(sys.argv) > 2:
+        raise Exception('Need a twitter handle and distance.')
+    else:
+        screen_name = sys.argv[1]
+        distance = int(sys.argv[2])
+    root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
+    reduce_and_save_communities(root_user, distance)
+
 
 
 
