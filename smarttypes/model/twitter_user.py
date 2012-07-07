@@ -1,6 +1,5 @@
 
 from smarttypes.model.postgres_base_model import PostgresBaseModel
-from collections import OrderedDict
 from types import NoneType
 from datetime import datetime, timedelta
 import numpy, random, heapq
@@ -218,6 +217,7 @@ class TwitterUser(PostgresBaseModel):
     @classmethod
     def get_rooted_network(cls, root_user, postgres_handle, go_back_this_many_weeks=2, distance=100):
         print 'Loading network in memory!'
+        from collections import OrderedDict
         network = OrderedDict()
         network[root_user.id] = set(root_user.following_ids)
         start_w_this_date = datetime.now() - timedelta(days=go_back_this_many_weeks * 7)
