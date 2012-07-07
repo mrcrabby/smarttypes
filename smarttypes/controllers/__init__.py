@@ -6,8 +6,8 @@ from smarttypes.utils.exceptions import RedirectException
 from smarttypes.utils import twitter_api_utils
 from smarttypes.utils import validation_utils
 from smarttypes.model.twitter_user import TwitterUser
-from smarttypes.model.twitter_community import TwitterCommunity
 from smarttypes.model.twitter_reduction import TwitterReduction
+from smarttypes.model.twitter_community import TwitterCommunity
 
 
 def index(req, session, postgres_handle):
@@ -15,10 +15,8 @@ def index(req, session, postgres_handle):
         'total_user_count':TwitterUser.get_user_count_str(postgres_handle),
     }
 
-
 def sign_in(req, session, postgres_handle):
     raise RedirectException(twitter_api_utils.get_signin_w_twitter_url(postgres_handle))
-
 
 def my_account(req, session, postgres_handle):
     if session:
@@ -30,7 +28,6 @@ def my_account(req, session, postgres_handle):
             return {'cookies': [('session', session.request_key)], 'session': session}
     return {}
 
-
 def save_email(req, session, postgres_handle):
     if session and session.credentials:
         credentials = session.credentials
@@ -38,7 +35,6 @@ def save_email(req, session, postgres_handle):
             credentials.email = req.params.get('email')
             credentials.save()
     raise RedirectException('/my_account')
-
 
 def blog(req, session, postgres_handle):
     changed_url_map = {
@@ -66,18 +62,8 @@ def blog(req, session, postgres_handle):
         d['meta_page_description'] = template_str[start_idx:end_idx]
     return d
 
-
 def about(req, session, postgres_handle):
     return {}
-
-
-def communities(req, session, postgres_handle):
-    root_user = TwitterUser.by_screen_name('SmartTypes', postgres_handle)
-    reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
-    return {
-        'reduction':reduction
-    }
-
 
 def static(req, session, postgres_handle):
     #apache will handle this in prod (this is for testing)

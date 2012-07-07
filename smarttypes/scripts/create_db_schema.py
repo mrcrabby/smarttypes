@@ -111,6 +111,8 @@ create table twitter_community(
     id serial unique,
     reduction_id integer not null references twitter_reduction(id), 
     index integer not null,
+    x_axis real,
+    y_axis real,
     community_edges text[] not null,
     member_ids text[] not null,
     member_scores real[] not null,

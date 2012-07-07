@@ -21,12 +21,9 @@ urls = [
 
     (r'^blog/?', controllers.blog),
 
-    (r'^communities/?', controllers.communities),
     (r'^social_map/?$', controllers.social_map.index),
-    #(r'^social_map/map_data.json', controllers.social_map.map_data),
-    #(r'^social_map/group_details/?$', controllers.social_map.group_details),
-    #(r'^social_map/node_details/?$', controllers.social_map.node_details),
-    #(r'^social_map/next_or_previous_reduction_id', controllers.social_map.next_or_previous_reduction_id),
+    (r'^social_map/reduction/?$', controllers.social_map.reduction),
+    (r'^social_map/community/?$', controllers.social_map.community),
 
     (r'^about/?$', controllers.about),
     (r'^contact/?$', controllers.about),

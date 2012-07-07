@@ -35,26 +35,21 @@
         </a>
 
         <ul class="nav nav-pills pull-right">
-          <!--<li class="${'active' if active_tab == 'social_map' else ''}">
+          <li class="${'active' if active_tab == 'social_map' else ''}">
             <a href="/social_map">
               Explore
             </a>
-          </li>-->
+          </li>
           <li class="${'active' if active_tab == 'blog' else ''}">
             <a href="/blog">
               Read 
             </a>
           </li>
-          <!--<li class="${'active' if active_tab == 'social_map' else ''}">
-            <a href="/social_map">
-              Explore 
-            </a>
-          </li>-->
-          <li class="${'active' if active_tab == 'about' else ''}">
+<!--           <li class="${'active' if active_tab == 'about' else ''}">
             <a href="/about">
               About
             </a>
-          </li>
+          </li> -->
           <li py:if="not logged_in_user" >
             <a href="/sign_in">
               Sign in w/ twitter

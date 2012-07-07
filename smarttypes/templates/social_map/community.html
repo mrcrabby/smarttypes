@@ -1,0 +1,43 @@
+<!DOCTYPE html> 
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:py="http://genshi.edgewall.org/"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    lang="en">
+
+<xi:include href="../master.html" />      
+<head>
+
+<style type="text/css">
+<!--
+   ul.posts li {margin:15px 0;}
+-->
+</style>
+    
+</head>                    
+
+<body>
+
+    <div style="text-align:center;">
+        <h2>
+            ${len(community.member_ids)} member community!
+        </h2>
+        <p style="font-weight:bold;">Top 20 members:</p>
+        <p>
+	        <ul class="posts" style="list-style:none;margin:10px 0;">
+	            <li py:for="score, user in community.top_users()">
+	                ${score} --
+	                <span style="font-weight:bold;">${user.screen_name}</span> --
+	                ${user.location_name} --
+	                ${user.description}
+	            </li>
+	        </ul>
+    	</p>
+
+    </div>
+
+</body>                                    
+</html>
+

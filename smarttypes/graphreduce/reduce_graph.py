@@ -52,7 +52,7 @@ if __name__ == "__main__":
     else:
         screen_name = sys.argv[1]
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
-    network = TwitterUser.get_rooted_network(root_user, postgres_handle, distance=5)
+    network = TwitterUser.get_rooted_network(root_user, postgres_handle, distance=8)
     #del network
 
     #load in igraph
@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
     #run infomap
     #infomap_command = 'infomap_dir/infomap 345234 io/%s.net 10'
-    infomap_command = 'conf-infomap_dir/conf-infomap 344 io/%s.net 15 10 0.50'
+    infomap_command = 'conf-infomap_dir/conf-infomap 344 io/%s.net 15 10 0.45'
     os.system(infomap_command % root_file_name)
 
     #read into memory
@@ -131,12 +131,14 @@ if __name__ == "__main__":
         #params:
         #reduction_id, index, 
         #community_edges, member_ids, member_scores, postgres_handle
-        if len(id_rank_tup[2]) > 3:
+        if len(id_rank_tup[2]) > 4:
             TwitterCommunity.create_community(twitter_reduction.id, community_idx, 
                 id_rank_tup[0], id_rank_tup[1], id_rank_tup[2], postgres_handle)
         postgres_handle.connection.commit()
     TwitterCommunity.mk_tag_clouds(twitter_reduction.id, postgres_handle)
     postgres_handle.connection.commit()
+
+
 
 
 

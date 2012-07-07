@@ -11,6 +11,10 @@ class TwitterReduction(PostgresBaseModel):
     ]
     table_defaults = {}
 
+    def root_user(self):
+        from smarttypes.model.twitter_user import TwitterUser
+        return TwitterUser.get_by_id(self.root_user_id, self.postgres_handle)
+
     def communities(self):
         from smarttypes.model.twitter_community import TwitterCommunity
         return TwitterCommunity.get_by_name_value('reduction_id', self.id, self.postgres_handle)

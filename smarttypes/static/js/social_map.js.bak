@@ -17,7 +17,8 @@ var load_social_map = function(reduction_id, num_groups){
     d3.json(reduction_href, function(data){
 
         var coord_scale = d3.scale.linear().domain(
-            [data.min_coord,data.max_coord]).range([10,420]);
+            [data.min_coord,data.max_coord])
+            .range([10,420]);
 
         var color_scale = d3.scale.linear().domain([-1,num_groups])
             .interpolate(d3.interpolateRgb)
@@ -47,13 +48,55 @@ var load_social_map = function(reduction_id, num_groups){
                 }
             });
         
-        //$('div#spinner').hide();
-        //global_old_group_index = -1;
-        //global_old_group_color = "";
-        //show_cluster(0, reduction_id);
+        $('div#spinner').hide();
+        global_old_group_index = -1;
+        global_old_group_color = "";
+        show_cluster(0, reduction_id);
+        global_old_node_id = "";
+        global_old_node_color = "";
+        show_node("", reduction_id);
 
     });
 }
+
+var show_node = function(node_id, reduction_id){
+
+    //change old group color back
+    if (global_old_group_index != -1){
+        d3.selectAll('circle.group_' + global_old_group_index).style("fill", global_old_group_color);
+    }
+    global_old_group_index = -1;
+    global_old_group_color = "";
+
+    //change following color back
+    global_old_following.forEach(function(following_id){ 
+        d3.selectAll('#id_' + following_id).style("fill", global_old_node_color);
+    });
+
+    //change old node color back
+    if (global_old_node_id != ""){
+        d3.selectAll('#id_' + global_old_node_id).style("fill", global_old_node_color);
+    }
+    global_old_node_id = node_id;
+    global_old_node_color = d3.selectAll('#id_' + node_id).style("fill");
+
+    //highlight selected node
+    d3.selectAll('#id_' + node_id).style("fill", '#00FF00');
+    $('#current_group').html("");
+
+    $.ajax({type:"POST",
+            url:"/social_map/node_details",
+            cache:false,
+            data:{'node_id': node_id, 'reduction_id':reduction_id},
+            dataType:"html",
+            error:function(){},
+            success:function(html){
+                $('#group_details').html('');
+                $('#group_details').html(html);
+                bind_highlight_following_click();
+            }
+    });
+};
 
 var show_cluster = function(group_idx, reduction_id){
 
