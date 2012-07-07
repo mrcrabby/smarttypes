@@ -21,6 +21,9 @@ def print_user_details(user_ids, postgres_handle):
 
 def reduce_and_save_communities(root_user, distance=10):
 
+    print 'starting reduce_and_save_communities'
+    print 'root_user: %s,  following_in_our_db: %s, distance: %s' % (
+        root_user.screen_name, len(root_user.following), distance)
     network = TwitterUser.get_rooted_network(root_user, postgres_handle, distance=distance)
 
     print 'load %s users into igraph' % len(network)
@@ -124,6 +127,8 @@ if __name__ == "__main__":
         screen_name = sys.argv[1]
         distance = int(sys.argv[2])
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
+    if distance < 1:
+        distance = 9000 / len(root_user.following)
     reduce_and_save_communities(root_user, distance)
 
 
