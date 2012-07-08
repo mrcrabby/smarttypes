@@ -8,16 +8,6 @@ from datetime import datetime, timedelta
 from smarttypes.utils.postgres_handle import PostgresHandle
 from collections import defaultdict
 
-def print_user_details(user_ids, postgres_handle):
-	for user in TwitterUser.get_by_ids(user_ids, postgres_handle):
-		try:
-			print "%s -- %s -- %s " % (
-				user.screen_name, 
-				user.location_name,
-				user.description[:100].replace('\n', ' ') if user.description else '',
-			)
-		except Exception, e:
-			""
 
 def reduce_and_save_communities(root_user, distance=10, return_graph_for_inspection=False):
 
