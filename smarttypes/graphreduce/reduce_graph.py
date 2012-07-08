@@ -19,7 +19,7 @@ def print_user_details(user_ids, postgres_handle):
 		except Exception, e:
 			""
 
-def reduce_and_save_communities(root_user, distance=10):
+def reduce_and_save_communities(root_user, distance=10, return_graph_for_inspection=False):
 
     print 'starting reduce_and_save_communities'
     print 'root_user: %s,  following_in_our_db: %s, distance: %s' % (
@@ -37,6 +37,9 @@ def reduce_and_save_communities(root_user, distance=10):
         for target in network[source].intersection(keys_set):
             edges.append((source, target))
     g.add_edges(edges)
+    g = g.simplify()
+    if return_graph_for_inspection:
+        return g
 
     print 'write to pajek format'
     root_file_name = 'partition_0'
@@ -117,17 +120,23 @@ if __name__ == "__main__":
 
     start_time = datetime.now()
     postgres_handle = PostgresHandle(smarttypes.connection_string)
+
     if not len(sys.argv) > 2:
         raise Exception('Need a twitter handle and distance.')
     else:
         screen_name = sys.argv[1]
         distance = int(sys.argv[2])
+
+    return_graph_for_inspection = False
+    if len(sys.argv) > 3 and int(sys.argv[3]) == 0:
+        return_graph_for_inspection = True
+
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
     if distance < 1:
         distance = 9000 / len(root_user.following)
-    reduce_and_save_communities(root_user, distance)
+    g = reduce_and_save_communities(root_user, distance, return_graph_for_inspection)
 
-
+    print datetime.now() - start_time
 
 
 
