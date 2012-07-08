@@ -38,6 +38,12 @@ def reduce_and_save_communities(root_user, distance=10, return_graph_for_inspect
             edges.append((source, target))
     g.add_edges(edges)
     g = g.simplify()
+    print 'make sure graph is connected'
+    connected_clusters = g.clusters()
+    connected_cluster_lengths = [len(x) for x in connected_clusters]
+    connected_cluster_max_idx = connected_cluster_lengths.index(max(connected_cluster_lengths))
+    g = connected_clusters.subgraph(connected_cluster_max_idx)
+
     if return_graph_for_inspection:
         return g
 
