@@ -43,6 +43,10 @@ def reduce_and_save_communities(root_user, distance=10, return_graph_for_inspect
     connected_cluster_lengths = [len(x) for x in connected_clusters]
     connected_cluster_max_idx = connected_cluster_lengths.index(max(connected_cluster_lengths))
     g = connected_clusters.subgraph(connected_cluster_max_idx)
+    if g.is_connected():
+        print 'graph is connected'
+    else:
+        print 'graph is not connected'
 
     if return_graph_for_inspection:
         return g
