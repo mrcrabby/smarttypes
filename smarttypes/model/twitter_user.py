@@ -265,11 +265,9 @@ class TwitterUser(PostgresBaseModel):
                 write_this_user = cls.get_by_id(write_this_id, postgres_handle)
                 initial_stuff = []
                 for x in properties:
-                    try:
-                        value = str(write_this_user.__dict__.get(x))
-                    except UnicodeEncodeError:
-                        value = write_this_user.__dict__.get(x)
-                        value = value.encode('ascii', 'ignore')
+                    value = write_this_user.__dict__.get(x)
+                    value = value.encode('ascii', 'ignore')
+                    value = value.replace('\r\n', ' ').replace('\n', ' ')
                     initial_stuff.append(value)
                 following_ids_str = '::'.join(write_this_user.following_ids)
                 writer.writerow(initial_stuff + [following_ids_str])

@@ -298,7 +298,7 @@ void partition(MTRand *R, Node ***node, GreedyBase *greedy, bool silent){
             int orig_NinLinks = cpy_node[orig_nr]->inLinks.size();
             sub_renumber[orig_nr] = j;
             sub_rev_renumber[j] = orig_nr;
-            sub_node[j] = new Node(j,cpy_node[orig_nr]->teleportWeight);
+            sub_node[j] = new Node(j,cpy_node[orig_nr]->teleportWeight/(*node)[i]->teleportWeight);
             sub_node[j]->selfLink =  cpy_node[orig_nr]->selfLink; // Take care of self-link
             for(int k=0;k<orig_NoutLinks;k++){
               int orig_link = cpy_node[orig_nr]->outLinks[k].first;
