@@ -1,5 +1,7 @@
-from igraph import Graph
+
 import smarttypes, sys, os
+sys.path.append('/usr/local/lib/python2.7/site-packages')
+from igraph import Graph, plot
 from smarttypes.model.twitter_user import TwitterUser
 from smarttypes.model.twitter_community import TwitterCommunity
 from smarttypes.model.twitter_reduction import TwitterReduction
@@ -42,7 +44,7 @@ def reduce_and_save_communities(root_user, distance=10, return_graph_for_inspect
         return g
 
     print 'write to pajek format'
-    root_file_name = 'partition_0'
+    root_file_name = root_user.screen_name
     f = open('io/%s.net' % root_file_name, 'w')
     g.write(f, format='pajek')
 
@@ -100,20 +102,34 @@ def reduce_and_save_communities(root_user, distance=10, return_graph_for_inspect
             target_community_idx = line.split(' ')[1]
             edge_weight = line.split(' ')[2]
             communities[community_idx][0].append('%s:%s' % (target_community_idx, edge_weight))
-        
-    print 'save final to disk'
-    twitter_reduction = TwitterReduction.create_reduction(root_user.id, postgres_handle)
-    postgres_handle.connection.commit()
-    for community_idx, id_rank_tup in communities.items():
-        #params:
-        #reduction_id, index, 
-        #community_edges, member_ids, member_scores, postgres_handle
-        if len(id_rank_tup[2]) > 5:
-            TwitterCommunity.create_community(twitter_reduction.id, community_idx, 
-                id_rank_tup[0], id_rank_tup[1], id_rank_tup[2], postgres_handle)
-        postgres_handle.connection.commit()
-    TwitterCommunity.mk_tag_clouds(twitter_reduction.id, postgres_handle)
-    postgres_handle.connection.commit()
+
+    print 'make community graph w/ %s communities' % len(communities)
+    cg = Graph(directed=True)
+    cg.add_vertices(sorted(communities.keys()))
+    cg.vs["label"] = cg.vs["name"]
+    for community_idx in sorted(communities.keys()):
+        for target_weight in communities[community_idx][0]:
+            target, weight = target_weight.split(':')
+            target, weight = target, float(weight)
+            cg.add_edge(community_idx, target, weight=weight)
+    layout = cg.layout("kk")
+    vertex_size = []
+    plot(cg, layout=layout, edge_color="white", vertex_size=30)
+    return layout
+
+    # print 'save final to disk'
+    # twitter_reduction = TwitterReduction.create_reduction(root_user.id, postgres_handle)
+    # postgres_handle.connection.commit()
+    # for community_idx, id_rank_tup in communities.items():
+    #     #params:
+    #     #reduction_id, index, 
+    #     #community_edges, member_ids, member_scores, postgres_handle
+    #     if len(id_rank_tup[2]) > 5:
+    #         TwitterCommunity.create_community(twitter_reduction.id, community_idx, 
+    #             id_rank_tup[0], id_rank_tup[1], id_rank_tup[2], postgres_handle)
+    #     postgres_handle.connection.commit()
+    # TwitterCommunity.mk_tag_clouds(twitter_reduction.id, postgres_handle)
+    # postgres_handle.connection.commit()
 
 
 if __name__ == "__main__":
