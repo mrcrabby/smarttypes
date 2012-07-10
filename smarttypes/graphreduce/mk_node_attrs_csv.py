@@ -9,7 +9,7 @@ from smarttypes.utils.postgres_handle import PostgresHandle
 
 
 def mk_node_attrs_csv(g, file_like, postgres_handle):
-    properties = ['screen_name', 'location_name', 'description', 'url']
+    properties = ['id', 'screen_name', 'location_name', 'description', 'url']
     try:
         writer = csv.writer(file_like)
         writer.writerow(properties)
