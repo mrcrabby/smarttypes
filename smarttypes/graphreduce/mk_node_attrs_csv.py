@@ -17,7 +17,7 @@ def mk_node_attrs_csv(g, file_like, postgres_handle):
             write_this_user = TwitterUser.get_by_id(write_this_id, postgres_handle)
             write_this = []
             for x in properties:
-                value = write_this_user.__dict__.get(x)
+                value = write_this_user.__dict__.get(x, '')
                 value = value.encode('ascii', 'ignore')
                 value = value.replace('\r\n', ' ').replace('\n', ' ')
                 write_this.append(value)
