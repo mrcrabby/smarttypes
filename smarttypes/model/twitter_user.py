@@ -250,31 +250,6 @@ class TwitterUser(PostgresBaseModel):
         return network
 
     @classmethod
-    def mk_following_following_csv(cls, root_user_id, file_like, postgres_handle):
-        root_user = cls.get_by_id(root_user_id, postgres_handle)
-        network = cls.get_rooted_network(root_user, postgres_handle)
-        print "writing %s users to a csv" % len(network)
-
-        properties = copy(cls.table_columns)
-        properties[0:0] = ['createddate', 'modifieddate']
-        properties.remove('caused_an_error')
-        try:
-            writer = csv.writer(file_like)
-            writer.writerow(properties + ['following_ids'])
-            for write_this_id in network:
-                write_this_user = cls.get_by_id(write_this_id, postgres_handle)
-                initial_stuff = []
-                for x in properties:
-                    value = write_this_user.__dict__.get(x)
-                    value = value.encode('ascii', 'ignore')
-                    value = value.replace('\r\n', ' ').replace('\n', ' ')
-                    initial_stuff.append(value)
-                following_ids_str = '::'.join(write_this_user.following_ids)
-                writer.writerow(initial_stuff + [following_ids_str])
-        finally:
-            file_like.close()
-
-    @classmethod
     def upsert_from_api_user(cls, api_user, postgres_handle):
         if api_user.protected == None:
             api_user.protected = False
