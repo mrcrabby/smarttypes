@@ -28,8 +28,9 @@
         <p>
 	        <ul class="posts" style="list-style:none;margin:10px 0;">
 	            <li py:for="score, user in community.top_users()">
-	                ${score} --
-	                <span style="font-weight:bold;">${user.screen_name}</span> --
+	                <span style="font-weight:bold;">
+                        <a href="https://twitter.com/${user.screen_name}">${user.screen_name}</a>
+                    </span> --
 	                ${user.location_name} --
 	                ${user.description}
 	            </li>
