@@ -18,8 +18,9 @@ def mk_node_attrs_csv(g, file_like, postgres_handle):
             write_this = []
             for x in properties:
                 value = write_this_user.__dict__.get(x, '')
-                value = value.encode('ascii', 'ignore')
-                value = value.replace('\r\n', ' ').replace('\n', ' ')
+                if value:
+                    value = value.encode('ascii', 'ignore')
+                    value = value.replace('\r\n', ' ').replace('\n', ' ')
                 write_this.append(value)
             writer.writerow(write_this)
     finally:
