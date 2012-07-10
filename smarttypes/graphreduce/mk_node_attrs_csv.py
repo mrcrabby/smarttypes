@@ -1,6 +1,6 @@
 
 from igraph import Graph
-import smarttypes, sys
+import smarttypes, sys, csv
 from smarttypes.model.twitter_user import TwitterUser
 from smarttypes.model.twitter_tweet import TwitterTweet
 from datetime import datetime, timedelta
