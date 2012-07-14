@@ -50,7 +50,8 @@ def reduce_and_save_communities(root_user, distance=10, return_graph_for_inspect
 
     print 'run infomap'
     #infomap_command = 'infomap_dir/infomap 345234 io/%s.net 10'
-    infomap_command = 'conf-infomap_dir/conf-infomap 344 io/%s.net 10 10 0.50'
+    #infomap_command = 'conf-infomap_dir/conf-infomap 344 io/%s.net 10 10 0.50'
+    infomap_command = 'infohiermap_dir/infohiermap 345234 io/%s.net 30'
     os.system(infomap_command % root_file_name)
 
     print 'read into memory'
@@ -117,22 +118,25 @@ def reduce_and_save_communities(root_user, distance=10, return_graph_for_inspect
     # plot(cg, layout=layout, edge_color="white", vertex_size=30)
     # return layout
 
-    print 'save final to disk'
-    twitter_reduction = TwitterReduction.create_reduction(root_user.id, postgres_handle)
-    postgres_handle.connection.commit()
-    for community_idx, id_rank_tup in communities.items():
-        #params:
-        #reduction_id, index, 
-        #community_edges, member_ids, member_scores, postgres_handle
-        if len(id_rank_tup[2]) > 5:
-            TwitterCommunity.create_community(twitter_reduction.id, community_idx, 
-                id_rank_tup[0], id_rank_tup[1], id_rank_tup[2], postgres_handle)
-        postgres_handle.connection.commit()
-    TwitterCommunity.mk_tag_clouds(twitter_reduction.id, postgres_handle)
-    postgres_handle.connection.commit()
+    # print 'save final to disk'
+    # twitter_reduction = TwitterReduction.create_reduction(root_user.id, postgres_handle)
+    # postgres_handle.connection.commit()
+    # for community_idx, id_rank_tup in communities.items():
+    #     #params:
+    #     #reduction_id, index, 
+    #     #community_edges, member_ids, member_scores, postgres_handle
+    #     if len(id_rank_tup[2]) > 5:
+    #         TwitterCommunity.create_community(twitter_reduction.id, community_idx, 
+    #             id_rank_tup[0], id_rank_tup[1], id_rank_tup[2], postgres_handle)
+    #     postgres_handle.connection.commit()
+    # TwitterCommunity.mk_tag_clouds(twitter_reduction.id, postgres_handle)
+    # postgres_handle.connection.commit()
 
 
 if __name__ == "__main__":
+
+    #call like this:
+    #python reduce_graph.py SmartTypes 0
 
     start_time = datetime.now()
     postgres_handle = PostgresHandle(smarttypes.connection_string)
@@ -149,7 +153,7 @@ if __name__ == "__main__":
 
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
     if distance < 1:
-        distance = 9000 / len(root_user.following)
+        distance = 500 / len(root_user.following)
     g = reduce_and_save_communities(root_user, distance, return_graph_for_inspection)
 
     print datetime.now() - start_time
