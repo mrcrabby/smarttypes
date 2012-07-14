@@ -74,7 +74,6 @@ def application(environ, start_response):
                 error_string = traceback.format_exc()
                 start_response('500 Internal Server Error', [('Content-Type', 'text/plain')])
                 if smarttypes.config.IS_PROD:
-                    os.system('ssh timmyt@96.11.60.42 -N -f -L 5432:localhost:5432')
                     email_utils.send_email('error@smarttypes.org',
                         ['timmyt@smarttypes.org', 'kevinroth82@gmail.com'],
                         error_string, 'smarttypes site error')
