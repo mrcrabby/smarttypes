@@ -11,18 +11,11 @@ from smarttypes.utils.postgres_handle import PostgresHandle
 from collections import defaultdict
 
 
-def reduce_and_save_communities(root_user, distance=10, return_graph_for_inspection=False):
-
-    print 'starting reduce_and_save_communities'
-    print 'root_user: %s,  following_in_our_db: %s, distance: %s' % (
-        root_user.screen_name, len(root_user.following), distance)
-    network = TwitterUser.get_rooted_network(root_user, postgres_handle, distance=distance)
-
+def get_igraph_graph(network):
     print 'load %s users into igraph' % len(network)
     g = Graph(directed=True)
     keys_set = set(network.keys())
     g.add_vertices(network.keys())
-    g.vs["id"] = network.keys() #need this for pajek format
     print 'iterative load into igraph'
     edges = []
     for source in network:
@@ -39,84 +32,52 @@ def reduce_and_save_communities(root_user, distance=10, return_graph_for_inspect
         print 'graph is connected'
     else:
         print 'graph is not connected'
+    return g
 
-    if return_graph_for_inspection:
-        return g
-
+def write_to_pajek_file(g):
+    g.vs["id"] = network.keys() #need this for pajek format
     print 'write to pajek format'
     root_file_name = root_user.screen_name
     f = open('io/%s.net' % root_file_name, 'w')
     g.write(f, format='pajek')
 
-    print 'run infomap'
-    #infomap_command = 'infomap_dir/infomap 345234 io/%s.net 10'
-    #infomap_command = 'conf-infomap_dir/conf-infomap 344 io/%s.net 10 10 0.50'
-    infomap_command = 'infohiermap_dir/infohiermap 345234 io/%s.net 30'
-    os.system(infomap_command % root_file_name)
-
-    print 'read into memory'
-    f = open('io/%s.smap' % root_file_name)
-
-    section_header = ''
-    communities = defaultdict(lambda: ([], [], []))
+def reduce_with_linloglayout(g, root_user):
+    input_file = open('io/%s.input' % root_user.screen_name, 'w') 
+    for vertex in g.vs:
+        for following_vertex in vertex.successors():
+            input_file.write('%s %s \n' % (vertex['name'], following_vertex['name']))
+    input_file.close()
+    #to recompile
+    #$ cd smarttypes/smarttypes/graphreduce/LinLogLayout/src/
+    #$ javac -d ../bin LinLogLayout.java
+    os.system('cd LinLogLayout; java -cp bin LinLogLayout 2 %s %s;' % (
+        '../io/%s.input' % root_user.screen_name,
+        '../io/%s.output' % root_user.screen_name,
+    ))
+    f = open('io/%s.output' % root_user.screen_name)
     for line in f:
-        if line.startswith('*Modules'):
-            section_header = 'Modules'
-            continue
-        if line.startswith('*Insignificants'):
-            section_header = 'Insignificants'
-            continue
-        if line.startswith('*Nodes'):
-            section_header = 'Nodes'
-            continue
-        if line.startswith('*Links'):
-            section_header = 'Links'
-            continue
+        line_pieces = line.split(' ')
+        node_id = line_pieces[0]
+        x_value = float(line_pieces[1])
+        y_value = float(line_pieces[2])
+        community_idx = int(line_pieces[4])
+        g.vs.find(node_id)['x_y'] = (x_value, y_value)
+        g.vs.find(node_id)['community_idx'] = community_idx
+    return g
 
-        if section_header == 'Modules':
-            #looks like this:
-            #1 "26000689,..." 0.130147 0.0308866
-            #The names under *Modules are derived from the node with the highest 
-            #flow volume within the module, and 0.25 0.0395432 represent, respectively, 
-            #the aggregated flow volume of all nodes within the module and the per 
-            #step exit flow from the module.
-            continue
+def reduce_and_save_communities(root_user, distance=10, return_graph_for_inspection=False):
+    print 'starting reduce_and_save_communities'
+    print 'root_user: %s,  following_in_our_db: %s, distance: %s' % (
+        root_user.screen_name, len(root_user.following), distance)
 
-        if section_header == 'Nodes':
-            #looks like this: 
-            #1:10 "2335431" 0.00365772
-            #or w/ a semicolon instead, semicolon means not significant
-            #see http://www.tp.umu.se/~rosvall/code.html
-            if ';' in line:
-                continue
-            community_idx = line.split(':')[0]
-            node_id = line.split('"')[1]
-            final_volume = float(line.split(' ')[2])
-            communities[community_idx][1].append(node_id)
-            communities[community_idx][2].append(final_volume)
+    network = TwitterUser.get_rooted_network(root_user, postgres_handle, distance=distance)
+    g = get_igraph_graph(network)
+    g = reduce_with_linloglayout(g, root_user)
+    if return_graph_for_inspection:
+        return g
 
-        if section_header == 'Links':
-            #community_edges
-            #looks like this:
-            #1 4 0.0395432
-            community_idx = line.split(' ')[0]
-            target_community_idx = line.split(' ')[1]
-            edge_weight = line.split(' ')[2]
-            communities[community_idx][0].append('%s:%s' % (target_community_idx, edge_weight))
-
-    # print 'make community graph w/ %s communities' % len(communities)
-    # cg = Graph(directed=True)
-    # cg.add_vertices(sorted(communities.keys()))
-    # cg.vs["label"] = cg.vs["name"]
-    # for community_idx in sorted(communities.keys()):
-    #     for target_weight in communities[community_idx][0]:
-    #         target, weight = target_weight.split(':')
-    #         target, weight = target, float(weight)
-    #         cg.add_edge(community_idx, target, weight=weight)
-    # layout = cg.layout("kk")
-    # vertex_size = []
-    # plot(cg, layout=layout, edge_color="white", vertex_size=30)
-    # return layout
+    #id communities
+    #communities = defaultdict(lambda: ([], [], []))
 
     # print 'save final to disk'
     # twitter_reduction = TwitterReduction.create_reduction(root_user.id, postgres_handle)
@@ -138,6 +99,9 @@ if __name__ == "__main__":
     #call like this:
     #python reduce_graph.py SmartTypes 0
 
+    #to inspect the igraph g in ipython:
+    #ipython -i reduce_graph.py SmartTypes 0 0
+
     start_time = datetime.now()
     postgres_handle = PostgresHandle(smarttypes.connection_string)
 
@@ -149,6 +113,7 @@ if __name__ == "__main__":
 
     return_graph_for_inspection = False
     if len(sys.argv) > 3 and int(sys.argv[3]) == 0:
+        print 'return_graph_for_inspection'
         return_graph_for_inspection = True
 
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
