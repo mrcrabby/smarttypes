@@ -2,6 +2,12 @@
 import smarttypes, sys, os
 sys.path.append('/usr/local/lib/python2.7/site-packages')
 from igraph import Graph, plot
+from igraph.clustering import VertexClustering
+from igraph.layout import Layout
+from igraph.drawing.colors import palettes
+import numpy as np
+from scipy import spatial
+from sklearn.cluster import DBSCAN
 from smarttypes.model.twitter_user import TwitterUser
 from smarttypes.model.twitter_community import TwitterCommunity
 from smarttypes.model.twitter_reduction import TwitterReduction
@@ -32,6 +38,11 @@ def get_igraph_graph(network):
         print 'graph is connected'
     else:
         print 'graph is not connected'
+    #damping: the lower the damping the less 'powerlawish' (the more 'socialization')
+    #.85 is the default
+    pagerank = np.array(g.pagerank(damping=0.60))
+    node_size = pagerank / (max(pagerank) / 25)
+    g.vs['size'] = list(node_size)
     return g
 
 def write_to_pajek_file(g):
@@ -55,29 +66,61 @@ def reduce_with_linloglayout(g, root_user):
         '../io/%s.output' % root_user.screen_name,
     ))
     f = open('io/%s.output' % root_user.screen_name)
+    layout_list = []
     for line in f:
         line_pieces = line.split(' ')
         node_id = line_pieces[0]
         x_value = float(line_pieces[1])
         y_value = float(line_pieces[2])
-        community_idx = int(line_pieces[4])
-        g.vs.find(node_id)['x_y'] = (x_value, y_value)
-        g.vs.find(node_id)['community_idx'] = community_idx
-    return g
+        layout_list.append((x_value, y_value))
+    return layout_list
 
-def reduce_and_save_communities(root_user, distance=10, return_graph_for_inspection=False):
-    print 'starting reduce_and_save_communities'
-    print 'root_user: %s,  following_in_our_db: %s, distance: %s' % (
-        root_user.screen_name, len(root_user.following), distance)
+def id_communities(g, layout_list):
+    layout_distance = spatial.distance.squareform(spatial.distance.pdist(layout_list))
+    layout_similarity = 1 - (layout_distance / np.max(layout_distance))
+    community_idx_list = DBSCAN().fit(layout_similarity, eps=0.42, min_samples=10).labels_
+    community_idx_list = [int(x) for x in community_idx_list]
+    if -1 in community_idx_list:
+        community_idx_list = list(np.array(community_idx_list) + 1)
+    #set color based on community
+    g.vs['color'] = list(int(256 / len(set(community_idx_list))) * np.array(community_idx_list))
+    return g, community_idx_list
+
+
+if __name__ == "__main__":
+
+    #call like this:
+    #python reduce_graph.py SmartTypes 0
+    start_time = datetime.now()
+    postgres_handle = PostgresHandle(smarttypes.connection_string)
+
+    if not len(sys.argv) > 2:
+        raise Exception('Need a twitter handle and distance.')
+    else:
+        screen_name = sys.argv[1]
+        distance = int(sys.argv[2])
+    root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
+    if distance < 1:
+        distance = 10000 / len(root_user.following)
 
     network = TwitterUser.get_rooted_network(root_user, postgres_handle, distance=distance)
     g = get_igraph_graph(network)
-    g = reduce_with_linloglayout(g, root_user)
-    if return_graph_for_inspection:
-        return g
+    layout_list = reduce_with_linloglayout(g, root_user)
+    g, community_idx_list = id_communities(g, layout_list)
+    layout = Layout(layout_list)
+    vertex_clustering = VertexClustering(g, community_idx_list)
 
-    #id communities
-    #communities = defaultdict(lambda: ([], [], []))
+    #palettes
+    #  'red-yellow-green','gray','red-purple-blue','rainbow',
+    #  'red-black-green','terrain','red-blue','heat','red-green'
+    plot(g, layout=layout, edge_color="white", palette=palettes["rainbow"])
+
+    # communities = defaultdict(lambda: [[], [], []])
+    # i = 1
+    # for community_graph in vertex_clustering.subgraphs():
+    #     communities[i][1] = community_graph.vs['name']
+    #     communities[i][2] = community_graph.vs['size']
+    #     i += 1
 
     # print 'save final to disk'
     # twitter_reduction = TwitterReduction.create_reduction(root_user.id, postgres_handle)
@@ -92,34 +135,6 @@ def reduce_and_save_communities(root_user, distance=10, return_graph_for_inspect
     #     postgres_handle.connection.commit()
     # TwitterCommunity.mk_tag_clouds(twitter_reduction.id, postgres_handle)
     # postgres_handle.connection.commit()
-
-
-if __name__ == "__main__":
-
-    #call like this:
-    #python reduce_graph.py SmartTypes 0
-
-    #to inspect the igraph g in ipython:
-    #ipython -i reduce_graph.py SmartTypes 0 0
-
-    start_time = datetime.now()
-    postgres_handle = PostgresHandle(smarttypes.connection_string)
-
-    if not len(sys.argv) > 2:
-        raise Exception('Need a twitter handle and distance.')
-    else:
-        screen_name = sys.argv[1]
-        distance = int(sys.argv[2])
-
-    return_graph_for_inspection = False
-    if len(sys.argv) > 3 and int(sys.argv[3]) == 0:
-        print 'return_graph_for_inspection'
-        return_graph_for_inspection = True
-
-    root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
-    if distance < 1:
-        distance = 500 / len(root_user.following)
-    g = reduce_and_save_communities(root_user, distance, return_graph_for_inspection)
 
     print datetime.now() - start_time
 
