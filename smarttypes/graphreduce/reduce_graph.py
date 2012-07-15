@@ -38,11 +38,6 @@ def get_igraph_graph(network):
         print 'graph is connected'
     else:
         print 'graph is not connected'
-    #damping: the lower the damping the less 'powerlawish' (the more 'socialization')
-    #.85 is the default
-    pagerank = np.array(g.pagerank(damping=0.60))
-    node_size = pagerank / (max(pagerank) / 25)
-    g.vs['size'] = list(node_size)
     return g
 
 def write_to_pajek_file(g):
@@ -55,8 +50,8 @@ def write_to_pajek_file(g):
 def reduce_with_linloglayout(g, root_user):
     input_file = open('io/%s.input' % root_user.screen_name, 'w') 
     for vertex in g.vs:
-        for following_vertex in vertex.successors():
-            input_file.write('%s %s \n' % (vertex['name'], following_vertex['name']))
+        for successor in vertex.successors():
+            input_file.write('%s %s \n' % (vertex['name'], successor['name']))
     input_file.close()
     #to recompile
     #$ cd smarttypes/smarttypes/graphreduce/LinLogLayout/src/
@@ -66,13 +61,14 @@ def reduce_with_linloglayout(g, root_user):
         '../io/%s.output' % root_user.screen_name,
     ))
     f = open('io/%s.output' % root_user.screen_name)
-    layout_list = []
+    layout_list = [None] * len(g.vs)
     for line in f:
         line_pieces = line.split(' ')
         node_id = line_pieces[0]
+        node_idx = g.vs.find(node_id).index
         x_value = float(line_pieces[1])
         y_value = float(line_pieces[2])
-        layout_list.append((x_value, y_value))
+        layout_list[node_idx] = (x_value, y_value)
     return layout_list
 
 def id_communities(g, layout_list, eps=0.42, min_samples=10):
@@ -89,7 +85,26 @@ def id_communities(g, layout_list, eps=0.42, min_samples=10):
     colors = 255 - colors
     g.vs['color'] = list(colors)
     g.vs['shape'] = ['hidden' if x == 0 else 'circle' for x in community_idx_list]
-    return g, community_idx_list
+
+    #community pagerank
+    #damping: the lower the damping the less 'powerlawish' 
+    #(the more 'socialization') -- .85 is the default
+    vertex_clustering = VertexClustering(g, community_idx_list)
+    communities = defaultdict(lambda: [[], [], []])
+    i = 1
+    for community_graph in vertex_clustering.subgraphs():
+        communities[i][1] = community_graph.vs['name']
+        pagerank = np.array(community_graph.pagerank(damping=0.95))
+        node_size = pagerank / (max(pagerank) / 10)   
+        node_size = list(node_size)
+        communities[i][2] = node_size
+        j = 0
+        for x in community_graph.vs:
+            g.vs.find(x['name'])['size'] = node_size[j]
+            j += 1
+        i += 1
+
+    return g, communities
 
 
 if __name__ == "__main__":
@@ -113,20 +128,12 @@ if __name__ == "__main__":
     layout_list = reduce_with_linloglayout(g, root_user)
     layout = Layout(layout_list)
 
-    g, community_idx_list = id_communities(g, layout_list, eps=0.72, min_samples=10)
-    vertex_clustering = VertexClustering(g, community_idx_list)
+    g, communities = id_communities(g, layout_list, eps=0.72, min_samples=10)
 
     #palettes
     #  'red-yellow-green','gray','red-purple-blue','rainbow',
     #  'red-black-green','terrain','red-blue','heat','red-green'
     plot(g, layout=layout, edge_color="white", palette=colors.palettes["rainbow"], vertex_order_by=('size', True))
-
-    communities = defaultdict(lambda: [[], [], []])
-    i = 1
-    for community_graph in vertex_clustering.subgraphs():
-        communities[i][1] = community_graph.vs['name']
-        communities[i][2] = community_graph.vs['size']
-        i += 1
 
     print 'save to disk'
     twitter_reduction = TwitterReduction.create_reduction(root_user.id, postgres_handle)
