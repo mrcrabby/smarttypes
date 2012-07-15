@@ -104,7 +104,7 @@ class TwitterCommunity(PostgresBaseModel):
         for community_index in community_wordcounts:
             communities_unique_words[community_index] = []
             for word, times_used in community_wordcounts[community_index][1].items():
-                if times_used > 2:
+                if times_used > 2.5:
                     usage_diff = times_used - avg_wordcounts[word]
                     communities_unique_words[community_index].append((usage_diff, word))
         

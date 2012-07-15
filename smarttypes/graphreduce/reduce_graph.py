@@ -38,6 +38,11 @@ def get_igraph_graph(network):
         print 'graph is connected'
     else:
         print 'graph is not connected'
+
+    pagerank = np.array(g.pagerank(damping=0.80))
+    node_size = pagerank / (max(pagerank) / 10)
+    g.vs['size'] = list(node_size)
+
     return g
 
 def write_to_pajek_file(g):
@@ -100,7 +105,7 @@ def id_communities(g, layout_list, eps=0.42, min_samples=10):
         communities[i][2] = node_size
         j = 0
         for x in community_graph.vs:
-            g.vs.find(x['name'])['size'] = node_size[j]
+            g.vs.find(x['name'])['size'] += node_size[j]
             j += 1
         i += 1
 
