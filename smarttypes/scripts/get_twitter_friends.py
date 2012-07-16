@@ -11,18 +11,34 @@ import tweepy
 from tweepy import TweepError
 
 
-def load_user_and_the_people_they_follow(api_handle, user_id, postgres_handle, 
-        is_root_user=False, remaining_hits_threshold=10):
+def load_user_and_the_people_they_follow(creds, user_id, postgres_handle):
 
-    print "Attempting to load user %s." % user_id
+    remaining_hits_threshold = 10
+    api_handle = creds.api_handle
+    root_user = creds.root_user
+    is_root_user = False
+    if root_user.id == user_id:
+        is_root_user = True
+
     remaining_hits, reset_time = get_rate_limit_status(api_handle)
     if remaining_hits < remaining_hits_threshold:
-        raise Exception("remaining_hits less than threshold %s" % user_id)
+        raise Exception("%s: remaining_hits less than threshold!" % root_user.screen_name)
 
     try:
         api_user = api_handle.get_user(user_id=user_id)
     except TweepError, ex:
-        print "**api_handle.get_user got a TweepError: %s." % ex
+        print "%s: api_handle.get_user(%s) got a TweepError %s" % (root_user.screen_name, user_id, ex)
+        if 'Sorry, that page does not exist' in str(ex) or 'User has been suspended' in str(ex):
+            print 'setting caused_an_error'
+            model_user = TwitterUser.get_by_id(user_id, postgres_handle)
+            if not model_user:
+                properties = {'id': user_id, 'screen_name': user_id}
+                model_user = TwitterUser(postgres_handle=postgres_handle, **properties)
+                model_user.save()
+                postgres_handle.connection.commit()
+            model_user.caused_an_error = datetime.now()
+            model_user.save()
+            postgres_handle.connection.commit()
         return None
 
     model_user = TwitterUser.upsert_from_api_user(api_user, postgres_handle)
@@ -30,20 +46,20 @@ def load_user_and_the_people_they_follow(api_handle, user_id, postgres_handle,
     screen_name = model_user.screen_name
 
     if api_user.protected:
-        print "\t %s is protected." % screen_name
+        print "%s: %s is protected." % (root_user.screen_name, screen_name)
         return model_user
 
     following_ids = []
-    print "Loading the people %s follows." % screen_name
+    print "%s: loading the people %s follows." % (root_user.screen_name, screen_name)
     try:
         max_pages = 5 if is_root_user else 1
         following_id_pages = tweepy.Cursor(api_handle.friends_ids, user_id=user_id).pages(max_pages)
         for following_ids_page in following_id_pages:
             following_ids += [str(x) for x in following_ids_page]
     except TweepError, ex:
-        print "**Loading the people %s follows, got a TweepError: %s" % (screen_name, ex) 
+        print "%s: loading the people %s follows, got a TweepError: %s" % (root_user.screen_name, screen_name, ex) 
         if str(ex) in ["Not authorized", "Sorry, that page does not exist"]:
-            print "\t Setting caused_an_error for %s." % screen_name
+            print "%s: setting caused_an_error for %s" % (root_user.screen_name, screen_name)
             model_user.caused_an_error = datetime.now()
             model_user.save()
             postgres_handle.connection.commit()
@@ -53,19 +69,15 @@ def load_user_and_the_people_they_follow(api_handle, user_id, postgres_handle,
     return model_user
 
 
-def pull_some_users(creds_user_id):
+def pull_some_users(access_key):
     postgres_handle = PostgresHandle(smarttypes.connection_string)
-    creds_user = TwitterUser.get_by_id(creds_user_id, postgres_handle)
-    if not creds_user:
-        raise Exception('Creds User ID: %s not in our DB!' % creds_user_id)
-    if not creds_user.credentials:
-        raise Exception('%s does not have api credentials!' % creds_user.screen_name)
-    api_handle = creds_user.credentials.api_handle
-    root_user = load_user_and_the_people_they_follow(api_handle, creds_user.credentials.root_user_id, 
-        postgres_handle, is_root_user=True)
+    creds = TwitterCredentials.get_by_access_key(access_key, postgres_handle)
+    root_user = load_user_and_the_people_they_follow(creds, creds.root_user_id, postgres_handle)
+    
+    
     load_this_user_id = root_user.get_id_of_someone_in_my_network_to_load()
     while load_this_user_id:
-        load_user_and_the_people_they_follow(api_handle, load_this_user_id, postgres_handle)
+        load_user_and_the_people_they_follow(creds, load_this_user_id, postgres_handle)
         load_this_user_id = root_user.get_id_of_someone_in_my_network_to_load()
         #load_this_user_id = None
     print "Finished loading all related users for %s!" % root_user.screen_name
@@ -96,6 +108,6 @@ if __name__ == "__main__":
             creds.last_root_user_api_query = datetime.now()
             creds.save()
             postgres_handle.connection.commit()
-            p = Process(target=pull_some_users, args=(creds.twitter_id,))
+            p = Process(target=pull_some_users, args=(creds.access_key,))
             p.start()
             i += 1

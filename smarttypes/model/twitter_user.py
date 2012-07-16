@@ -54,12 +54,11 @@ class TwitterUser(PostgresBaseModel):
     @property
     def following_ids(self):
         if not '_following_ids' in self.__dict__:
-            time_context = self.get_graph_time_context()
-            if not time_context:
+            if not self.last_loaded_following_ids:
                 self._following_ids = []
             else:
                 pre_params = {
-                    'postfix': time_context.strftime('%Y_%U'),
+                    'postfix': self.last_loaded_following_ids.strftime('%Y_%U'),
                     'user_id': '%(user_id)s',
                 }
                 qry = """
@@ -91,6 +90,9 @@ class TwitterUser(PostgresBaseModel):
         for user in following_in_db:
             if user.is_expired:
                 return_list.append(user.id)
+        #move on if we have more than some # in the db + not expired
+        if len(self.following_ids) - len(return_list) > 2000:
+            return []
         return return_list
 
     @property
@@ -101,7 +103,7 @@ class TwitterUser(PostgresBaseModel):
             expired = False
         return expired and \
                not self.caused_an_error and \
-               not self.protected
+               not self.protected 
 
     def get_random_followie_id(self, not_in_this_list=[], attempts=0):
         random_index = random.randrange(0, len(self.following_ids))
@@ -123,13 +125,18 @@ class TwitterUser(PostgresBaseModel):
             return following_and_expired_list[random_index]
         #the people self follows follows
         else:
+            print '%s: pulling second layer of followies' % self.screen_name
             tried_to_load_these_ids = []
             for i in range(150):  # give up at some point (this could be anything)
                 random_following_id = self.get_random_followie_id(tried_to_load_these_ids)
                 random_following = TwitterUser.get_by_id(random_following_id, self.postgres_handle)
-                random_following_following_and_expired_list = random_following.following_and_expired_ids
-                if random_following_following_and_expired_list:
-                    return random_following_following_and_expired_list[0]
+                if random_following:
+                    random_following_following_and_expired_list = random_following.following_and_expired_ids
+                    if random_following_following_and_expired_list:
+                        print '%s: took %s attempts to find someone in second layer' % (self.screen_name, i)
+                        return random_following_following_and_expired_list[0]
+                    else:
+                        tried_to_load_these_ids.append(random_following_id)
                 else:
                     tried_to_load_these_ids.append(random_following_id)
 
@@ -209,7 +216,7 @@ class TwitterUser(PostgresBaseModel):
     def get_following_following_ids(cls, root_user, distance=100):
         print "Loading following_following_ids!"
         return_ids = set(root_user.following_ids)
-        for following in root_user.following:
+        for following in root_user.following[:2000]:
             for following_following_id in following.following_ids[:distance]:
                 return_ids.add(following_following_id)
         return list(return_ids)
@@ -234,7 +241,7 @@ class TwitterUser(PostgresBaseModel):
         from twitter_user u
         join twitter_user_following_%s f on u.id = f.twitter_user_id 
         join only_these_ids on only_these_ids.id = u.id
-        --where array_length(f.following_ids, 1) >= 20
+        where u.followers_count > 4 
         ;
         """
         following_following_ids = cls.get_following_following_ids(root_user, distance=distance)
