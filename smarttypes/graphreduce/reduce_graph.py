@@ -39,8 +39,8 @@ def get_igraph_graph(network):
     else:
         print 'graph is not connected'
 
-    pagerank = np.array(g.pagerank(damping=0.80))
-    node_size = pagerank / (max(pagerank) / 10)
+    pagerank = np.array(g.pagerank(damping=0.70))
+    node_size = pagerank / (max(pagerank) / 5)
     g.vs['size'] = list(node_size)
 
     return g
@@ -99,10 +99,10 @@ def id_communities(g, layout_list, eps=0.42, min_samples=10):
     i = 1
     for community_graph in vertex_clustering.subgraphs():
         communities[i][1] = community_graph.vs['name']
-        pagerank = np.array(community_graph.pagerank(damping=0.95))
-        node_size = pagerank / (max(pagerank) / 10)   
-        node_size = list(node_size)
-        communities[i][2] = node_size
+        pagerank = np.array(community_graph.pagerank(damping=0.70))
+        node_size = pagerank / (max(pagerank) / 15)
+        node_size = node_size + np.array(community_graph.vs['size'])
+        communities[i][2] = list(node_size)
         j = 0
         for x in community_graph.vs:
             g.vs.find(x['name'])['size'] += node_size[j]
