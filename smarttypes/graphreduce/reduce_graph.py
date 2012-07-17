@@ -136,7 +136,7 @@ if __name__ == "__main__":
         distance = int(sys.argv[2])
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
     if distance < 1:
-        distance = 10000 / len(root_user.following)
+        distance = 10000 / len(root_user.following[:2000])
 
     network = TwitterUser.get_rooted_network(root_user, postgres_handle, distance=distance)
     g = get_igraph_graph(network)
@@ -149,9 +149,12 @@ if __name__ == "__main__":
     #  'red-yellow-green','gray','red-purple-blue','rainbow',
     #  'red-black-green','terrain','red-blue','heat','red-green'
     #pass filename as second argument: SmartTypes.png
-    #mark_groups=mark_groups, vertex_order_by=('size', True),
-    plot(g, layout=layout, palette=colors.palettes["rainbow"], 
-        edge_color="white", edge_width=0, edge_arrow_size=0.1, edge_arrow_width=0.1)
+    #mark_groups=mark_groups, ,
+
+    filepath = 'io/%s.png' % root_user.screen_name
+    plot(g, filepath, (800, 800), layout=layout, palette=colors.palettes["rainbow"], 
+        vertex_order_by=('size', True), edge_color="white", edge_width=0, edge_arrow_size=0.1, 
+        edge_arrow_width=0.1)
 
     # print 'save to disk'
     # twitter_reduction = TwitterReduction.create_reduction(root_user.id, postgres_handle)
@@ -167,7 +170,7 @@ if __name__ == "__main__":
     # TwitterCommunity.mk_tag_clouds(twitter_reduction.id, postgres_handle)
     # postgres_handle.connection.commit()
 
-    # print datetime.now() - start_time
+    print datetime.now() - start_time
 
 
 
