@@ -216,7 +216,7 @@ class TwitterUser(PostgresBaseModel):
     def get_following_following_ids(cls, root_user, distance=100):
         print "Loading following_following_ids!"
         return_ids = set(root_user.following_ids)
-        for following in root_user.following[:2000]:
+        for following in root_user.following[:1000]:
             for following_following_id in following.following_ids[:distance]:
                 return_ids.add(following_following_id)
         return list(return_ids)

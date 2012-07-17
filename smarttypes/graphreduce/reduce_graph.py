@@ -136,7 +136,7 @@ if __name__ == "__main__":
         distance = int(sys.argv[2])
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
     if distance < 1:
-        distance = 10000 / len(root_user.following[:2000])
+        distance = 15000 / len(root_user.following[:1000])
 
     network = TwitterUser.get_rooted_network(root_user, postgres_handle, distance=distance)
     g = get_igraph_graph(network)
