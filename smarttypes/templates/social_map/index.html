@@ -28,7 +28,8 @@
             <ul class="posts" style="list-style:none;margin:10px 0;">
                 <li py:for="reduction in reductions">
                     <?python root_user = reduction.root_user()?>
-                    <a href="/social_map/reduction?reduction_id=${reduction.id}">${root_user.screen_name}</a>
+                    <a href="/social_map/reduction?reduction_id=${reduction.id}">View communities</a>
+                    -- <span style="font-weight:bold;">${root_user.screen_name}</span>
                     -- ${root_user.location_name}
                     -- ${root_user.description}
                 </li>
