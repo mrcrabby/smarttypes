@@ -136,7 +136,7 @@ if __name__ == "__main__":
         distance = int(sys.argv[2])
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
     if distance < 1:
-        distance = 15000 / len(root_user.following[:1000])
+        distance = 10000 / len(root_user.following[:1000])
 
     network = TwitterUser.get_rooted_network(root_user, postgres_handle, distance=distance)
     g = get_igraph_graph(network)
@@ -156,19 +156,19 @@ if __name__ == "__main__":
         vertex_order_by=('size', True), edge_color="white", edge_width=0, edge_arrow_size=0.1, 
         edge_arrow_width=0.1)
 
-    print 'save to disk'
-    twitter_reduction = TwitterReduction.create_reduction(root_user.id, postgres_handle)
-    postgres_handle.connection.commit()
-    for community_idx, id_rank_tup in communities.items():
-        #params:
-        #reduction_id, index, 
-        #community_edges, member_ids, member_scores, postgres_handle
-        if community_idx > 0:
-            TwitterCommunity.create_community(twitter_reduction.id, community_idx, 
-                id_rank_tup[0], id_rank_tup[1], id_rank_tup[2], postgres_handle)
-        postgres_handle.connection.commit()
-    TwitterCommunity.mk_tag_clouds(twitter_reduction.id, postgres_handle)
-    postgres_handle.connection.commit()
+    # print 'save to disk'
+    # twitter_reduction = TwitterReduction.create_reduction(root_user.id, postgres_handle)
+    # postgres_handle.connection.commit()
+    # for community_idx, id_rank_tup in communities.items():
+    #     #params:
+    #     #reduction_id, index, 
+    #     #community_edges, member_ids, member_scores, postgres_handle
+    #     if community_idx > 0:
+    #         TwitterCommunity.create_community(twitter_reduction.id, community_idx, 
+    #             id_rank_tup[0], id_rank_tup[1], id_rank_tup[2], postgres_handle)
+    #     postgres_handle.connection.commit()
+    # TwitterCommunity.mk_tag_clouds(twitter_reduction.id, postgres_handle)
+    # postgres_handle.connection.commit()
 
     print datetime.now() - start_time
 
