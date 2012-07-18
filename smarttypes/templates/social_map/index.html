@@ -30,7 +30,7 @@
                     <?python root_user = reduction.root_user()?>
                     <a href="/social_map/reduction?reduction_id=${reduction.id}">See the map</a>
                     -- <span style="font-weight:bold;">${root_user.screen_name}</span>
-                    -- ${root_user.location_name}
+                    -- ${root_user.location_name if root_user.location_name else 'Unknown'}
                     -- ${root_user.description}
                 </li>
             </ul>
