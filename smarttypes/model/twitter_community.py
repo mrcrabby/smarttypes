@@ -20,8 +20,8 @@ class TwitterCommunity(PostgresBaseModel):
     ]    
     table_defaults = {}
     
-    def total_global_pagerank(self):
-        return sum(self.global_pagerank)
+    def avg_global_pagerank(self):
+        return sum(self.global_pagerank) / len(self.global_pagerank)
 
     def get_members(self):
         return_list = []
