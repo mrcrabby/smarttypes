@@ -90,7 +90,7 @@ def id_communities(g, layout_list, eps=0.42, min_samples=10):
 def get_community_stats(g, vertex_clustering, layout_list):
     layout_list = np.array(layout_list)
     global_pagerank = np.array(g.pagerank(damping=0.70))
-    g.vs['size'] = list(global_pagerank / (max(global_pagerank) / 45))
+    g.vs['size'] = list(global_pagerank / (max(global_pagerank) / 35))
     community_stats = defaultdict(lambda: {
         'center_coordinate':[0,0], 
         'member_ids':[],
