@@ -89,8 +89,8 @@ def id_communities(g, layout_list, eps=0.42, min_samples=10):
 
 def get_community_stats(g, vertex_clustering, layout_list):
     layout_list = np.array(layout_list)
-    global_pagerank = np.array(g.pagerank(damping=0.70))
-    g.vs['size'] = list(global_pagerank / (max(global_pagerank) / 35))
+    global_pagerank = np.array(g.pagerank(damping=0.65))
+    g.vs['size'] = list(global_pagerank / (max(global_pagerank) / 40))
     community_stats = defaultdict(lambda: {
         'center_coordinate':[0,0], 
         'member_ids':[],
@@ -102,10 +102,10 @@ def get_community_stats(g, vertex_clustering, layout_list):
     for community_graph in vertex_clustering.subgraphs():
         community_stats[i]['member_ids'] = community_graph.vs['name']
         community_stats[i]['global_pagerank'] = list(global_pagerank[vertex_clustering[i]])
-        community_stats[i]['community_pagerank'] = community_graph.pagerank(damping=0.70)
+        community_stats[i]['community_pagerank'] = community_graph.pagerank(damping=0.65)
         avg_global_pagerank = sum(community_stats[i]['global_pagerank']) / len(vertex_clustering[i])
         hybrid_pagerank = avg_global_pagerank * np.array(community_stats[i]['community_pagerank'])
-        community_stats[i]['hybrid_pagerank'] = list(hybrid_pagerank / (max(hybrid_pagerank) / 35))
+        community_stats[i]['hybrid_pagerank'] = list(hybrid_pagerank / (max(hybrid_pagerank) / 20))
         i += 1
     return community_stats
 
