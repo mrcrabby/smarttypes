@@ -105,7 +105,7 @@ def get_community_stats(g, vertex_clustering, layout_list):
         community_stats[i]['community_pagerank'] = community_graph.pagerank(damping=0.70)
         avg_global_pagerank = sum(community_stats[i]['global_pagerank']) / len(vertex_clustering[i])
         hybrid_pagerank = avg_global_pagerank * np.array(community_stats[i]['community_pagerank'])
-        community_stats[i]['hybrid_pagerank'] = list(hybrid_pagerank)
+        community_stats[i]['hybrid_pagerank'] = list(hybrid_pagerank / (max(hybrid_pagerank) / 35))
         i += 1
     return community_stats
 
