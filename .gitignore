@@ -6,6 +6,7 @@ smarttypes/backups
 smarttypes/static/video
 smarttypes/static/graphlab_pmf.tar.gz
 smarttypes/static/graphlab_pmf/
+smarttypes/static/images/maps/
 smarttypes/graphreduce/io/
 time.dat
 smarttypes/config.py
