@@ -17,7 +17,9 @@ class TwitterReduction(PostgresBaseModel):
 
     def communities(self):
         from smarttypes.model.twitter_community import TwitterCommunity
-        return TwitterCommunity.get_by_name_value('reduction_id', self.id, self.postgres_handle)
+        communities = TwitterCommunity.get_by_name_value('reduction_id', self.id, 
+            self.postgres_handle)
+        return sorted(communities, key=lambda k: k.total_global_pagerank())
 
     @classmethod
     def get_latest_reduction(cls, root_user_id, postgres_handle):
