@@ -11,11 +11,11 @@ class TwitterCommunity(PostgresBaseModel):
     table_columns = [
         'reduction_id',
         'index',
-        'x_axis',
-        'y_axis',
-        'community_edges',
+        'center_coordinate',
         'member_ids',
-        'member_scores',
+        'global_pagerank',
+        'community_pagerank',
+        'hybrid_pagerank',
         'tag_cloud',
     ]    
     table_defaults = {}
@@ -24,7 +24,7 @@ class TwitterCommunity(PostgresBaseModel):
         return_list = []
         for i in range(len(self.member_ids)):
             user_id = self.member_ids[i]
-            score = self.member_scores[i]
+            score = self.hybrid_pagerank[i]
             return_list.append((score, user_id))
         return return_list
     
@@ -50,14 +50,16 @@ class TwitterCommunity(PostgresBaseModel):
         return cls.get_by_name_value('reduction_id', reduction_id, postgres_handle)
     
     @classmethod
-    def create_community(cls, reduction_id, index, community_edges, 
-            member_ids, member_scores, postgres_handle):
+    def create_community(cls, reduction_id, index, center_coordinate, member_ids, 
+            global_pagerank, community_pagerank, hybrid_pagerank, postgres_handle):
         twitter_community = cls(postgres_handle=postgres_handle)
         twitter_community.reduction_id = reduction_id
         twitter_community.index = index
-        twitter_community.community_edges = community_edges
+        twitter_community.center_coordinate = center_coordinate
         twitter_community.member_ids = member_ids
-        twitter_community.member_scores = member_scores
+        twitter_community.global_pagerank = global_pagerank
+        twitter_community.community_pagerank = community_pagerank
+        twitter_community.hybrid_pagerank = hybrid_pagerank
         twitter_community.save()
         return twitter_community
         

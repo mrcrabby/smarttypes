@@ -38,11 +38,6 @@ def get_igraph_graph(network):
         print 'graph is connected'
     else:
         print 'graph is not connected'
-
-    pagerank = np.array(g.pagerank(damping=0.75))
-    node_size = pagerank / (max(pagerank) / 10)
-    g.vs['size'] = list(node_size)
-
     return g
 
 def write_to_pajek_file(g):
@@ -83,44 +78,35 @@ def id_communities(g, layout_list, eps=0.42, min_samples=10):
     community_idx_list = [int(x) for x in community_idx_list]
     if -1 in community_idx_list:
         community_idx_list = list(np.array(community_idx_list) + 1)
-
-    #community pagerank
-    #damping: the lower the damping the less 'powerlawish' 
-    #(the more 'socialization') -- .85 is the default
     vertex_clustering = VertexClustering(g, community_idx_list)
-    communities = defaultdict(lambda: [[], [], []])
-    mark_groups = []
-    i = 0
-    for community_graph in vertex_clustering.subgraphs():
-        communities[i][1] = community_graph.vs['name']
-        pagerank = np.array(community_graph.pagerank(damping=0.75))
-        node_size = pagerank / (max(pagerank) / 10)
-        communities[i][2] = list(node_size + np.array(community_graph.vs['size']))
-        mark_group = []
-        j = 0
-        for x in community_graph.vs:
-            g_vertex = g.vs.find(x['name'])
-            g_vertex['size'] += node_size[j]
-            mark_group.append(g_vertex.index)
-            j += 1
-        if i != 0:
-            mark_groups.append((mark_group,'#C0C0C0'))
-        i += 1
-
-    # #set color based on pagerank (255 is white) (20 is the max score community_pagerank + overall_pagerank)
-    # g.vs['color'] = (20 - np.array(g.vs['size'])) * 12
-    # g.vs['color'] = [int(x) for x in g.vs['color']]
-    # g.vs['shape'] = ['hidden' if x == 0 else 'circle' for x in community_idx_list]
-
-    #set color based on community
+    #set color and shape
     color_step = 256 / len(set(community_idx_list))
     colors = np.array(community_idx_list) * color_step
     colors = 255 - colors
     g.vs['color'] = list(colors)
     g.vs['shape'] = ['hidden' if x == 0 else 'circle' for x in community_idx_list]
+    return g, vertex_clustering
 
-    return g, communities, mark_groups
-
+def get_community_stats(g, vertex_clustering, layout_list):
+    layout_list = np.array(layout_list)
+    global_pagerank = np.array(g.pagerank(damping=0.75))
+    g.vs['size'] = list(global_pagerank / (max(global_pagerank) / 25))
+    community_stats = defaultdict(lambda: {
+        'center_coordinate':[0,0], 
+        'member_ids':[],
+        'global_pagerank':[],
+        'community_pagerank':[],
+        'hybrid_pagerank':[],
+    })
+    i = 0
+    for community_graph in vertex_clustering.subgraphs():
+        community_stats[i]['member_ids'] = community_graph.vs['name']
+        community_stats[i]['global_pagerank'] = list(global_pagerank[vertex_clustering[i]])
+        community_stats[i]['community_pagerank'] = community_graph.pagerank(damping=0.75)
+        hybrid_pagerank = sum(community_stats[i]['global_pagerank']) * np.array(community_stats[i]['community_pagerank'])
+        community_stats[i]['hybrid_pagerank'] = list(hybrid_pagerank)
+        i += 1
+    return community_stats
 
 if __name__ == "__main__":
 
@@ -142,33 +128,33 @@ if __name__ == "__main__":
     g = get_igraph_graph(network)
     layout_list = reduce_with_linloglayout(g, root_user)
     layout = Layout(layout_list)
+    g, vertex_clustering = id_communities(g, layout_list, eps=0.62, min_samples=10)
+    community_stats = get_community_stats(g, vertex_clustering, layout_list)
 
-    g, communities, mark_groups = id_communities(g, layout_list, eps=0.62, min_samples=10)
-
-    #palettes
-    #  'red-yellow-green','gray','red-purple-blue','rainbow',
-    #  'red-black-green','terrain','red-blue','heat','red-green'
-    #pass filename as second argument: SmartTypes.png
-    #mark_groups=mark_groups, ,
-
+    # #palettes
+    # #  'red-yellow-green','gray','red-purple-blue','rainbow',
+    # #  'red-black-green','terrain','red-blue','heat','red-green'
     filepath = 'io/%s.png' % root_user.screen_name
     plot(g, filepath, (800, 800), layout=layout, palette=colors.palettes["rainbow"], 
         vertex_order_by=('size', True), edge_color="white", edge_width=0, edge_arrow_size=0.1, 
         edge_arrow_width=0.1)
 
-    # print 'save to disk'
-    # twitter_reduction = TwitterReduction.create_reduction(root_user.id, postgres_handle)
-    # postgres_handle.connection.commit()
-    # for community_idx, id_rank_tup in communities.items():
-    #     #params:
-    #     #reduction_id, index, 
-    #     #community_edges, member_ids, member_scores, postgres_handle
-    #     if community_idx > 0:
-    #         TwitterCommunity.create_community(twitter_reduction.id, community_idx, 
-    #             id_rank_tup[0], id_rank_tup[1], id_rank_tup[2], postgres_handle)
-    #     postgres_handle.connection.commit()
-    # TwitterCommunity.mk_tag_clouds(twitter_reduction.id, postgres_handle)
-    # postgres_handle.connection.commit()
+    print 'save to disk'
+    twitter_reduction = TwitterReduction.create_reduction(root_user.id, postgres_handle)
+    postgres_handle.connection.commit()
+    for community_idx, values_dict in community_stats.items():
+        #params:
+        #reduction_id, index, center_coordinate, member_ids, 
+        #global_pagerank, community_pagerank, hybrid_pagerank
+        if community_idx > 0:
+            TwitterCommunity.create_community(twitter_reduction.id, community_idx, 
+                values_dict['center_coordinate'], values_dict['member_ids'], values_dict['global_pagerank'], 
+                values_dict['community_pagerank'], values_dict['hybrid_pagerank'], postgres_handle)
+        postgres_handle.connection.commit()
+    TwitterCommunity.mk_tag_clouds(twitter_reduction.id, postgres_handle)
+    postgres_handle.connection.commit()
+
+    os.system('scp io/%s.png cottie:/home/timmyt/projects/smarttypes/smarttypes/static/images/maps/.' % root_user.screen_name)
 
     print datetime.now() - start_time
 

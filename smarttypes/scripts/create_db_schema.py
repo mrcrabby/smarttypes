@@ -111,11 +111,11 @@ create table twitter_community(
     id serial unique,
     reduction_id integer not null references twitter_reduction(id), 
     index integer not null,
-    x_axis real,
-    y_axis real,
-    community_edges text[] not null,
+    center_coordinate real[] not null,
     member_ids text[] not null,
-    member_scores real[] not null,
+    global_pagerank real[] not null,
+    community_pagerank real[] not null,
+    hybrid_pagerank real[] not null,
     tag_cloud text[],
     unique (reduction_id, index)
 );
