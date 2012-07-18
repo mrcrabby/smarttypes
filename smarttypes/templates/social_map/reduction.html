@@ -36,7 +36,7 @@
         <p>
 	        <ul class="posts" style="list-style:none;margin:10px 0;">
 	        	<li py:for="community in communities">
-	        		<a href="/social_map/community?community_id=${community.id}">See members</a> --
+	        		<a href="/social_map/community?community_id=${community.id}">View members</a> --
                     ${len(community.member_ids)} members --
 	            	${', '.join(community.tag_cloud[:5])}
 	        	</li>
