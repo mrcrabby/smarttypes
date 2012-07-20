@@ -1,46 +1,38 @@
-<!DOCTYPE html> 
-
-
-
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
     xmlns:py="http://genshi.edgewall.org/"
     xmlns:xi="http://www.w3.org/2001/XInclude"
     lang="en">
 
 <xi:include href="master.html" />      
+
 <head>
 
+<?python import simplejson ?>
+<script type="text/javascript">
+    a = ${simplejson.dumps([x.root_user().screen_name for x in reductions])};    
+    function helloWorld() {
+        alert(a);
+        return false;
+    }
+</script>
 </head>                    
 
 <body>
 
     <div style="text-align:center;">
-        <h2>
+<!--         <h2>
             A map of your online social world!
-        </h2>
-        <p>
-            ${site_description}
-        </p>
-<!--         <p style="margin:15px 0 15px 0;">
-            <a href="/sign_in">Signin w/ your twitter account to begin your journey!</a>
-        </p>
-        <p style="margin:15px 0 15px 0;">
-            <a href="/social_map">Or, explore these existing social maps!</a>
-        </p> -->
-
-        <p style="margin:40px 0 0 0;">
-            ${total_user_count} twitter users saved!
-        </p>
-
-<!--         <p style="margin:20px 0;">
-            <img width="90%" style="border:solid #000000 2px;" 
-                src="/static/images/cone_nebula.jpg" 
-                alt="/static/images/cone_nebula.jpg"/>
-        </p>
-        <p>
-            <a href="http://www.sierra-remote.com/index.html">Image courtesy of Sierra Remote Observations</a>
-        </p> -->
-
+        </h2> -->
+        <div>
+            <?python import simplejson ?>
+            <?python map_names = simplejson.dumps([x.root_user().screen_name for x in reductions]) ?>
+            <a href="#" onClick="helloWorld(${map_names});">Left Arrow</a>
+                <img width="50%" style="" 
+                    src="/static/images/maps/SmartTypes.png" 
+                    alt="/static/images/maps/SmartTypes.png"/>
+            <a href="#" onClick="helloWorld(${map_names});">Right Arrow</a>
+        </div>
     </div>
 
 </body>                                     

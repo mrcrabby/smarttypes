@@ -11,8 +11,10 @@ from smarttypes.model.twitter_community import TwitterCommunity
 
 
 def index(req, session, postgres_handle):
+    root_user_count_tups = TwitterReduction.get_user_reduction_counts(postgres_handle)
+    reductions = [TwitterReduction.get_latest_reduction(x[0].id, postgres_handle) for x in root_user_count_tups]
     return {
-        'total_user_count':TwitterUser.get_user_count_str(postgres_handle),
+        'reductions':reductions,
     }
 
 def sign_in(req, session, postgres_handle):
