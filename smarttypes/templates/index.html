@@ -62,10 +62,15 @@
         <div id="slides" style="width:650px;margin:20px auto;">
             <div class="slides_container" style="width:600px;margin:0 auto;">
                 <div py:for="reduction in reductions">
-                    <p>
-                        <span style="font-weight:bold;">${reduction.root_user().screen_name}</span>
+                    <?python root_user = reduction.root_user()?>
+                    <p style="width:600px;margin:0 auto;">
+                        <span style="font-weight:bold;">${root_user.screen_name}</span>
+                        <br/>
+                        ${root_user.description}
                     </p>
-                    <img width="600px" src="${'/static/images/maps/%s.png' % reduction.root_user().screen_name}" />
+                    <a href="/social_map/reduction?root_user=${root_user.screen_name}">
+                        <img width="600px" src="${'/static/images/maps/%s.png' % reduction.root_user().screen_name}" />
+                    </a>
                 </div>
             </div>
         </div>

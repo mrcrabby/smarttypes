@@ -17,6 +17,12 @@ def reduction(req, session, postgres_handle):
     if 'reduction_id' in req.params:
         reduction_id = int(req.params['reduction_id'])
         reduction = TwitterReduction.get_by_id(reduction_id, postgres_handle)
+    if 'root_user' in req.params:
+        root_user = TwitterUser.by_screen_name(req.params['root_user'], postgres_handle)
+        reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
+    if not reduction:
+        root_user = TwitterUser.by_screen_name('SmartTypes', postgres_handle)
+        reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
     return {
         'active_tab': 'social_map',
         'template_path': 'social_map/reduction.html',
