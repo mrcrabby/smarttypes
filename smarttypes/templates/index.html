@@ -8,30 +8,64 @@
 
 <head>
 
-<?python import simplejson ?>
-<script type="text/javascript">
-    a = ${simplejson.dumps([x.root_user().screen_name for x in reductions])};    
-    function helloWorld() {
-        alert(a);
-        return false;
+<style type="text/css" media="screen">
+
+    #slides {
+        position:relative;
     }
+
+    .slides_container {
+        width:600px;
+        height:600px;
+    }
+
+    .next,.prev {
+        position:absolute;
+        top:100px;
+        left:0;
+        width:21px;
+        height:0;
+        padding-top:21px;
+        overflow:hidden;
+        display:block;
+        z-index:101;
+    }
+
+    .prev {
+        background:url(/static/images/arrow-prev.png);
+    }
+
+    .next {
+        left:630px;
+        background:url(/static/images/arrow-next.png);
+    }
+
+
+</style>
+
+<script src="/static/js/slides.min.jquery.js"></script>
+<script type="text/javascript">
+    $(function(){
+          $("#slides").slides({
+            generateNextPrev: true,
+            pagination: false,
+            generatePagination: false
+          });
+        });
 </script>
+
 </head>                    
 
 <body>
 
     <div style="text-align:center;">
-<!--         <h2>
-            A map of your online social world!
-        </h2> -->
-        <div>
-            <?python import simplejson ?>
-            <?python map_names = simplejson.dumps([x.root_user().screen_name for x in reductions]) ?>
-            <a href="#" onClick="helloWorld(${map_names});">Left Arrow</a>
-                <img width="50%" style="" 
-                    src="/static/images/maps/SmartTypes.png" 
-                    alt="/static/images/maps/SmartTypes.png"/>
-            <a href="#" onClick="helloWorld(${map_names});">Right Arrow</a>
+        <div id="slides" style="width:650px;margin:0 auto;">
+            <div class="slides_container" style="width:600px;margin:0 auto;">
+                <div py:for="reduction in reductions">
+                    <p>${reduction.root_user().screen_name}</p>
+                    <img width="600px" src="${'/static/images/maps/%s.png' % reduction.root_user().screen_name}" />
+                </div>
+            </div>
         </div>
     </div>
 
