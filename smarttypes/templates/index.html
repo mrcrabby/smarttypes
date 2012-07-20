@@ -59,10 +59,12 @@
 <body>
 
     <div style="text-align:center;">
-        <div id="slides" style="width:650px;margin:0 auto;">
+        <div id="slides" style="width:650px;margin:20px auto;">
             <div class="slides_container" style="width:600px;margin:0 auto;">
                 <div py:for="reduction in reductions">
-                    <p>${reduction.root_user().screen_name}</p>
+                    <p>
+                        <span style="font-weight:bold;">${reduction.root_user().screen_name}</span>
+                    </p>
                     <img width="600px" src="${'/static/images/maps/%s.png' % reduction.root_user().screen_name}" />
                 </div>
             </div>
