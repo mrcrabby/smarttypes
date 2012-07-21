@@ -20,8 +20,8 @@ class TwitterCommunity(PostgresBaseModel):
     ]    
     table_defaults = {}
     
-    def avg_global_pagerank(self):
-        return sum(self.global_pagerank) / len(self.global_pagerank)
+    def avg_hybrid_pagerank(self):
+        return sum(self.hybrid_pagerank) / len(self.hybrid_pagerank)
 
     def get_members(self):
         return_list = []
@@ -86,7 +86,7 @@ class TwitterCommunity(PostgresBaseModel):
                     if len(word) > 2 and word not in user_words:
                         user_words.add(word)
                         all_words.add(word)
-                        community_wordcounts[community.index][1][word] += (1 + (score * 5))
+                        community_wordcounts[community.index][1][word] += score
                         
         print "starting avg_wordcounts loop"            
         avg_wordcounts = {} #{word:avg}
@@ -109,9 +109,8 @@ class TwitterCommunity(PostgresBaseModel):
         for community_index in community_wordcounts:
             communities_unique_words[community_index] = []
             for word, times_used in community_wordcounts[community_index][1].items():
-                if times_used > 2.5:
-                    usage_diff = times_used - avg_wordcounts[word]
-                    communities_unique_words[community_index].append((usage_diff, word))
+                usage_diff = times_used - avg_wordcounts[word]
+                communities_unique_words[community_index].append((usage_diff, word))
         
         print "starting save tag_cloud loop"
         for community_index, unique_scores in communities_unique_words.items():

@@ -75,24 +75,17 @@ def id_communities(g, layout_list, eps=0.42, min_samples=10):
     layout_distance = spatial.distance.squareform(spatial.distance.pdist(layout_list))
     layout_similarity = 1 - (layout_distance / np.max(layout_distance))
     community_idx_list = DBSCAN().fit(layout_similarity, eps=eps, min_samples=min_samples).labels_
-    community_idx_list = [int(x) for x in community_idx_list]
     if -1 in community_idx_list:
         community_idx_list = list(np.array(community_idx_list) + 1)
+    community_idx_list = [int(x) for x in community_idx_list]
     vertex_clustering = VertexClustering(g, community_idx_list)
-    #set color and shape
-    color_step = 256 / len(set(community_idx_list))
-    colors = np.array(community_idx_list) * color_step
-    colors = 255 - colors
-    g.vs['color'] = list(colors)
-    g.vs['shape'] = ['hidden' if x == 0 else 'circle' for x in community_idx_list]
-    return g, vertex_clustering
+    return g, community_idx_list, vertex_clustering
 
-def get_community_stats(g, vertex_clustering, layout_list):
-    layout_list = np.array(layout_list)
-    global_pagerank = np.array(g.pagerank(damping=0.65))
-    g.vs['size'] = list(global_pagerank / (max(global_pagerank) / 40))
+def get_community_stats(network, g, vertex_clustering, layout_list):
+    global_pagerank = np.array(g.pagerank(damping=0.60))
     community_stats = defaultdict(lambda: {
-        'center_coordinate':[0,0], 
+        'center_coordinate':[0,0],
+        'member_idxs':[], 
         'member_ids':[],
         'global_pagerank':[],
         'community_pagerank':[],
@@ -100,14 +93,27 @@ def get_community_stats(g, vertex_clustering, layout_list):
     })
     i = 0
     for community_graph in vertex_clustering.subgraphs():
+        community_stats[i]['member_idxs'] = vertex_clustering[i]
         community_stats[i]['member_ids'] = community_graph.vs['name']
         community_stats[i]['global_pagerank'] = list(global_pagerank[vertex_clustering[i]])
-        community_stats[i]['community_pagerank'] = community_graph.pagerank(damping=0.65)
+        community_stats[i]['community_pagerank'] = community_graph.pagerank(damping=0.60)
         avg_global_pagerank = sum(community_stats[i]['global_pagerank']) / len(vertex_clustering[i])
-        hybrid_pagerank = avg_global_pagerank * np.array(community_stats[i]['community_pagerank'])
-        community_stats[i]['hybrid_pagerank'] = list(hybrid_pagerank / (max(hybrid_pagerank) / 20))
+        community_out = float(sum([len(network[x]) for x in community_graph.vs['name']]))
+        community_closeness_score = float(sum(community_graph.vs.indegree())) / community_out
+        hybrid_pagerank = (community_closeness_score * 1) * (avg_global_pagerank * 1) * \
+            (np.array(community_stats[i]['community_pagerank']) * 2)
+        community_stats[i]['hybrid_pagerank'] = list(hybrid_pagerank)
         i += 1
     return community_stats
+
+def plot_graph(g, layout, filepath, size_tup=(600, 600)):
+    # #palettes
+    # #  'red-yellow-green','gray','red-purple-blue','rainbow',
+    # #  'red-black-green','terrain','red-blue','heat','red-green'
+    #palette=colors.palettes["gray"],
+    plot(g, filepath, size_tup, layout=layout,  
+        vertex_order_by=('size', True), edge_color="white", edge_width=0, edge_arrow_size=0.1, 
+        edge_arrow_width=0.1)
 
 if __name__ == "__main__":
 
@@ -116,7 +122,7 @@ if __name__ == "__main__":
     start_time = datetime.now()
     postgres_handle = PostgresHandle(smarttypes.connection_string)
 
-    if not len(sys.argv) > 2:
+    if len(sys.argv) < 3:
         raise Exception('Need a twitter handle and distance.')
     else:
         screen_name = sys.argv[1]
@@ -128,17 +134,35 @@ if __name__ == "__main__":
     network = TwitterUser.get_rooted_network(root_user, postgres_handle, distance=distance)
     g = get_igraph_graph(network)
     layout_list = reduce_with_linloglayout(g, root_user)
-    layout = Layout(layout_list)
-    g, vertex_clustering = id_communities(g, layout_list, eps=0.62, min_samples=10)
-    community_stats = get_community_stats(g, vertex_clustering, layout_list)
+    
+    #id_communities
+    g, community_idx_list, vertex_clustering = id_communities(g, layout_list, eps=0.57, min_samples=10)
 
-    # #palettes
-    # #  'red-yellow-green','gray','red-purple-blue','rainbow',
-    # #  'red-black-green','terrain','red-blue','heat','red-green'
+    #set color and shape based on communities
+    color_array = np.array(community_idx_list)
+    color_array = color_array / (max(color_array) / 31)
+    g.vs['color'] = ['rgb(%s, %s, %s)' % (int(x) * 8, int(x) * 8, int(x) * 8) for x in color_array]
+    g.vs[g.vs.find(root_user.id).index]['color'] = 'rgb(255,0,0)'
+    #g.vs['shape'] = ['hidden' if x == 0 else 'circle' for x in community_idx_list]
+
+    #community_stats
+    community_stats = get_community_stats(network, g, vertex_clustering, layout_list)
+
+    #set node size based on community_stats
+    size_array = np.array([0.0] * len(community_idx_list))
+    for community_idx, values_dict in community_stats.items():
+        size_array[values_dict['member_idxs']] = values_dict['hybrid_pagerank']
+    g.vs['size'] = list(size_array / (max(size_array) / 30))
+    g.vs[g.vs.find(root_user.id).index]['size'] = 40
+
+    #plot to file
+    layout = Layout(layout_list)
     filepath = 'io/%s.png' % root_user.screen_name
-    plot(g, filepath, (800, 800), layout=layout, palette=colors.palettes["rainbow"], 
-        vertex_order_by=('size', True), edge_color="white", edge_width=0, edge_arrow_size=0.1, 
-        edge_arrow_width=0.1)
+    thumb_filepath = 'io/%s_thumb.png' % root_user.screen_name
+    plot_graph(g, layout, filepath, size_tup=(600, 600))
+    #plot_graph(g, layout, thumb_filepath, size_tup=(50, 50))
+    os.system('cp io/%s*.png /home/timmyt/projects/smarttypes/smarttypes/static/images/maps/.' % root_user.screen_name)
+    os.system('scp io/%s*.png cottie:/home/timmyt/projects/smarttypes/smarttypes/static/images/maps/.' % root_user.screen_name)
 
     print 'save to disk'
     twitter_reduction = TwitterReduction.create_reduction(root_user.id, postgres_handle)
@@ -155,8 +179,7 @@ if __name__ == "__main__":
     TwitterCommunity.mk_tag_clouds(twitter_reduction.id, postgres_handle)
     postgres_handle.connection.commit()
 
-    os.system('scp io/%s.png cottie:/home/timmyt/projects/smarttypes/smarttypes/static/images/maps/.' % root_user.screen_name)
-
+    #how long
     print datetime.now() - start_time
 
 
