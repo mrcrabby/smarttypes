@@ -82,7 +82,7 @@ def id_communities(g, layout_list, eps=0.42, min_samples=10):
     return g, community_idx_list, vertex_clustering
 
 def get_community_stats(network, g, vertex_clustering, layout_list):
-    global_pagerank = np.array(g.pagerank(damping=0.60))
+    global_pagerank = np.array(g.pagerank(damping=0.65))
     community_stats = defaultdict(lambda: {
         'center_coordinate':[0,0],
         'member_idxs':[], 
@@ -96,7 +96,7 @@ def get_community_stats(network, g, vertex_clustering, layout_list):
         community_stats[i]['member_idxs'] = vertex_clustering[i]
         community_stats[i]['member_ids'] = community_graph.vs['name']
         community_stats[i]['global_pagerank'] = list(global_pagerank[vertex_clustering[i]])
-        community_stats[i]['community_pagerank'] = community_graph.pagerank(damping=0.60)
+        community_stats[i]['community_pagerank'] = community_graph.pagerank(damping=0.65)
         avg_global_pagerank = sum(community_stats[i]['global_pagerank']) / len(vertex_clustering[i])
         community_out = float(sum([len(network[x]) for x in community_graph.vs['name']]))
         community_closeness_score = float(sum(community_graph.vs.indegree())) / community_out
@@ -136,7 +136,7 @@ if __name__ == "__main__":
     layout_list = reduce_with_linloglayout(g, root_user)
     
     #id_communities
-    g, community_idx_list, vertex_clustering = id_communities(g, layout_list, eps=0.57, min_samples=10)
+    g, community_idx_list, vertex_clustering = id_communities(g, layout_list, eps=0.62, min_samples=12)
 
     #set color and shape based on communities
     color_array = np.array(community_idx_list)
