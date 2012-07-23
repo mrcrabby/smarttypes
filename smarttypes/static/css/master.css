@@ -5,7 +5,11 @@
 
 /*root*/
 
-    #page_wrapper{font-family:'ColaborateLightRegular',Arial,sans-serif;color:#404040;line-height:135%;}
+    #page_wrapper{
+        /*font-family:'ColaborateLightRegular',Arial,sans-serif;*/
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        color:#404040;
+        line-height:135%;}
 
 /*headers */
 

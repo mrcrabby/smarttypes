@@ -138,7 +138,7 @@ if __name__ == "__main__":
     #id_communities
     g, community_idx_list, vertex_clustering = id_communities(g, layout_list, eps=0.62, min_samples=12)
 
-    #set color and shape based on communities
+    #set color based on communities
     color_array = np.array(community_idx_list)
     color_array = color_array / (max(color_array) / 31)
     g.vs['color'] = ['rgb(%s, %s, %s)' % (int(x) * 8, int(x) * 8, int(x) * 8) for x in color_array]
