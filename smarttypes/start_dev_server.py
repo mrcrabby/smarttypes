@@ -12,6 +12,7 @@ class CustomRequestHandler(WSGIRequestHandler):
 
 
 def start_app():
+    import smarttypes
     from wsgi import application
     from smarttypes.utils import web_monitor
     web_monitor.start(interval=1.0)
@@ -20,6 +21,7 @@ def start_app():
     port = 9999
     httpd = make_server('localhost', port, application, handler_class=CustomRequestHandler)
     print "Serving on port %s..." % port
+    smarttypes.config.IS_PROD = False
     httpd.serve_forever()
 
 

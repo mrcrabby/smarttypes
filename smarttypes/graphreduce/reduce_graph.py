@@ -128,7 +128,10 @@ if __name__ == "__main__":
         screen_name = sys.argv[1]
         distance = int(sys.argv[2])
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
+
+    smarttypes.config.IS_PROD = False
     if distance < 1:
+        smarttypes.config.IS_PROD = True
         distance = 10000 / len(root_user.following[:1000])
 
     network = TwitterUser.get_rooted_network(root_user, postgres_handle, distance=distance)
@@ -154,30 +157,34 @@ if __name__ == "__main__":
         size_array[values_dict['member_idxs']] = values_dict['hybrid_pagerank']
     g.vs['size'] = list(size_array / (max(size_array) / 30))
     g.vs[g.vs.find(root_user.id).index]['size'] = 40
+    g.vs['size'] = 1
 
     #plot to file
     layout = Layout(layout_list)
     filepath = 'io/%s.png' % root_user.screen_name
     thumb_filepath = 'io/%s_thumb.png' % root_user.screen_name
     plot_graph(g, layout, filepath, size_tup=(600, 600))
+    #need to adjust vs['size'] if i want to do this
     #plot_graph(g, layout, thumb_filepath, size_tup=(50, 50))
-    os.system('cp io/%s*.png /home/timmyt/projects/smarttypes/smarttypes/static/images/maps/.' % root_user.screen_name)
-    os.system('scp io/%s*.png cottie:/home/timmyt/projects/smarttypes/smarttypes/static/images/maps/.' % root_user.screen_name)
-
-    print 'save to disk'
-    twitter_reduction = TwitterReduction.create_reduction(root_user.id, postgres_handle)
-    postgres_handle.connection.commit()
-    for community_idx, values_dict in community_stats.items():
-        #params:
-        #reduction_id, index, center_coordinate, member_ids, 
-        #global_pagerank, community_pagerank, hybrid_pagerank
-        if community_idx > 0:
-            TwitterCommunity.create_community(twitter_reduction.id, community_idx, 
-                values_dict['center_coordinate'], values_dict['member_ids'], values_dict['global_pagerank'], 
-                values_dict['community_pagerank'], values_dict['hybrid_pagerank'], postgres_handle)
+    if not smarttypes.config.IS_PROD:
+        os.system('cp io/%s*.png /home/timmyt/projects/smarttypes/smarttypes/static/images/maps/.' % root_user.screen_name)
+    else:
+        os.system('scp io/%s*.png cottie:/home/timmyt/projects/smarttypes/smarttypes/static/images/maps/.' % root_user.screen_name)
+        
+        print 'save to disk'
+        twitter_reduction = TwitterReduction.create_reduction(root_user.id, postgres_handle)
         postgres_handle.connection.commit()
-    TwitterCommunity.mk_tag_clouds(twitter_reduction.id, postgres_handle)
-    postgres_handle.connection.commit()
+        for community_idx, values_dict in community_stats.items():
+            #params:
+            #reduction_id, index, center_coordinate, member_ids, 
+            #global_pagerank, community_pagerank, hybrid_pagerank
+            if community_idx > 0:
+                TwitterCommunity.create_community(twitter_reduction.id, community_idx, 
+                    values_dict['center_coordinate'], values_dict['member_ids'], values_dict['global_pagerank'], 
+                    values_dict['community_pagerank'], values_dict['hybrid_pagerank'], postgres_handle)
+            postgres_handle.connection.commit()
+        TwitterCommunity.mk_tag_clouds(twitter_reduction.id, postgres_handle)
+        postgres_handle.connection.commit()
 
     #how long
     print datetime.now() - start_time
