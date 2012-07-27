@@ -22,7 +22,7 @@
 
     <div style="text-align:center;">
         <h2>
-            Mapping your twitter universe!
+            Map your online social universe!
         </h2>
 
         <div py:for="user, reduction_count in root_user_count_tups" 
@@ -33,7 +33,7 @@
                 <br/>
                 ${user.description}
             </p>
-            <a href="/social_map/reduction?root_user=${user.screen_name}">
+            <a href="/social_map/${user.screen_name}">
                 <img width="90%" src="${'/static/images/maps/%s.png' % user.screen_name}" />
             </a>
         </div>
