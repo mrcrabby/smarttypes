@@ -22,11 +22,16 @@
 
     <div style="text-align:center;">
         <h2>
-            Map your online social universe!
+            Explore our existing social maps!
         </h2>
+        <p>
+            <a href="/sign_in">
+              Sign in w/ twitter
+            </a> to start your own map.
+        </p>
 
-        <div py:for="user, reduction_count in root_user_count_tups" style="clear:both;margin:40px 2%;">
-            <div style="float:left;width:48%;">
+        <div py:for="user, reduction_count in root_user_count_tups" style="clear:both;margin:75px 2%;">
+            <div style="float:left;width:48%;margin:10% 0 0 0;">
                 <span style="font-weight:bold;">${user.screen_name}</span>
                 --
                 <a href="/social_map/${user.screen_name}">View map</a>
