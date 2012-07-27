@@ -28,6 +28,8 @@
         <div py:for="user, reduction_count in root_user_count_tups" style="clear:both;margin:40px 2%;">
             <div style="float:left;width:48%;">
                 <span style="font-weight:bold;">${user.screen_name}</span>
+                --
+                <a href="/social_map/${user.screen_name}">View map</a>
                 <span py:if="user.location_name" style="font-style:italic;">
                     <br/>
                     ${user.location_name}
