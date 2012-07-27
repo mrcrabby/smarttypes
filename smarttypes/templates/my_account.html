@@ -14,8 +14,15 @@
     <div style="text-align:center;">
         <h2>Thanks for signing up!</h2>
         <p>
-            Give us your email, and someone will shoot you a note to say hi, 
-            and learn more about your goals and interests.
+            SmartTypes is currently a modest side-project.
+            Build w/ love, during nights and weekends
+            <a href="http://www.linkedin.com/pub/timmy-wilson/6/881/56b">
+                by Timmy Wilson
+            </a>.
+        </p>
+        <p>
+            I want to learn more about you.
+            Enter your email below, and my wife or i will send you a quick note to say hi.
         </p>
         <p>
             <form name="input" action="/save_email" method="post" style="margin:20px 0;">
@@ -24,6 +31,7 @@
                     email_label = 'Email:' if email_value else "Email?"
                     email_submit = 'Update' if email_value else 'Add'
                 ?>
+                <h2 py:if="email_value">Got it!</h2>
                 <span >${email_label}</span>
                 <input type="text" style="text-align:center;" class="text" name="email" value="${email_value}" />
                 <input type="submit" class="submit" value="${email_submit}" />

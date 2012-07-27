@@ -14,15 +14,8 @@
         root_user = reduction.root_user()
         communities = reduction.communities()
     ?>
-    <script src="/static/js/social_map.js" type="text/javascript"></script>
+    <!--<script src="/static/js/social_map.js" type="text/javascript"></script>-->
     <style type="text/css">
-        div#social_map{
-            background-image:url('/static/images/maps/${root_user.screen_name}.png');
-            height:600px;
-            width:600px;
-            margin:0 auto;
-            background-size:100% 100%;
-        }
         ul.posts li {margin:15px 0;}
     </style>
 </head>                    
@@ -35,8 +28,11 @@
             Social map for ${root_user.screen_name}, ${len(communities)} communities!
         </h2>
 
-        <div id="social_map">
-        </div>
+        <p style="margin:15px 0;">
+            <img width="85%" style="" 
+                src="/static/images/maps/${root_user.screen_name}.png" 
+                alt="/static/images/maps/${root_user.screen_name}.png"/>
+        </p>
 
         <p>
 	        <ul class="posts" style="list-style:none;margin:10px 0;">
