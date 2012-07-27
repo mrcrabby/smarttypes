@@ -25,6 +25,7 @@ def my_account(req, session, postgres_handle):
         if creds:
             user = creds.twitter_user
             if user and user.get_latest_reduction():
+                raise RedirectException('/')
                 raise RedirectException('/social_map/%s' % user.screen_name)
         return {}
     if 'oauth_token' in req.params and 'oauth_verifier' in req.params:
