@@ -23,6 +23,8 @@
     <div style="text-align:center;">
         <h2>
             ${len(community.member_ids)} member community!
+            <br/>
+            ${', '.join(community.tag_cloud[:5])}
         </h2>
         <p style="font-weight:bold;">Top 20 members:</p>
         <p>
