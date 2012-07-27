@@ -140,6 +140,10 @@ class TwitterUser(PostgresBaseModel):
                 else:
                     tried_to_load_these_ids.append(random_following_id)
 
+    def get_latest_reduction(self):
+        from smarttypes.model.twitter_reduction import TwitterReduction
+        return TwitterReduction.get_latest_reduction(self.id, self.postgres_handle)
+
     def save_following_ids(self, following_ids):
         pre_params = {
             'postfix': datetime.now().strftime('%Y_%U'),
