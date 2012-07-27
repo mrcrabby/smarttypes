@@ -24,7 +24,7 @@ def my_account(req, session, postgres_handle):
         creds = session.credentials
         if creds:
             user = creds.twitter_user
-            if user and user.get_latest_reduction():
+            if user and False:#user.get_latest_reduction():
                 raise RedirectException('/%s' % user.screen_name)
                 raise RedirectException('/social_map/%s' % user.screen_name)
         return {}
