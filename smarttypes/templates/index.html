@@ -25,17 +25,26 @@
             Map your online social universe!
         </h2>
 
-        <div py:for="user, reduction_count in root_user_count_tups" 
-            style="float:left;width:45%;margin:50px 2% 0 2%;">
-
-            <p style="display:block;height:90px;overflow:hidden;">
+        <div py:for="user, reduction_count in root_user_count_tups" style="clear:both;margin:40px 2%;">
+            <div style="float:left;width:48%;">
                 <span style="font-weight:bold;">${user.screen_name}</span>
+                <span py:if="user.location_name" style="font-style:italic;">
+                    <br/>
+                    ${user.location_name}
+                </span>
                 <br/>
                 ${user.description}
-            </p>
-            <a href="/social_map/${user.screen_name}">
-                <img width="90%" src="${'/static/images/maps/%s.png' % user.screen_name}" />
-            </a>
+                <span py:if="user.url">
+                    <br/>
+                    <a href="${user.url}">${user.url}</a>
+                </span>
+            </div>
+            <div style="float:right;width:48%;">
+                <a href="/social_map/${user.screen_name}">
+                    <img width="90%" src="${'/static/images/maps/%s.png' % user.screen_name}" />
+                </a>
+            </div>
+            <div style="clear:both;">&nbsp;</div>
         </div>
     </div>
 

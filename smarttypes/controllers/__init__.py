@@ -1,6 +1,6 @@
 import social_map  # need this
 import mimetypes
-import os
+import os, random
 from smarttypes.config import *
 from smarttypes.utils.exceptions import RedirectException
 from smarttypes.utils import twitter_api_utils
@@ -13,7 +13,7 @@ from smarttypes.model.twitter_community import TwitterCommunity
 def index(req, session, postgres_handle):
     root_user_count_tups = TwitterReduction.get_user_reduction_counts(postgres_handle)
     return {
-        'root_user_count_tups':root_user_count_tups,
+        'root_user_count_tups':random.sample(root_user_count_tups, 5),
     }
 
 def sign_in(req, session, postgres_handle):
