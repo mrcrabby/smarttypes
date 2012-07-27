@@ -19,7 +19,13 @@ def reduction(req, session, postgres_handle):
         reduction = TwitterReduction.get_by_id(reduction_id, postgres_handle)
     if 'root_user' in req.params:
         root_user = TwitterUser.by_screen_name(req.params['root_user'], postgres_handle)
-        reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
+        if root_user:
+            reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
+    if not reduction:
+        if req.path.split('/') > 2:  # path looks like '/social_map/something'
+            root_user = TwitterUser.by_screen_name(req.path.split('/')[2], postgres_handle)
+            if root_user:
+                reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
     if not reduction:
         root_user = TwitterUser.by_screen_name('SmartTypes', postgres_handle)
         reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
