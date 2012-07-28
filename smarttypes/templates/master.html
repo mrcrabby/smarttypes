@@ -24,6 +24,7 @@
 
 <body py:match="body" py:attrs="select('@*')">
   <div class="container">
+
     <!--header-->
     <div class="row-fluid" style="margin:20px 0 15px 0;">
       <!-- <div class="span1">&nbsp;</div> -->
@@ -32,18 +33,18 @@
             <img src="/static/images/smarttypes_tree_real_tiny.jpg" alt="${site_name}: ${site_mantra}"/>
             <img src="/static/images/smarttypes_logo.png" alt="${site_name}: ${site_mantra}"/>
         </a>
-
+ 
         <ul class="nav nav-pills pull-right">
-<!--           <li class="${'active' if active_tab == 'social_map' else ''}">
+          <li class="${'active' if active_tab == 'social_map' else ''}">
             <a style="font-size:16px;" href="/social_map">
               Explore
             </a>
-          </li> -->
-          <li class="${'active' if active_tab == 'about' else ''}">
+          </li>
+<!--           <li class="${'active' if active_tab == 'about' else ''}">
             <a style="font-size:16px;" href="/about">
               About 
             </a> 
-          </li>
+          </li> -->
           <li class="${'active' if active_tab == 'blog' else ''}">
             <a style="font-size:16px;" href="/blog">
               Blog 
@@ -61,51 +62,49 @@
           </li>
         </ul>
       </div>
-      <!-- <div class="span1">&nbsp;</div> -->
     </div>
-          
+
     <!--crap from the child-->
     <div class="row-fluid" style="margin:15px 0 30px 0;">
-      <div class="span2">&nbsp;</div>
-      <div class="span8">
+      <div class="span1">&nbsp;</div>
+      <div class="span10">
         <div style="margin:0 30px;">
           <div py:replace="select('*|text()')"></div>
         </div>
       </div>
-      <div class="span2">&nbsp;</div>
+      <div class="span1">&nbsp;</div>
     </div>
 
     <!--footer-->
-    <div class="row-fluid" style="margin:60px 0 20px 0;">
+    <div class="row-fluid" style="margin:60px 0 30px 0;">
 
-      <div class="span2">&nbsp;</div>
-      <div class="span8" style="text-align:center;">
+      <div class="span12" style="text-align:center;">
 
         <div>
-          <a target="_blank" href="http://twitter.com/smarttypes">@SmartTypes</a>
-        </div>
 
-        <div style="line-height:10%; width:110px; margin:0 auto 2px auto; 
-          border-bottom: solid 1px #666666;">&nbsp;</div>
-        <div style="line-height:30%; width:118px; margin:2px auto 0 auto; 
-          border-top: solid 1px #333333;">&nbsp;</div>
+          <div>
+            <a target="_blank" href="http://twitter.com/smarttypes">
+              <i class="icon-leaf"></i> @SmartTypes
+            </a>
+          </div>
 
-        <div style="margin:5px 0 0 0;">
-          <a target="_blank" href="https://github.com/smarttypes/smarttypes">
-            Everything's on github
-          </a>
-        </div> 
-        
-        <div style="line-height:10%; width:160px; margin:0 auto 2px auto; 
+        <div style="width:160px; margin:0 auto 2px auto; 
           border-bottom: solid 1px #666666;">&nbsp;</div>
-         <div style="line-height:10%; width:168px; margin:2px auto 0 auto; 
+         <div style="width:168px; margin:2px auto 0 auto; 
           border-top: solid 1px #333333;">&nbsp;</div> 
 
+          <div>
+            <a target="_blank" href="https://github.com/smarttypes/smarttypes">
+              <i class="icon-leaf"></i> Everything's on github
+            </a>
+          </div> 
+
+        </div>
+
       </div>
-      <div class="span2">&nbsp;</div>
     </div>
+    <!--footer-->
 
-</div>
-
+  </div>
 </body>
 </html>

@@ -11,31 +11,34 @@
 
 <body>
 
-    <div py:if="logged_in_user" style="text-align:center;">
-        <h2>Thanks for signing up!</h2>
-        <p>
-            SmartTypes is currently a modest side-project.
-            Built w/ love, during nights and weekends
-            <a href="http://www.linkedin.com/pub/timmy-wilson/6/881/56b">
-                by Timmy Wilson
-            </a>
-        </p>
-        <p>
-            I want to learn more about you.
-            Enter your email below, and i'll send you a quick note to say hi and learn about your
-            interests / motivations.
-        </p>
-        <p>
-            <form name="input" action="/save_email" method="post" style="margin:20px 0;">
+    <div style="text-align:center;">
+
+        <div style="margin:40px 0 0 0;">
+            <h2>Thanks for signing up!</h2>
+            <p>
+                SmartTypes is a modest side-project.
+                Built w/ love, nights, and weekends
+                <a href="http://www.linkedin.com/pub/timmy-wilson/6/881/56b">
+                    by Timmy Wilson
+                </a>
+            </p>
+            <p>
+                Enter your email below and i'll send you a quick note to say hi, and learn more about your
+                interests and motivations.
+            </p>
+        </div>
+
+        <p style="margin:40px 0 0 0;">
+            <form class="form-inline" name="input" action="/save_email" method="post" style="margin:20px 0;">
                 <?python
                     email_value = credentials.email if credentials else ''
                     email_label = 'Email:' if email_value else "Email?"
                     email_submit = 'Update' if email_value else 'Add'
                 ?>
                 <h2 py:if="email_value">Got it!</h2>
-                <span >${email_label}</span>
-                <input type="text" style="text-align:center;" class="text" name="email" value="${email_value}" />
-                <input type="submit" class="submit" value="${email_submit}" />
+                <span style="padding-right:5px;">${email_label}</span>
+                <input type="text" style="text-align:center;" name="email" value="${email_value}" />
+                <input type="submit" class="btn btn-primary" value="${email_submit}" />
             </form> 
         </p>
     </div>

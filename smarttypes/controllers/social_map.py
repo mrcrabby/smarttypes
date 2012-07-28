@@ -1,15 +1,14 @@
-import smarttypes
+import smarttypes, random
 from smarttypes.model.twitter_user import TwitterUser
 from smarttypes.model.twitter_reduction import TwitterReduction
 from smarttypes.model.twitter_community import TwitterCommunity
 
 def index(req, session, postgres_handle):
     root_user_count_tups = TwitterReduction.get_user_reduction_counts(postgres_handle)
-    reductions = [TwitterReduction.get_latest_reduction(x[0].id, postgres_handle) for x in root_user_count_tups]
     return {
         'active_tab': 'social_map',
         'template_path': 'social_map/index.html',
-        'reductions':reductions,
+        'root_user_count_tups':random.sample(root_user_count_tups, 5),
     }
 
 def reduction(req, session, postgres_handle):

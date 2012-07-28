@@ -21,46 +21,18 @@
 <body>
 
     <div style="text-align:center;">
-        <h2>
-            <i class="icon-search"></i> Explore your social universe! 
-        </h2> 
-<!--         <p style="">
-            <a class="btn btn-primary" href="/sign_in">
-              Sign in w/ twitter
-            </a>
-        </p> -->
 
-        <div py:for="user, reduction_count in root_user_count_tups" 
-            style="clear:both;margin:40px 2%;">
-            <div style="float:left;width:48%;margin:12% 0 0 0;">
-                <i class="icon-user"></i> <span style="font-weight:bold;">${user.screen_name}</span>
-                --
-                <a href="/social_map/${user.screen_name}">View map</a>
-                <span style="font-style:italic;">
-                    <br/>
-                    ${user.location_name if user.location_name else 'No location given'}
-                </span>
-                <br/>
-                ${user.description[:80]}
-                ${'...' if len(user.description) &gt; 80 else ''}
-                <span py:if="user.url">
-                    <br/>
-                    <a href="${user.url}">${user.url}</a>
-                </span>
-            </div>
-            <div style="float:right;width:48%;text-align:right;">
-                <a href="/social_map/${user.screen_name}">
-                    <img width="90%" style="padding-bottom:40px;" src="${'/static/images/maps/%s.png' % user.screen_name}" />
+        <div style="margin:40px 0 0 0;" class="hero-unit">
+            <h2>
+                <i class="icon-search"></i> Explore your social universe! 
+            </h2>
+            <p>${site_description}</p> 
+            <p style="margin-top:20px">
+                <a class="btn btn-primary" href="/sign_in">
+                  <i class="icon-leaf"></i> Sign in w/ twitter
                 </a>
-            </div>
-            <div style="clear:both;">&nbsp;</div>
+            </p>
         </div>
-
-        <p>
-            <a class="btn btn-primary" href="/">
-              <i class="icon-refresh"></i> Refresh this list
-            </a>
-        </p>
 
     </div>
 
