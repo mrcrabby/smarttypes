@@ -42,27 +42,23 @@
           </li> -->
           <li  class="${'active' if active_tab == 'about' else ''}">
             <a href="/about">
-              About
-            </a>
+              About 
+            </a> 
           </li>
           <li class="${'active' if active_tab == 'blog' else ''}">
             <a href="/blog">
               Blog 
-            </a>
+            </a> 
           </li>
           <li py:if="not logged_in_user" >
             <a href="/sign_in">
-              Sign in w/ twitter
-              <!--This is causing a spacing issue
-              <img src="/static/images/twitter_16_gray.png" style="border:none;padding:0;" alt="twitter"/>
-              -->
-            </a>
+              Sign in w/ twitter 
+            </a> 
           </li>
           <li py:if="logged_in_user" class="${'active' if active_tab == 'my_account' else ''}">
             <a href="/my_account">
-              ${logged_in_user.screen_name}
-              <!--<img src="/static/images/twitter_16_gray.png" style="border:none;padding:0;" alt="twitter"/>-->
-            </a>
+              ${logged_in_user.screen_name} 
+            </a> 
           </li>
         </ul>
       </div>

@@ -22,17 +22,18 @@
 
     <div style="text-align:center;">
         <h2>
-            Explore our social universe!
-        </h2>
-        <p>
+            <i class="icon-search"></i> Explore your social universe! 
+        </h2> 
+        <p style="border-bottom: solid 1px #cccccc;padding-bottom: 35px;">
             <a class="btn btn-primary" href="/sign_in">
               Sign in w/ twitter
             </a>
         </p>
 
-        <div py:for="user, reduction_count in root_user_count_tups" style="clear:both;margin:75px 2%;">
+        <div py:for="user, reduction_count in root_user_count_tups" 
+            style="clear:both;margin:35px 2%;padding-bottom: 35px; border-bottom: solid 1px #cccccc;">
             <div style="float:left;width:48%;margin:10% 0 0 0;">
-                <span style="font-weight:bold;">${user.screen_name}</span>
+                <i class="icon-user"></i> <span style="font-weight:bold;">${user.screen_name}</span>
                 --
                 <a href="/social_map/${user.screen_name}">View map</a>
                 <span py:if="user.location_name" style="font-style:italic;">
