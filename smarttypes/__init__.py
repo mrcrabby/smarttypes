@@ -34,6 +34,5 @@ site_mantra = 'A tool for social discovery.'
 default_title = '%s - %s' % (site_name, site_mantra)
 site_description = """
 SmartTypes is an open lab for online social network analysis (initially twitter).
-We provide free tools to pull, store, and analyze social profiles and relationships.
-Our goal: to provide an accurate, searchable, map of your online universe!"""
+Our goal is to provide an accurate, searchable, map of your online universe!"""
 site_description = site_description.strip()
