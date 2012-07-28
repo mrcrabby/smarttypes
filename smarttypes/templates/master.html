@@ -35,27 +35,27 @@
 
         <ul class="nav nav-pills pull-right">
 <!--           <li class="${'active' if active_tab == 'social_map' else ''}">
-            <a href="/social_map">
+            <a style="font-size:16px;" href="/social_map">
               Explore
             </a>
           </li> -->
-          <li  class="${'active' if active_tab == 'about' else ''}">
-            <a href="/about">
+          <li class="${'active' if active_tab == 'about' else ''}">
+            <a style="font-size:16px;" href="/about">
               About 
             </a> 
           </li>
           <li class="${'active' if active_tab == 'blog' else ''}">
-            <a href="/blog">
+            <a style="font-size:16px;" href="/blog">
               Blog 
             </a> 
           </li>
           <li py:if="not logged_in_user" >
-            <a href="/sign_in">
+            <a style="font-size:16px;" href="/sign_in">
               Sign in w/ twitter 
             </a> 
           </li>
           <li py:if="logged_in_user" class="${'active' if active_tab == 'my_account' else ''}">
-            <a href="/my_account">
+            <a style="font-size:16px;" href="/my_account">
               ${logged_in_user.screen_name} 
             </a> 
           </li>

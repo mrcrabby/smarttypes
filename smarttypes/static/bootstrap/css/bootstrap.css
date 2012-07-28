@@ -134,7 +134,7 @@ textarea {
 body {
   margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   line-height: 18px;
   color: #333333;
   background-color: #ffffff;
@@ -345,7 +345,7 @@ p {
   margin: 0 0 9px;
 }
 p small {
-  font-size: 11px;
+  font-size: 13px;
   color: #999999;
 }
 .lead {
@@ -549,7 +549,7 @@ code,
 pre {
   padding: 0 3px 2px;
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-  font-size: 12px;
+  font-size: 14px;
   color: #333333;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -565,7 +565,7 @@ pre {
   display: block;
   padding: 8.5px;
   margin: 0 0 9px;
-  font-size: 12.025px;
+  font-size: 13.875px;
   line-height: 18px;
   word-break: break-all;
   word-wrap: break-word;
@@ -593,7 +593,7 @@ pre code {
 }
 .label,
 .badge {
-  font-size: 10.998px;
+  font-size: 12.69px;
   font-weight: bold;
   line-height: 14px;
   color: #ffffff;
@@ -891,7 +891,7 @@ legend {
   width: 100%;
   padding: 0;
   margin-bottom: 27px;
-  font-size: 19.5px;
+  font-size: 22.5px;
   line-height: 36px;
   color: #333333;
   border: 0;
@@ -906,7 +906,7 @@ input,
 button,
 select,
 textarea {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: normal;
   line-height: 18px;
 }
@@ -941,7 +941,7 @@ input[type="color"],
   height: 18px;
   padding: 4px;
   margin-bottom: 9px;
-  font-size: 13px;
+  font-size: 15px;
   line-height: 18px;
   color: #555555;
 }
@@ -1552,7 +1552,7 @@ legend + .control-group {
   *zoom: 1;
   padding: 4px 10px 4px;
   margin-bottom: 0;
-  font-size: 13px;
+  font-size: 15px;
   line-height: 18px;
   *line-height: 20px;
   color: #333333;
@@ -1643,7 +1643,7 @@ legend + .control-group {
 }
 .btn-large {
   padding: 9px 14px;
-  font-size: 15px;
+  font-size: 17px;
   line-height: normal;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -1654,7 +1654,7 @@ legend + .control-group {
 }
 .btn-small {
   padding: 5px 9px;
-  font-size: 11px;
+  font-size: 13px;
   line-height: 16px;
 }
 .btn-small [class^="icon-"] {
@@ -1662,7 +1662,7 @@ legend + .control-group {
 }
 .btn-mini {
   padding: 2px 6px;
-  font-size: 11px;
+  font-size: 13px;
   line-height: 14px;
 }
 .btn-primary,
