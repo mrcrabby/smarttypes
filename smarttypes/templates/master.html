@@ -36,22 +36,22 @@
 
         <ul class="nav nav-pills pull-right">
 <!--           <li class="${'active' if active_tab == 'social_map' else ''}">
-            <a style="font-size:16px;" href="/social_map">
+            <a href="/social_map">
               Explore
             </a>
           </li> -->
-          <li class="${'active' if active_tab == 'about' else ''}">
-            <a style="font-size:16px;" href="/about">
+          <li  class="${'active' if active_tab == 'about' else ''}">
+            <a href="/about">
               About
             </a>
           </li>
           <li class="${'active' if active_tab == 'blog' else ''}">
-            <a style="font-size:16px;" href="/blog">
+            <a href="/blog">
               Blog 
             </a>
           </li>
           <li py:if="not logged_in_user" >
-            <a style="font-size:16px;" href="/sign_in">
+            <a href="/sign_in">
               Sign in w/ twitter
               <!--This is causing a spacing issue
               <img src="/static/images/twitter_16_gray.png" style="border:none;padding:0;" alt="twitter"/>
@@ -59,7 +59,7 @@
             </a>
           </li>
           <li py:if="logged_in_user" class="${'active' if active_tab == 'my_account' else ''}">
-            <a style="font-size:16px;" href="/my_account">
+            <a href="/my_account">
               ${logged_in_user.screen_name}
               <!--<img src="/static/images/twitter_16_gray.png" style="border:none;padding:0;" alt="twitter"/>-->
             </a>
