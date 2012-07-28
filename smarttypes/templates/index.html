@@ -24,15 +24,15 @@
         <h2>
             <i class="icon-search"></i> Explore your social universe! 
         </h2> 
-        <p style="">
+<!--         <p style="">
             <a class="btn btn-primary" href="/sign_in">
               Sign in w/ twitter
             </a>
-        </p>
+        </p> -->
 
         <div py:for="user, reduction_count in root_user_count_tups" 
             style="clear:both;margin:40px 2%;">
-            <div style="float:left;width:48%;margin:10% 0 0 0;">
+            <div style="float:left;width:48%;margin:12% 0 0 0;">
                 <i class="icon-user"></i> <span style="font-weight:bold;">${user.screen_name}</span>
                 --
                 <a href="/social_map/${user.screen_name}">View map</a>
@@ -41,7 +41,8 @@
                     ${user.location_name}
                 </span>
                 <br/>
-                ${user.description}
+                ${user.description[:80]}
+                ${'...' if len(user.description) &gt; 80 else ''}
                 <span py:if="user.url">
                     <br/>
                     <a href="${user.url}">${user.url}</a>
@@ -49,7 +50,7 @@
             </div>
             <div style="float:right;width:48%;text-align:right;">
                 <a href="/social_map/${user.screen_name}">
-                    <img width="90%" src="${'/static/images/maps/%s.png' % user.screen_name}" />
+                    <img width="90%" style="padding-bottom:40px;" src="${'/static/images/maps/%s.png' % user.screen_name}" />
                 </a>
             </div>
             <div style="clear:both;">&nbsp;</div>
