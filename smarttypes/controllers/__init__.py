@@ -11,10 +11,7 @@ from smarttypes.model.twitter_community import TwitterCommunity
 
 
 def index(req, session, postgres_handle):
-    root_user_count_tups = TwitterReduction.get_user_reduction_counts(postgres_handle)
-    return {
-        'root_user_count_tups':random.sample(root_user_count_tups, 5),
-    }
+    return {}
 
 def sign_in(req, session, postgres_handle):
     raise RedirectException(twitter_api_utils.get_signin_w_twitter_url(postgres_handle))
