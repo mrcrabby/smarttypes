@@ -36,9 +36,9 @@
                 <i class="icon-user"></i> <span style="font-weight:bold;">${user.screen_name}</span>
                 --
                 <a href="/social_map/${user.screen_name}">View map</a>
-                <span py:if="user.location_name" style="font-style:italic;">
+                <span style="font-style:italic;">
                     <br/>
-                    ${user.location_name}
+                    ${user.location_name if user.location_name else 'No location given'}
                 </span>
                 <br/>
                 ${user.description[:80]}
