@@ -22,12 +22,12 @@
 
     <div style="text-align:center;">
         <h2>
-            Explore our existing social maps!
+            Explore our social universe!
         </h2>
         <p>
-            <a href="/sign_in">
+            <a class="btn btn-primary" href="/sign_in">
               Sign in w/ twitter
-            </a> to start your own map.
+            </a>
         </p>
 
         <div py:for="user, reduction_count in root_user_count_tups" style="clear:both;margin:75px 2%;">
@@ -46,13 +46,20 @@
                     <a href="${user.url}">${user.url}</a>
                 </span>
             </div>
-            <div style="float:right;width:48%;">
+            <div style="float:right;width:48%;text-align:right;">
                 <a href="/social_map/${user.screen_name}">
                     <img width="90%" src="${'/static/images/maps/%s.png' % user.screen_name}" />
                 </a>
             </div>
             <div style="clear:both;">&nbsp;</div>
         </div>
+
+        <p>
+            <a class="btn btn-primary" href="/">
+              Refresh this list
+            </a>
+        </p>
+
     </div>
 
 </body>                                     

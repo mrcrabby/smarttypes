@@ -27,30 +27,31 @@
 
     <!--header-->
     <div class="row-fluid" style="margin:20px 0 15px 0;">
-      <div class="span1">&nbsp;</div>
-      <div class="span10">
+      <!-- <div class="span1">&nbsp;</div> -->
+      <div class="span12">
         <a href="/">
+            <img src="/static/images/smarttypes_tree_real_tiny.jpg" alt="${site_name}: ${site_mantra}"/>
             <img src="/static/images/smarttypes_logo.png" alt="${site_name}: ${site_mantra}"/>
         </a>
 
         <ul class="nav nav-pills pull-right">
 <!--           <li class="${'active' if active_tab == 'social_map' else ''}">
-            <a href="/social_map">
+            <a style="font-size:16px;" href="/social_map">
               Explore
             </a>
           </li> -->
           <li class="${'active' if active_tab == 'about' else ''}">
-            <a href="/about">
+            <a style="font-size:16px;" href="/about">
               About
             </a>
           </li>
           <li class="${'active' if active_tab == 'blog' else ''}">
-            <a href="/blog">
+            <a style="font-size:16px;" href="/blog">
               Blog 
             </a>
           </li>
           <li py:if="not logged_in_user" >
-            <a href="/sign_in">
+            <a style="font-size:16px;" href="/sign_in">
               Sign in w/ twitter
               <!--This is causing a spacing issue
               <img src="/static/images/twitter_16_gray.png" style="border:none;padding:0;" alt="twitter"/>
@@ -58,14 +59,14 @@
             </a>
           </li>
           <li py:if="logged_in_user" class="${'active' if active_tab == 'my_account' else ''}">
-            <a href="/my_account">
+            <a style="font-size:16px;" href="/my_account">
               ${logged_in_user.screen_name}
               <!--<img src="/static/images/twitter_16_gray.png" style="border:none;padding:0;" alt="twitter"/>-->
             </a>
           </li>
         </ul>
       </div>
-      <div class="span1">&nbsp;</div>
+      <!-- <div class="span1">&nbsp;</div> -->
     </div>
           
     <!--crap from the child-->
@@ -90,7 +91,7 @@
         </div>
 
         <div style="line-height:10%; width:110px; margin:0 auto 2px auto; 
-          border-bottom: double 3px #666666;">&nbsp;</div>
+          border-bottom: solid 1px #666666;">&nbsp;</div>
         <div style="line-height:30%; width:118px; margin:2px auto 0 auto; 
           border-top: solid 1px #333333;">&nbsp;</div>
 
@@ -101,7 +102,7 @@
         </div> 
         
         <div style="line-height:10%; width:160px; margin:0 auto 2px auto; 
-          border-bottom: double 3px #666666;">&nbsp;</div>
+          border-bottom: solid 1px #666666;">&nbsp;</div>
          <div style="line-height:10%; width:168px; margin:2px auto 0 auto; 
           border-top: solid 1px #333333;">&nbsp;</div> 
 

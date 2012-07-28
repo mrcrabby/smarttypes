@@ -18,16 +18,20 @@ For now let's just say that graphs are convenient abstractions that can be used 
 <body>
 <div style="text-align:left;">
 
-<h1>
+<h2>
 Graph reduction via the linlog energy model 
-</h1>
+</h2>
 
 <p>
-The following is about reducing the dimensionality of a graph. 
+The following is about reducing the dimensionality of a graph (a network). 
 Explaining the value of graph reduction is a task left for another day. 
 For now let's say that graphs are a convenient way to represent complex problems.  
-If you're curious, check this out: <a href="http://networkscience.wordpress.com/2011/11/21/why-everything-is-a-network/">from a recent Network Science Postdoc</a>. 
+For more, see this from <a href="http://networkscience.wordpress.com/2011/11/21/why-everything-is-a-network/">a 2011 Network Science Postdoc</a>. 
 </p>
+
+<blockquote>
+"The trick is... Everything is a NETWORK!"
+</blockquote>
 
 <p>
 Assuming then, the inherit value in graphs. 
@@ -38,7 +42,7 @@ Reducing the dimensionality of a graph (squeezing out it's essence -- it's juice
 There are a lot of dimension reduction methods. 
 There are a lot of graph analysis methods. 
 The method/model described here uses <a href="http://en.wikipedia.org/wiki/N-body">N-body Simulation</a> to reduce a graph to 2 dimensions.
-Reducing the dimensionality of our graph this much has the nice effect of making it easy to digest and transmit. 
+Reducing the dimensionality of our graph this much has the nice effect of making it easy to read and transmit. 
 </p>
 
 <p>
@@ -53,11 +57,11 @@ Fans of complexity and social science will see similarities between this and
 <p>
 Lets talk for a minute about our specific goal. 
 I'm interested in understanding the community structure of a graph.
-The following is from the 103 page tour de force <a href="http://arxiv.org/abs/0906.0612">Community Detection in Graphs</a>.
+The following is from the 103 page tour de force, <a href="http://arxiv.org/abs/0906.0612">Community Detection in Graphs</a>.
 </p>
 
 <blockquote>The modern science of networks has brought significant advances to our understanding of complex systems. One of the most relevant features of graphs representing real systems is community structure, or clustering...
-
+<br/><br/>
 Such clusters, or communities, can be considered as fairly independent compartments of a graph, playing a similar role like, e.g., the tissues or the organs in the human body. Detecting communities is of great importance in sociology, biology and computer science, disciplines where systems are often represented as graphs. This problem is very hard and not yet satisfactorily solved, despite the huge effort of a large interdisciplinary community of scientists working on it over the past few years.
 </blockquote>
 
@@ -65,7 +69,7 @@ Such clusters, or communities, can be considered as fairly independent compartme
 Luckily <a href="http://www-sst.informatik.tu-cottbus.de/~an/">Dr. Andreas Noack</a> has done all the hard work. 
 Noack’s LinLog energy model is considered the best objective function for force based community detection.
 The following is from Noack's 2007 paper
-<a href="http://www-sst.informatik.tu-cottbus.de/~an/Publications/JGAA2007.pdf">Energy Models for Graph Clustering</a>.
+<a href="http://www-sst.informatik.tu-cottbus.de/~an/Publications/JGAA2007.pdf">Energy Models for Graph Clustering</a>:
 </p>
 
 <blockquote>
@@ -74,13 +78,7 @@ between connected end nodes to the mean distance between all end nodes.
 </blockquote>
 
 <p style="text-align:center;padding-bottom:20px;">
-<img src="/static/images/blog/linlog_energy_model.png" style="" alt="runningbulls.jpg"/>
-</p>
-
-<p>
-All this means is we should strive for a graph layout where the average distance between all nodes 
-equals the log of the average distance between connected nodes.  
-Noack adds a little kicker by also taking the degree of connected nodes into account.
+<img width="75%" src="/static/images/blog/linlog_energy_model.png" style="" alt="linlog_energy_model.png"/>
 </p>
 
 <blockquote>
@@ -89,9 +87,6 @@ In other words, nodes that attract strongly also repulse strongly.
 More precisely, each node has consistently (in terms of attraction and repulsion) an 
 influence on the layout proportional to its degree.
 </blockquote>
-
-
-
 
 </div>
 </body>                                    
