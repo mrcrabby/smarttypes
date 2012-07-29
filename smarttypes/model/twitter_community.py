@@ -53,6 +53,24 @@ class TwitterCommunity(PostgresBaseModel):
         return cls.get_by_name_value('reduction_id', reduction_id, postgres_handle)
     
     @classmethod
+    def search(cls, search_string, postgres_handle):
+        #this is just a shell 
+        qry = """
+        select *
+        from twitter_community c
+        join twitter_reduction r on c.reduction_id = r.id
+        where c.tag_cloud
+        group by r.root_user_id;
+        """
+        params = {'root_user_id': root_user_id}
+        results = postgres_handle.execute_query(qry, params)
+        if results:
+            return cls(postgres_handle=postgres_handle, **results[0])
+        else:
+            return None
+        return cls.get_by_name_value('reduction_id', reduction_id, postgres_handle)
+
+    @classmethod
     def create_community(cls, reduction_id, index, center_coordinate, member_ids, 
             global_pagerank, community_pagerank, hybrid_pagerank, postgres_handle):
         twitter_community = cls(postgres_handle=postgres_handle)

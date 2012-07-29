@@ -22,6 +22,7 @@ class TwitterUser(PostgresBaseModel):
         'location_name',
         'description',
         'url',
+        'profile_image_url',
         'following_count',
         'followers_count',
         'statuses_count',
@@ -275,6 +276,7 @@ class TwitterUser(PostgresBaseModel):
             model_user.location_name = api_user.location
             model_user.description = api_user.description
             model_user.url = api_user.url
+            model_user.profile_image_url = api_user.profile_image_url
 
             model_user.following_count = api_user.friends_count
             model_user.followers_count = api_user.followers_count
@@ -292,6 +294,7 @@ class TwitterUser(PostgresBaseModel):
                 'location_name': api_user.location,
                 'description': api_user.description,
                 'url': api_user.url,
+                'profile_image_url': api_user.profile_image_url,
                 'following_count': api_user.friends_count,
                 'followers_count': api_user.followers_count,
                 'statuses_count': api_user.statuses_count,
