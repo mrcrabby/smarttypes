@@ -27,7 +27,7 @@ postgres_handle.connection.commit()
 
 #drop tables
 sql = """drop table twitter_user_following_%(postfix)s;""" 
-for year_week_st in time_utils.year_weeknum_strs(delete_before_this_date, 20, ):
+for year_week_st in time_utils.year_weeknum_strs(delete_before_this_date - timedelta(days=7), 20, forward=False):
 	#print sql % {'postfix':year_week_st}
     postgres_handle.execute_query(sql % {'postfix':year_week_st}, return_results=False)
     postgres_handle.connection.commit()
