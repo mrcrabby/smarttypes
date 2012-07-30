@@ -87,6 +87,8 @@ for year_week_st in time_utils.year_weeknum_strs(datetime.now(), 50):
 
 ################################################
 ##twitter_reduction
+##
+##added: member_ids and below
 ################################################    
 twitter_reduction = """
 create table twitter_reduction(
