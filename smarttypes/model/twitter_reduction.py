@@ -2,6 +2,15 @@
 from smarttypes.model.postgres_base_model import PostgresBaseModel
 
 
+#http://stackoverflow.com/questions/6117646/insert-into-and-string-concatenation-with-python
+# sql = '''
+#    INSERT INTO foo (point_geom, poly_geom)
+#    VALUES (ST_PointFromText(%s, 4326), ST_GeomFromText(%s, 4326))'''
+# params = ['POINT( 20 20 )', 'POLYGON(( 0 0, 0 10, 10 10, 10 0, 0 0 ))']
+# cur.execute(sql, params)
+
+
+
 class TwitterReduction(PostgresBaseModel):
 
     table_name = 'twitter_reduction'

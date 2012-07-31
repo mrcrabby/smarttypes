@@ -73,7 +73,6 @@ twitter_user_following = """
 create table twitter_user_following_%(postfix)s(
     createddate timestamp not null default now(),
     modifieddate timestamp not null default now(),
-    
     twitter_user_id text unique not null references twitter_user(id),
     following_ids text[] not null
 );
@@ -98,9 +97,7 @@ create table twitter_reduction(
     root_user_id text not null references twitter_user(id),
     member_ids text[] not null,
     pagerank real[] not null,
-    hybrid_pagerank real[] not null,
-    x_coordinate real[] not null,
-    y_coordinate real[] not null
+    coordinates point[] not null
 );
 CREATE TRIGGER twitter_reduction_modified BEFORE UPDATE
 ON twitter_reduction FOR EACH ROW
@@ -113,7 +110,7 @@ postgres_handle.connection.commit()
 ##twitter_community
 ##
 ##added: community_score, center_x_coordinate, center_y_coordinate
-##took out: global_pagerank, hybrid_pagerank, center_coordinate
+##took out: global_pagerank, hybrid_pagerank, center_coordinate, 
 ##changed: member_ids to member_idxs
 ################################################    
 twitter_community = """
@@ -123,10 +120,10 @@ create table twitter_community(
     id serial unique,
     reduction_id integer not null references twitter_reduction(id), 
     index integer not null,
+    member_idxs integer[] not null,
     community_score real not null,
-    center_x_coordinate real not null,
-    center_y_coordinate real not null,
-    member_idxs text[] not null,
+    community_circle circle not null,
+    community_center point not null,
     community_pagerank real[] not null,
     tag_cloud text[],
     unique (reduction_id, index)
