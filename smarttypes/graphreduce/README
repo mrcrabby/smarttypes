@@ -8,23 +8,17 @@ interesting challenge.
 
 Here are the steps:
 
- 1. pick a root_node
+ 1. reduce root_node's network using LinLog energy model and save
+ reduction to the db
 
- 2. reduce root_node's network using LinLog energy model
+ 2. use reduction to id communities and save communities to the db
 
- 3. identify communities
+ 3. use reductions and communities to stitch a bunch of reductions together 
+ and save to postgis
 
- 4. identify network and community stats
+ 4. use mapnik to generate image tiles
 
- 5. save everything to postgres and postgis
-
- 6. stitch a bunch of reductions together
-
- 7. save to postgis
-
- 8. use mapnik to generate image tiles
-
- 9. use leaflet + d3 to do for the html map
+ 5. use leaflet + d3 to do for the html map
 
 
  
