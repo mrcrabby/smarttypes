@@ -96,8 +96,9 @@ create table twitter_reduction(
     id serial unique,
     root_user_id text not null references twitter_user(id),
     member_ids text[] not null,
+    coordinates point[] not null,
     pagerank real[] not null,
-    coordinates point[] not null
+    different_kind_of_pagerank real[]
 );
 CREATE TRIGGER twitter_reduction_modified BEFORE UPDATE
 ON twitter_reduction FOR EACH ROW
