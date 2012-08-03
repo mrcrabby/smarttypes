@@ -9,7 +9,14 @@ from smarttypes.model.postgres_base_model import PostgresBaseModel
 # params = ['POINT( 20 20 )', 'POLYGON(( 0 0, 0 10, 10 10, 10 0, 0 0 ))']
 # cur.execute(sql, params)
 
-
+#regroup data in a MULTI
+#http://www.bostongis.com/postgis_dump.snippet
+# SELECT stusps, ST_Multi(ST_Collect(f.the_geom)) as singlegeom 
+# FROM (
+#     SELECT stusps, (ST_Dump(the_geom)).geom As the_geom 
+#     FROM somestatetable
+# ) As f 
+# GROUP BY stusps
 
 class TwitterReduction(PostgresBaseModel):
 

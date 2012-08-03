@@ -86,8 +86,6 @@ for year_week_st in time_utils.year_weeknum_strs(datetime.now(), 50):
 
 ################################################
 ##twitter_reduction
-##
-##added: member_ids and below
 ################################################    
 twitter_reduction = """
 create table twitter_reduction(
@@ -96,23 +94,20 @@ create table twitter_reduction(
     id serial unique,
     root_user_id text not null references twitter_user(id),
     member_ids text[] not null,
-    coordinates point[] not null,
     pagerank real[] not null,
-    different_kind_of_pagerank real[]
+    hybrid_pagerank real[],
+    translate_rotate real[]
 );
+SELECT AddGeometryColumn('twitter_reduction', 'coordinates', -1, 'MULTIPOINT', 2);
 CREATE TRIGGER twitter_reduction_modified BEFORE UPDATE
 ON twitter_reduction FOR EACH ROW
-EXECUTE PROCEDURE ts_modifieddate();  
+EXECUTE PROCEDURE ts_modifieddate();
 """
 postgres_handle.execute_query(twitter_reduction, return_results=False)
 postgres_handle.connection.commit()
 
 ################################################
 ##twitter_community
-##
-##added: community_score, center_x_coordinate, center_y_coordinate
-##took out: global_pagerank, hybrid_pagerank, center_coordinate, 
-##changed: member_ids to member_idxs
 ################################################    
 twitter_community = """
 create table twitter_community(
@@ -121,12 +116,10 @@ create table twitter_community(
     id serial unique,
     reduction_id integer not null references twitter_reduction(id), 
     index integer not null,
+    member_ids text[] not null,
     member_idxs integer[] not null,
     community_score real not null,
-    community_circle circle not null,
-    community_center point not null,
     community_pagerank real[] not null,
-    tag_cloud text[],
     unique (reduction_id, index)
 );
 CREATE TRIGGER twitter_community_modified BEFORE UPDATE
@@ -134,6 +127,41 @@ ON twitter_community FOR EACH ROW
 EXECUTE PROCEDURE ts_modifieddate();
 """
 postgres_handle.execute_query(twitter_community, return_results=False)
+postgres_handle.connection.commit()
+
+################################################
+##twitter_user_map
+################################################    
+twitter_user_map = """
+create table twitter_user_map(
+    createddate timestamp not null default now(),
+    modifieddate timestamp not null default now(),
+    twitter_user_id text unique not null references twitter_user(id),
+    full_txt_idx tsvector
+);
+SELECT AddGeometryColumn('twitter_user_map', 'coordinate', -1, 'POINT', 2);
+CREATE TRIGGER twitter_user_map_modified BEFORE UPDATE
+ON twitter_user_map FOR EACH ROW
+EXECUTE PROCEDURE ts_modifieddate();
+"""
+postgres_handle.execute_query(twitter_user_map, return_results=False)
+postgres_handle.connection.commit()
+
+################################################
+##twitter_community_map
+################################################    
+twitter_community_map = """
+create table twitter_community_map(
+    createddate timestamp not null default now(),
+    modifieddate timestamp not null default now(),
+    twitter_community_id integer unique not null references twitter_community(id)
+);
+SELECT AddGeometryColumn('twitter_community_map', 'coordinate', -1, 'MULTIPOINT', 2);
+CREATE TRIGGER twitter_community_map_modified BEFORE UPDATE
+ON twitter_community_map FOR EACH ROW
+EXECUTE PROCEDURE ts_modifieddate();
+"""
+postgres_handle.execute_query(twitter_community_map, return_results=False)
 postgres_handle.connection.commit()
 
 ################################################
