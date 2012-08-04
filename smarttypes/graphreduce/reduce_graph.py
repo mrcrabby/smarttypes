@@ -74,32 +74,29 @@ def id_communities(g, layout_list, eps=0.42, min_samples=10):
         community_idx_list = list(np.array(community_idx_list) + 1)
     community_idx_list = [int(x) for x in community_idx_list]
     vertex_clustering = VertexClustering(g, community_idx_list)
-    return g, community_idx_list, vertex_clustering
+    return vertex_clustering
 
-def get_community_stats(network, g, vertex_clustering, layout_list):
+def get_network_stats(network, g, layout_list, vertex_clustering):
+    n = len(network)
+    member_ids = np.array(g.vs['name'])
+    coordinates = np.array(layout_list)
     global_pagerank = np.array(g.pagerank(damping=0.65))
-    community_stats = defaultdict(lambda: {
-        'center_coordinate':[0,0],
-        'member_idxs':[], 
-        'member_ids':[],
-        'global_pagerank':[],
-        'community_pagerank':[],
-        'hybrid_pagerank':[],
-    })
-    i = 0
-    for community_graph in vertex_clustering.subgraphs():
-        community_stats[i]['member_idxs'] = vertex_clustering[i]
-        community_stats[i]['member_ids'] = community_graph.vs['name']
-        community_stats[i]['global_pagerank'] = list(global_pagerank[vertex_clustering[i]])
-        community_stats[i]['community_pagerank'] = community_graph.pagerank(damping=0.65)
-        avg_global_pagerank = sum(community_stats[i]['global_pagerank']) / len(vertex_clustering[i])
-        community_out = float(sum([len(network[x]) for x in community_graph.vs['name']]))
-        community_closeness_score = float(sum(community_graph.vs.indegree())) / community_out
-        hybrid_pagerank = (community_closeness_score * 1) * (avg_global_pagerank * 1) * \
-            (np.array(community_stats[i]['community_pagerank']) * 2)
-        community_stats[i]['hybrid_pagerank'] = list(hybrid_pagerank)
-        i += 1
-    return community_stats
+    #community stats
+    community_pagerank, community_score = np.zeros(n), np.zeros(n)
+    for i in range(len(vertex_clustering)):
+        if vertex_clustering[i].modularity > 0:
+            member_idxs = vertex_clustering[i]
+            community_graph = vertex_clustering.subgraph(i)
+            community_pagerank[member_idxs] = community_graph.pagerank(damping=0.65)
+            community_out = float(sum([len(network[x]) for x in community_graph.vs['name']]))
+            community_graph_score = float(sum(community_graph.vs.indegree())) / community_out
+            community_score[member_idxs] = community_graph_score
+    return member_ids, coordinates, global_pagerank, community_pagerank, community_score
+
+def calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score):
+    #need to normalize this
+    return (global_pagerank * 1) * (community_pagerank * 1) * (community_score * 1)
+
 
 if __name__ == "__main__":
 
@@ -124,22 +121,31 @@ if __name__ == "__main__":
     layout_list = reduce_with_linloglayout(g, root_user)
     
     #id_communities
-    g, community_idx_list, vertex_clustering = id_communities(g, layout_list, eps=0.62, 
-        min_samples=12)
+    vertex_clustering = id_communities(g, layout_list, eps=0.62, min_samples=12)
 
-    #community_stats
-    community_stats = get_community_stats(network, g, vertex_clustering, layout_list)
+    #network_stats
+    network_stats = get_network_stats(network, g, vertex_clustering, layout_list)
+    member_ids, coordinates, global_pagerank, community_pagerank, community_score = network_stats
+    hybrid_pagerank = calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score)
 
     #save reduction
-    TwitterReduction.create_reduction(root_user_id, member_ids, coordinates, pagerank, 
-        hybrid_pagerank, translate_rotate_mask, postgres_handle)
+    reduction = TwitterReduction.create_reduction(root_user.id, list(member_ids), list(coordinates), 
+        list(global_pagerank), list(hybrid_pagerank), [0, 0, 0], postgres_handle)
     postgres_handle.connection.commit()
 
     #save communities
-    for community_idx, values_dict in community_stats.items():
-        TwitterCommunity.create_community(reduction_id, index, member_ids, member_idxs, 
-            coordinates, community_score, community_pagerank, postgres_handle)
-        postgres_handle.connection.commit()
+    for i in range(len(vertex_clustering)):
+        if vertex_clustering[i].modularity > 0:
+            
+            member_idxs = vertex_clustering[i]
+
+            print "community: %s, modularity: %s, community_score: %s" % (
+                i, vertex_clustering[i].modularity, community_score[member_idxs][0])
+
+            TwitterCommunity.create_community(reduction.id, i, list(member_ids[member_idxs]), 
+                list(member_idxs), list(coordinates[member_idxs]), community_score[member_idxs][0], 
+                list(community_pagerank), postgres_handle)
+            postgres_handle.connection.commit()
 
     #how long
     print datetime.now() - start_time

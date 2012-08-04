@@ -66,13 +66,13 @@ class TwitterCommunity(PostgresBaseModel):
         return cls.get_by_name_value('reduction_id', reduction_id, postgres_handle)
 
     @classmethod
-    def create_community(cls, reduction_id, index, member_ids, member_idxs, coordinates,
+    def create_community(cls, reduction_id, index, member_idxs, member_ids, coordinates,
             community_score, community_pagerank, postgres_handle):
         twitter_community = cls(postgres_handle=postgres_handle)
         twitter_community.reduction_id = reduction_id
         twitter_community.index = index
-        twitter_community.member_ids = member_ids
         twitter_community.member_idxs = member_idxs
+        twitter_community.member_ids = member_ids
         twitter_community.coordinates = coordinates
         twitter_community.community_score = community_score
         twitter_community.community_pagerank = community_pagerank
