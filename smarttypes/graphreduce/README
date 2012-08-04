@@ -1,24 +1,23 @@
 
-Graphreduce is designed to reduce large networks to a 2D map.
+Graphreduce is designed to reduce a large network to a 2D map.
 
-We seek an 'accurate' reduction that highlights community structure.
+Think google maps for networks.
 
-We assume the entire graph won't fit into memory, which makes for an 
-interesting challenge.
+We seek an 'accurate' reduction w/ an emphasis on finding communities.
+
+We assume the entire network won't fit into memory.
 
 Here are the steps:
 
- 1. reduce root_node's network using LinLog energy model and save
- reduction to the db
+ 1. Reduce root_node's network using LinLog energy model
 
- 2. use reduction to id communities and save communities to the db
+ 2. Use DBSCAN to id communities
 
- 3. use reductions and communities to stitch a bunch of reductions together 
- and save to postgis
+ 3. Use NLTK to generate community labels and full_txt_idx
 
- 4. use mapnik to generate image tiles
+ 4. Use Mapnik to generate image tiles
 
- 5. use leaflet + d3 to do for the html map
+ 5. Controllers to serve images tiles + geojson
 
+ 6. D3 + Leaflet to bring it all together
 
- 

@@ -24,6 +24,11 @@ class TwitterReduction(PostgresBaseModel):
     table_key = 'id'
     table_columns = [
         'root_user_id',
+        'member_ids',
+        'coordinates',
+        'pagerank',
+        'hybrid_pagerank',
+        'translate_rotate_mask',
     ]
     table_defaults = {}
 
@@ -35,7 +40,7 @@ class TwitterReduction(PostgresBaseModel):
         from smarttypes.model.twitter_community import TwitterCommunity
         communities = TwitterCommunity.get_by_name_value('reduction_id', self.id, 
             self.postgres_handle)
-        return sorted(communities, key=lambda k: k.avg_hybrid_pagerank(), reverse=True)
+        return sorted(communities, key=lambda k: k.community_score, reverse=True)
 
     @classmethod
     def get_latest_reduction(cls, root_user_id, postgres_handle):
@@ -81,8 +86,14 @@ class TwitterReduction(PostgresBaseModel):
         return return_users
 
     @classmethod
-    def create_reduction(cls, root_user_id, postgres_handle):
+    def create_reduction(cls, root_user_id, member_ids, coordinates, pagerank, 
+            hybrid_pagerank, translate_rotate_mask, postgres_handle):
         twitter_reduction = cls(postgres_handle=postgres_handle)
         twitter_reduction.root_user_id = root_user_id
+        twitter_reduction.member_ids = member_ids
+        twitter_reduction.coordinates = coordinates
+        twitter_reduction.pagerank = pagerank
+        twitter_reduction.hybrid_pagerank = hybrid_pagerank
+        twitter_reduction.translate_rotate_mask = translate_rotate_mask
         twitter_reduction.save()
         return twitter_reduction

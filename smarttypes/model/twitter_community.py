@@ -5,29 +5,25 @@ from smarttypes.utils import time_utils, text_parsing
 import re, string, heapq, random, collections, numpy
 
 class TwitterCommunity(PostgresBaseModel):
-        
+
     table_name = 'twitter_community'
     table_key = 'id'
     table_columns = [
         'reduction_id',
         'index',
-        'center_coordinate',
         'member_ids',
-        'global_pagerank',
+        'member_idxs',
+        'coordinates',
+        'community_score',
         'community_pagerank',
-        'hybrid_pagerank',
-        'tag_cloud',
     ]    
     table_defaults = {}
-    
-    def avg_hybrid_pagerank(self):
-        return sum(self.hybrid_pagerank) / len(self.hybrid_pagerank)
 
     def get_members(self):
         return_list = []
         for i in range(len(self.member_ids)):
             user_id = self.member_ids[i]
-            score = self.hybrid_pagerank[i]
+            score = self.community_pagerank[i]
             return_list.append((score, user_id))
         return return_list
     
@@ -38,23 +34,22 @@ class TwitterCommunity(PostgresBaseModel):
         for score, user_id in heapq.nlargest(num_users, score_user_id_tup_list):
             if score:
                 add_this = (score, user_id)
-                if not just_ids: add_this = (score, TwitterUser.get_by_id(user_id, self.postgres_handle))
+                if not just_ids: 
+                    add_this = (score, 
+                        TwitterUser.get_by_id(user_id, self.postgres_handle))
                 return_list.append(add_this)
             else:
                 break
         return return_list
-        
 
-    ##############################################
-    ##class methods
-    ##############################################
     @classmethod
     def get_all(cls, reduction_id, postgres_handle):
         return cls.get_by_name_value('reduction_id', reduction_id, postgres_handle)
     
     @classmethod
     def search(cls, search_string, postgres_handle):
-        #this is just a shell 
+        #this is just a shell of a method
+        #the idea is to search across all reductions and communities
         qry = """
         select *
         from twitter_community c
@@ -71,72 +66,20 @@ class TwitterCommunity(PostgresBaseModel):
         return cls.get_by_name_value('reduction_id', reduction_id, postgres_handle)
 
     @classmethod
-    def create_community(cls, reduction_id, index, center_coordinate, member_ids, 
-            global_pagerank, community_pagerank, hybrid_pagerank, postgres_handle):
+    def create_community(cls, reduction_id, index, member_ids, member_idxs, coordinates,
+            community_score, community_pagerank, postgres_handle):
         twitter_community = cls(postgres_handle=postgres_handle)
         twitter_community.reduction_id = reduction_id
         twitter_community.index = index
-        twitter_community.center_coordinate = center_coordinate
         twitter_community.member_ids = member_ids
-        twitter_community.global_pagerank = global_pagerank
+        twitter_community.member_idxs = member_idxs
+        twitter_community.coordinates = coordinates
+        twitter_community.community_score = community_score
         twitter_community.community_pagerank = community_pagerank
-        twitter_community.hybrid_pagerank = hybrid_pagerank
         twitter_community.save()
         return twitter_community
         
-    @classmethod
-    def mk_tag_clouds(cls, reduction_id, postgres_handle):
-        print "starting community_wordcounts loop"
-        community_wordcounts = {}
-        all_words = set()
-        for community in cls.get_all(reduction_id, postgres_handle):
-            community_wordcounts[community.index] = (community, collections.defaultdict(int))
-            for score, user in community.top_users(num_users=25):
-                if not user.description:
-                    continue
-                regex = re.compile(r'[%s\s]+' % re.escape(string.punctuation))
-                user_words = set()
-                user.description = '' if not user.description else user.description
-                user.location_name = '' if not user.location_name else user.location_name
-                loc_desc = '%s %s' % (user.description.strip(), user.location_name.strip())
-                for word in regex.split(loc_desc):
-                    word = string.lower(word)
-                    if len(word) > 2 and word not in user_words:
-                        user_words.add(word)
-                        all_words.add(word)
-                        community_wordcounts[community.index][1][word] += score
-                        
-        print "starting avg_wordcounts loop"            
-        avg_wordcounts = {} #{word:avg}
-        sum_words = []#[(sum,word)]
-        for word in all_words:
-            community_usage = []
-            for community_index in community_wordcounts:
-                community_usage.append(community_wordcounts[community_index][1][word])
-            avg_wordcounts[word] = numpy.average(community_usage)
-            sum_words.append((numpy.sum(community_usage), word))        
-        
-        print "starting delete stop words loop"
-        for community_index in community_wordcounts:
-            for word in text_parsing.STOPWORDS:
-                if word in community_wordcounts[community_index][1]:
-                    del community_wordcounts[community_index][1][word]     
-                
-        print "starting communities_unique_words loop"
-        communities_unique_words = {} #{community_index:[(score, word)]}
-        for community_index in community_wordcounts:
-            communities_unique_words[community_index] = []
-            for word, times_used in community_wordcounts[community_index][1].items():
-                usage_diff = times_used - avg_wordcounts[word]
-                communities_unique_words[community_index].append((usage_diff, word))
-        
-        print "starting save tag_cloud loop"
-        for community_index, unique_scores in communities_unique_words.items():
-            community = community_wordcounts[community_index][0]
-            community.tag_cloud = [x[1] for x in heapq.nlargest(10, unique_scores)]
-            community.save()
-        
-        return "All done!"
+
         
         
         

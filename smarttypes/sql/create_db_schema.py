@@ -120,51 +120,15 @@ create table twitter_community(
     member_idxs integer[] not null,
     community_score real not null,
     community_pagerank real[] not null,
+    full_txt_idx tsvector,
     unique (reduction_id, index)
 );
+SELECT AddGeometryColumn('twitter_community', 'coordinates', -1, 'MULTIPOINT', 2);
 CREATE TRIGGER twitter_community_modified BEFORE UPDATE
 ON twitter_community FOR EACH ROW
 EXECUTE PROCEDURE ts_modifieddate();
 """
 postgres_handle.execute_query(twitter_community, return_results=False)
-postgres_handle.connection.commit()
-
-################################################
-##twitter_user_idx_map
-################################################    
-twitter_user_idx_map = """
-create table twitter_user_idx_map(
-    createddate timestamp not null default now(),
-    modifieddate timestamp not null default now(),
-    twitter_user_id text unique not null references twitter_user(id),
-    full_txt_idx tsvector
-);
-SELECT AddGeometryColumn('twitter_user_idx_map', 'coordinates', -1, 'MULTIPOINT', 2);
-CREATE TRIGGER twitter_user_idx_map_modified BEFORE UPDATE
-ON twitter_user_idx_map FOR EACH ROW
-EXECUTE PROCEDURE ts_modifieddate();
-"""
-postgres_handle.execute_query(twitter_user_idx_map, return_results=False)
-postgres_handle.connection.commit()
-
-################################################
-##twitter_community_idx_map
-################################################    
-twitter_community_idx_map = """
-create table twitter_community_idx_map(
-    createddate timestamp not null default now(),
-    modifieddate timestamp not null default now(),
-    id serial unique,
-    member_ids text[] not null,
-    community_score real not null,
-    community_pagerank real[] not null,
-    full_txt_idx tsvector
-);
-CREATE TRIGGER twitter_community_idx_map_modified BEFORE UPDATE
-ON twitter_community_idx_map FOR EACH ROW
-EXECUTE PROCEDURE ts_modifieddate();
-"""
-postgres_handle.execute_query(twitter_community_idx_map, return_results=False)
 postgres_handle.connection.commit()
 
 ################################################

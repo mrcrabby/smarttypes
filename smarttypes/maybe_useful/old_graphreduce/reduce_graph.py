@@ -1,13 +1,18 @@
 
 import smarttypes, sys, os
+sys.path.append('/usr/local/lib/python2.7/site-packages')
+from igraph import Graph, plot
+from igraph.clustering import VertexClustering
+from igraph.layout import Layout
+from igraph.drawing import colors
 import numpy as np
 from scipy import spatial
-from igraph.clustering import VertexClustering
 from sklearn.cluster import DBSCAN
-from datetime import datetime, timedelta
 from smarttypes.model.twitter_user import TwitterUser
 from smarttypes.model.twitter_community import TwitterCommunity
 from smarttypes.model.twitter_reduction import TwitterReduction
+from smarttypes.model.twitter_tweet import TwitterTweet
+from datetime import datetime, timedelta
 from smarttypes.utils.postgres_handle import PostgresHandle
 from collections import defaultdict
 
@@ -101,6 +106,15 @@ def get_community_stats(network, g, vertex_clustering, layout_list):
         i += 1
     return community_stats
 
+def plot_graph(g, layout, filepath, size_tup=(600, 600)):
+    # #palettes
+    # #  'red-yellow-green','gray','red-purple-blue','rainbow',
+    # #  'red-black-green','terrain','red-blue','heat','red-green'
+    #palette=colors.palettes["gray"],
+    plot(g, filepath, size_tup, layout=layout,  
+        vertex_order_by=('size', True), edge_color="white", edge_width=0, edge_arrow_size=0.1, 
+        edge_arrow_width=0.1)
+
 if __name__ == "__main__":
 
     #call like this:
@@ -108,37 +122,68 @@ if __name__ == "__main__":
     start_time = datetime.now()
     postgres_handle = PostgresHandle(smarttypes.connection_string)
 
-    #parse and set inputs
     if len(sys.argv) < 3:
         raise Exception('Need a twitter handle and distance.')
     else:
         screen_name = sys.argv[1]
         distance = int(sys.argv[2])
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
+
+    smarttypes.config.IS_PROD = False
     if distance < 1:
+        smarttypes.config.IS_PROD = True
         distance = 10000 / len(root_user.following[:1000])
 
-    #get network and reduce
     network = TwitterUser.get_rooted_network(root_user, postgres_handle, distance=distance)
     g = get_igraph_graph(network)
     layout_list = reduce_with_linloglayout(g, root_user)
     
     #id_communities
-    g, community_idx_list, vertex_clustering = id_communities(g, layout_list, eps=0.62, 
-        min_samples=12)
+    g, community_idx_list, vertex_clustering = id_communities(g, layout_list, eps=0.62, min_samples=12)
+
+    #set color based on communities
+    color_array = np.array(community_idx_list)
+    color_array = color_array / (max(color_array) / 31)
+    g.vs['color'] = ['rgb(%s, %s, %s)' % (int(x) * 8, int(x) * 8, int(x) * 8) for x in color_array]
+    g.vs[g.vs.find(root_user.id).index]['color'] = 'rgb(255,0,0)'
+    #g.vs['shape'] = ['hidden' if x == 0 else 'circle' for x in community_idx_list]
 
     #community_stats
     community_stats = get_community_stats(network, g, vertex_clustering, layout_list)
 
-    #save reduction
-    TwitterReduction.create_reduction(root_user_id, member_ids, coordinates, pagerank, 
-        hybrid_pagerank, translate_rotate_mask, postgres_handle)
-    postgres_handle.connection.commit()
-
-    #save communities
+    #set node size based on community_stats
+    size_array = np.array([0.0] * len(community_idx_list))
     for community_idx, values_dict in community_stats.items():
-        TwitterCommunity.create_community(reduction_id, index, member_ids, member_idxs, 
-            coordinates, community_score, community_pagerank, postgres_handle)
+        size_array[values_dict['member_idxs']] = values_dict['hybrid_pagerank']
+    g.vs['size'] = list(size_array / (max(size_array) / 30))
+    g.vs[g.vs.find(root_user.id).index]['size'] = 40
+    g.vs['size'] = 1
+
+    #plot to file
+    layout = Layout(layout_list)
+    filepath = 'io/%s.png' % root_user.screen_name
+    thumb_filepath = 'io/%s_thumb.png' % root_user.screen_name
+    plot_graph(g, layout, filepath, size_tup=(600, 600))
+    #need to adjust vs['size'] if i want to do this
+    #plot_graph(g, layout, thumb_filepath, size_tup=(50, 50))
+    if not smarttypes.config.IS_PROD:
+        os.system('cp io/%s*.png /home/timmyt/projects/smarttypes/smarttypes/static/images/maps/.' % root_user.screen_name)
+    else:
+        os.system('scp io/%s*.png cottie:/home/timmyt/projects/smarttypes/smarttypes/static/images/maps/.' % root_user.screen_name)
+        
+        print 'save to disk'
+        twitter_reduction = TwitterReduction.create_reduction(root_user.id, postgres_handle)
+        postgres_handle.connection.commit()
+        for community_idx, values_dict in community_stats.items():
+            #params:
+            #reduction_id, index, center_coordinate, member_ids, 
+            #global_pagerank, community_pagerank, hybrid_pagerank
+            if community_idx > 0:
+                TwitterCommunity.create_community(twitter_reduction.id, community_idx, 
+                    values_dict['center_coordinate'], values_dict['member_ids'], values_dict['global_pagerank'], 
+                    values_dict['community_pagerank'], values_dict['hybrid_pagerank'], postgres_handle)
+            postgres_handle.connection.commit()
+        TwitterCommunity.mk_tag_clouds(twitter_reduction.id, postgres_handle)
         postgres_handle.connection.commit()
 
     #how long
