@@ -17,6 +17,9 @@ class PostgresHandle(object):
         
     def execute_query(self, query_string, params=None, return_results=True, print_qry=False):
         params = params if params else {}
+        # for name, value in params.items():
+        #     print name
+        #     print type(value)
         cursor = self.connection.cursor()
         if print_qry: print query_string % params
         cursor.execute(query_string, params)        

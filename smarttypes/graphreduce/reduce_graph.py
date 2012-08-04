@@ -1,6 +1,7 @@
 
 import smarttypes, sys, os
 import numpy as np
+from igraph import Graph
 from scipy import spatial
 from igraph.clustering import VertexClustering
 from sklearn.cluster import DBSCAN
@@ -73,24 +74,23 @@ def id_communities(g, layout_list, eps=0.42, min_samples=10):
     if -1 in community_idx_list:
         community_idx_list = list(np.array(community_idx_list) + 1)
     community_idx_list = [int(x) for x in community_idx_list]
-    vertex_clustering = VertexClustering(g, community_idx_list)
-    return vertex_clustering
+    return VertexClustering(g, community_idx_list)
 
-def get_network_stats(network, g, layout_list, vertex_clustering):
-    n = len(network)
+def get_network_stats(network, g, vertex_clustering, layout_list):
+    n = len(g.vs)
     member_ids = np.array(g.vs['name'])
     coordinates = np.array(layout_list)
     global_pagerank = np.array(g.pagerank(damping=0.65))
+
     #community stats
     community_pagerank, community_score = np.zeros(n), np.zeros(n)
     for i in range(len(vertex_clustering)):
-        if vertex_clustering[i].modularity > 0:
-            member_idxs = vertex_clustering[i]
-            community_graph = vertex_clustering.subgraph(i)
-            community_pagerank[member_idxs] = community_graph.pagerank(damping=0.65)
-            community_out = float(sum([len(network[x]) for x in community_graph.vs['name']]))
-            community_graph_score = float(sum(community_graph.vs.indegree())) / community_out
-            community_score[member_idxs] = community_graph_score
+        member_idxs = vertex_clustering[i]
+        community_graph = vertex_clustering.subgraph(i)
+        community_pagerank[member_idxs] = community_graph.pagerank(damping=0.65)
+        community_out = float(sum([len(network[x]) for x in community_graph.vs['name']]))
+        community_graph_score = float(sum(community_graph.vs.indegree())) / community_out
+        community_score[member_idxs] = community_graph_score
     return member_ids, coordinates, global_pagerank, community_pagerank, community_score
 
 def calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score):
@@ -107,7 +107,7 @@ if __name__ == "__main__":
 
     #parse and set inputs
     if len(sys.argv) < 3:
-        raise Exception('Need a twitter handle and distance.')
+        raise Exception('Need to specify twitter handle and search distance.')
     else:
         screen_name = sys.argv[1]
         distance = int(sys.argv[2])
@@ -129,22 +129,20 @@ if __name__ == "__main__":
     hybrid_pagerank = calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score)
 
     #save reduction
-    reduction = TwitterReduction.create_reduction(root_user.id, list(member_ids), list(coordinates), 
-        list(global_pagerank), list(hybrid_pagerank), [0, 0, 0], postgres_handle)
+    reduction = TwitterReduction.create_reduction(root_user.id, member_ids.tolist(), coordinates.tolist(), 
+        global_pagerank.tolist(), hybrid_pagerank.tolist(), [0, 0, 0], postgres_handle)
     postgres_handle.connection.commit()
 
     #save communities
+    communities = []
     for i in range(len(vertex_clustering)):
-        if vertex_clustering[i].modularity > 0:
-            
+        if community_score[member_idxs][0] > 0:
             member_idxs = vertex_clustering[i]
-
-            print "community: %s, modularity: %s, community_score: %s" % (
-                i, vertex_clustering[i].modularity, community_score[member_idxs][0])
-
-            TwitterCommunity.create_community(reduction.id, i, list(member_ids[member_idxs]), 
-                list(member_idxs), list(coordinates[member_idxs]), community_score[member_idxs][0], 
-                list(community_pagerank), postgres_handle)
+            print "community: %s, community_score: %s" % (i, community_score[member_idxs][0])
+            community = TwitterCommunity.create_community(reduction.id, i, member_ids[member_idxs].tolist(), 
+                member_idxs.tolist(), coordinates[member_idxs].tolist(), community_score[member_idxs][0], 
+                community_pagerank.tolist(), postgres_handle)
+            communities.append(community)
             postgres_handle.connection.commit()
 
     #how long
