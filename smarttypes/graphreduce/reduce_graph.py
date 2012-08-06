@@ -9,7 +9,9 @@ from datetime import datetime, timedelta
 from smarttypes.model.twitter_user import TwitterUser
 from smarttypes.model.twitter_community import TwitterCommunity
 from smarttypes.model.twitter_reduction import TwitterReduction
+from smarttypes.model.ppygis import MultiPoint
 from smarttypes.utils.postgres_handle import PostgresHandle
+
 from collections import defaultdict
 
 
@@ -129,19 +131,19 @@ if __name__ == "__main__":
     hybrid_pagerank = calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score)
 
     #save reduction
-    reduction = TwitterReduction.create_reduction(root_user.id, member_ids.tolist(), coordinates.tolist(), 
+    reduction = TwitterReduction.create_reduction(root_user.id, member_ids.tolist(), MultiPoint(coordinates), 
         global_pagerank.tolist(), hybrid_pagerank.tolist(), [0, 0, 0], postgres_handle)
     postgres_handle.connection.commit()
 
     #save communities
     communities = []
     for i in range(len(vertex_clustering)):
-        if community_score[member_idxs][0] > 0:
-            member_idxs = vertex_clustering[i]
+        member_idxs = vertex_clustering[i]
+        if community_score[member_idxs][0] > 0.01:
             print "community: %s, community_score: %s" % (i, community_score[member_idxs][0])
-            community = TwitterCommunity.create_community(reduction.id, i, member_ids[member_idxs].tolist(), 
-                member_idxs.tolist(), coordinates[member_idxs].tolist(), community_score[member_idxs][0], 
-                community_pagerank.tolist(), postgres_handle)
+            community = TwitterCommunity.create_community(reduction.id, i, member_idxs, 
+                member_ids[member_idxs].tolist(), MultiPoint(coordinates[member_idxs]), 
+                community_score[member_idxs][0], community_pagerank.tolist(), postgres_handle)
             communities.append(community)
             postgres_handle.connection.commit()
 
