@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Map[]>
+<Map srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" background-color="#ffffff">
+
+<Parameters>
+  <Parameter name="bounds">-180,-85.0511,180,85.0511</Parameter>
+  <Parameter name="center">0,0,2</Parameter>
+  <Parameter name="format">png</Parameter>
+  <Parameter name="minzoom">1</Parameter>
+  <Parameter name="maxzoom">5</Parameter>
+  <Parameter name="name"><![CDATA[smarttypes]]></Parameter>
+</Parameters>
+
+
+<Style name="users" filter-mode="first">
+  <Rule>
+    <Filter>([hybrid_pagerank] &gt;= 0.04)</Filter>
+    <MarkersSymbolizer width="5" fill="#666666" allow-overlap="true" />
+  </Rule>
+  <Rule>
+    <Filter>([hybrid_pagerank] &gt;= 0.03)</Filter>
+    <MarkersSymbolizer width="4" fill="#666666" allow-overlap="true" />
+  </Rule>
+  <Rule>
+    <Filter>([hybrid_pagerank] &gt;= 0.02)</Filter>
+    <MarkersSymbolizer width="3" fill="#666666" allow-overlap="true" />
+  </Rule>
+  <Rule>
+    <Filter>([hybrid_pagerank] &gt;= 0.01)</Filter>
+    <MarkersSymbolizer width="2" fill="#666666" allow-overlap="true" />
+  </Rule>
+  <Rule>
+    <MarkersSymbolizer fill="#666666" allow-overlap="true" width="1" />
+  </Rule>
+</Style>
+<Layer name="users"
+  srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+    <StyleName>users</StyleName>
+    <Datasource>
+       <Parameter name="type"><![CDATA[postgis]]></Parameter>
+       <Parameter name="table"><![CDATA[(select *
+from twitter_reduction_user 
+where reduction_id = 8) reduction]]></Parameter>
+       <Parameter name="extent"><![CDATA[]]></Parameter>
+       <Parameter name="key_field"><![CDATA[id]]></Parameter>
+       <Parameter name="geometry_field"><![CDATA[coordinates]]></Parameter>
+       <Parameter name="user"><![CDATA[timmyt]]></Parameter>
+       <Parameter name="password"><![CDATA[urllib2]]></Parameter>
+       <Parameter name="dbname"><![CDATA[smarttypes]]></Parameter>
+       <Parameter name="id"><![CDATA[users]]></Parameter>
+       <Parameter name="project"><![CDATA[test]]></Parameter>
+       <Parameter name="srs"><![CDATA[null]]></Parameter>
+    </Datasource>
+  </Layer>
+
+</Map>

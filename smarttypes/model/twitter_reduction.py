@@ -1,33 +1,12 @@
 
 from smarttypes.model.postgres_base_model import PostgresBaseModel
 
-
-#http://stackoverflow.com/questions/6117646/insert-into-and-string-concatenation-with-python
-# sql = '''
-#    INSERT INTO foo (point_geom, poly_geom)
-#    VALUES (ST_PointFromText(%s, 4326), ST_GeomFromText(%s, 4326))'''
-# params = ['POINT( 20 20 )', 'POLYGON(( 0 0, 0 10, 10 10, 10 0, 0 0 ))']
-# cur.execute(sql, params)
-
-#regroup data in a MULTI
-#http://www.bostongis.com/postgis_dump.snippet
-# SELECT stusps, ST_Multi(ST_Collect(f.the_geom)) as singlegeom 
-# FROM (
-#     SELECT stusps, (ST_Dump(the_geom)).geom As the_geom 
-#     FROM somestatetable
-# ) As f 
-# GROUP BY stusps
-
 class TwitterReduction(PostgresBaseModel):
 
     table_name = 'twitter_reduction'
     table_key = 'id'
     table_columns = [
         'root_user_id',
-        'member_ids',
-        'coordinates',
-        'pagerank',
-        'hybrid_pagerank',
         'translate_rotate_mask',
     ]
     table_defaults = {}
@@ -35,6 +14,26 @@ class TwitterReduction(PostgresBaseModel):
     def root_user(self):
         from smarttypes.model.twitter_user import TwitterUser
         return TwitterUser.get_by_id(self.root_user_id, self.postgres_handle)
+
+    def reduction_users(self):
+        from smarttypes.model.twitter_reduction_user import TwitterReductionUser
+        qry = """
+        select tru.*
+        from twitter_reduction_users tru
+        where tru.reduction_id in 
+        (
+            select id
+            from twitter_reduction
+            where root_user_id = %(root_user_id)s
+            order by createddate desc limit 1
+        )
+        ;
+        """
+        params = {'root_user_id': root_user_id}
+        results = []
+        for result in postgres_handle.execute_query(qry, params):
+            results.append(TwitterReductionUser(postgres_handle=self.postgres_handle, **result))
+        return results
 
     def communities(self):
         from smarttypes.model.twitter_community import TwitterCommunity
@@ -86,14 +85,9 @@ class TwitterReduction(PostgresBaseModel):
         return return_users
 
     @classmethod
-    def create_reduction(cls, root_user_id, member_ids, coordinates, pagerank, 
-            hybrid_pagerank, translate_rotate_mask, postgres_handle):
+    def create_reduction(cls, root_user_id, translate_rotate_mask, postgres_handle):
         twitter_reduction = cls(postgres_handle=postgres_handle)
         twitter_reduction.root_user_id = root_user_id
-        twitter_reduction.member_ids = member_ids
-        twitter_reduction.coordinates = coordinates
-        twitter_reduction.pagerank = pagerank
-        twitter_reduction.hybrid_pagerank = hybrid_pagerank
         twitter_reduction.translate_rotate_mask = translate_rotate_mask
         twitter_reduction.save()
         return twitter_reduction

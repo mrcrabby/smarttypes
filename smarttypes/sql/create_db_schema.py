@@ -93,17 +93,36 @@ create table twitter_reduction(
     modifieddate timestamp not null default now(),
     id serial unique,
     root_user_id text not null references twitter_user(id),
-    member_ids text[] not null,
-    pagerank real[] not null,
-    hybrid_pagerank real[],
     translate_rotate_mask real[]
 );
-SELECT AddGeometryColumn('twitter_reduction', 'coordinates', -1, 'MULTIPOINT', 2);
 CREATE TRIGGER twitter_reduction_modified BEFORE UPDATE
 ON twitter_reduction FOR EACH ROW
 EXECUTE PROCEDURE ts_modifieddate();
 """
 postgres_handle.execute_query(twitter_reduction, return_results=False)
+postgres_handle.connection.commit()
+
+################################################
+##twitter_reduction_user
+################################################    
+twitter_reduction_user = """
+create table twitter_reduction_user(
+    createddate timestamp not null default now(),
+    modifieddate timestamp not null default now(),
+    id serial unique,
+    reduction_id integer not null references twitter_reduction(id), 
+    user_id text not null references twitter_user(id),
+    pagerank real not null,
+    hybrid_pagerank real not null,
+    full_txt_idx tsvector,
+    unique (reduction_id, user_id)
+);
+SELECT AddGeometryColumn('twitter_reduction_user', 'coordinates', -1, 'POINT', 2);
+CREATE TRIGGER twitter_reduction_user_modified BEFORE UPDATE
+ON twitter_reduction_user FOR EACH ROW
+EXECUTE PROCEDURE ts_modifieddate();
+"""
+postgres_handle.execute_query(twitter_reduction_user, return_results=False)
 postgres_handle.connection.commit()
 
 ################################################

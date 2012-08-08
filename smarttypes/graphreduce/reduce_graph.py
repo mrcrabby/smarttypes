@@ -7,13 +7,11 @@ from igraph.clustering import VertexClustering
 from sklearn.cluster import DBSCAN
 from datetime import datetime, timedelta
 from smarttypes.model.twitter_user import TwitterUser
-from smarttypes.model.twitter_community import TwitterCommunity
 from smarttypes.model.twitter_reduction import TwitterReduction
-from smarttypes.model.ppygis import MultiPoint
+from smarttypes.model.twitter_reduction_user import TwitterReductionUser
+from smarttypes.model.twitter_community import TwitterCommunity
+from smarttypes.model.ppygis import Point, MultiPoint
 from smarttypes.utils.postgres_handle import PostgresHandle
-
-from collections import defaultdict
-
 
 def get_igraph_graph(network):
     print 'load %s users into igraph' % len(network)
@@ -93,12 +91,16 @@ def get_network_stats(network, g, vertex_clustering, layout_list):
         community_out = float(sum([len(network[x]) for x in community_graph.vs['name']]))
         community_graph_score = float(sum(community_graph.vs.indegree())) / community_out
         community_score[member_idxs] = community_graph_score
+
+    #normalize
+    global_pagerank = global_pagerank / np.max(global_pagerank)
+    community_pagerank = community_pagerank / np.max(community_pagerank)
+    community_score = community_score / np.max(community_score)
     return member_ids, coordinates, global_pagerank, community_pagerank, community_score
 
 def calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score):
-    #need to normalize this
-    return (global_pagerank * 1) * (community_pagerank * 1) * (community_score * 1)
-
+    hybrid_pagerank = (global_pagerank * 1) * (community_pagerank * 1) * (community_score * 3)
+    return hybrid_pagerank / np.max(hybrid_pagerank)
 
 if __name__ == "__main__":
 
@@ -131,9 +133,20 @@ if __name__ == "__main__":
     hybrid_pagerank = calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score)
 
     #save reduction
-    reduction = TwitterReduction.create_reduction(root_user.id, member_ids.tolist(), MultiPoint(coordinates), 
-        global_pagerank.tolist(), hybrid_pagerank.tolist(), [0, 0, 0], postgres_handle)
+    reduction = TwitterReduction.create_reduction(root_user.id, [0, 0, 0], postgres_handle)
     postgres_handle.connection.commit()
+
+    #save reduction users
+    reduction_users = []
+    for i in range(len(member_ids)):
+        tru = TwitterReductionUser(postgres_handle=postgres_handle)
+        tru.reduction_id = reduction.id
+        tru.user_id = member_ids[i]
+        tru.coordinates = Point(coordinates[i][0], coordinates[i][1])
+        tru.pagerank = global_pagerank[i]
+        tru.hybrid_pagerank = hybrid_pagerank[i]
+        reduction_users.append(tru.save())
+        postgres_handle.connection.commit()
 
     #save communities
     communities = []
