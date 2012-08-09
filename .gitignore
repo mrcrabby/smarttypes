@@ -3,6 +3,7 @@
 *.sublime-*
 .ropeproject/
 smarttypes/backups
+smarttypes/static/tiles/
 smarttypes/static/video
 smarttypes/static/graphlab_pmf.tar.gz
 smarttypes/static/graphlab_pmf/

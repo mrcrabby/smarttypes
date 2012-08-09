@@ -152,7 +152,7 @@ if __name__ == "__main__":
     communities = []
     for i in range(len(vertex_clustering)):
         member_idxs = vertex_clustering[i]
-        if community_score[member_idxs][0] > 0.01:
+        if community_score[member_idxs][0] > 0.1:
             print "community: %s, community_score: %s" % (i, community_score[member_idxs][0])
             community = TwitterCommunity.create_community(reduction.id, i, member_idxs, 
                 member_ids[member_idxs].tolist(), MultiPoint(coordinates[member_idxs]), 

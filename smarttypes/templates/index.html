@@ -8,11 +8,24 @@
 
 <head>
 
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.css" />
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.ie.css" />
+    <![endif]-->
+    <script src="http://cdn.leafletjs.com/leaflet-0.4/leaflet.js"></script>
+
     <style type="text/css" media="screen">
+        #map { height: 400px; }
+        .leaflet-container { background:None; }
     </style>
 
     <script type="text/javascript">
         $(function(){
+            var map = L.map('map').setView([0, 0], 1);
+
+            L.tileLayer('http://localhost:9999/static/tiles/{z}/{x}/{y}.png', {
+                maxZoom: 3
+            }).addTo(map);
         });
     </script>
 
@@ -20,29 +33,9 @@
 
 <body>
 
-    <div class="row-fluid" style="margin:40px 0 0 0;">
+    <div style="text-align:center;margin-top:40px;">
 
-        <div class="span8 hero-unit" style="text-align:center;background:none;">
-            <h2>
-                <i class="icon-search"></i> Explore your social universe! 
-            </h2>
-            <p>${site_description}</p> 
-            <p style="margin-top:20px">
-                <a class="btn btn-primary" href="/sign_in">
-                  <i class="icon-leaf"></i> Sign in w/ twitter
-                </a>
-            </p>
-        </div>
-
-        <div class="span4" style="text-align:center;">
-            <h2>
-                <i class="icon-search"></i> Explore your social universe! 
-            </h2>
-            <form class="well form-search" style="background:none;">
-              <input type="text" class="input-medium search-query"/>
-              <button type="submit" class="btn">Search</button>
-            </form>
-        </div>
+        <div id="map"></div>
 
     </div>
 
