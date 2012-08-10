@@ -65,10 +65,16 @@ def reduce_with_linloglayout(g, root_user):
         x_value = float(line_pieces[1])
         y_value = float(line_pieces[2])
         layout_list[node_idx] = (x_value, y_value)
-    return layout_list
+    return np.array(layout_list)
 
-def id_communities(g, layout_list, eps=0.42, min_samples=10):
-    layout_distance = spatial.distance.squareform(spatial.distance.pdist(layout_list))
+def reproject_to_spherical_mercator(coordinates):
+    spherical_mercator_bb = np.array([[-175, -80], [175, 80]])
+    current_projection_bb = np.array([coordinates.min(0), coordinates.max(0)])
+    reprojection = (spherical_mercator_bb / current_projection_bb).min(0)
+    return coordinates * reprojection
+
+def id_communities(g, coordinates, eps=0.42, min_samples=10):
+    layout_distance = spatial.distance.squareform(spatial.distance.pdist(coordinates))
     layout_similarity = 1 - (layout_distance / np.max(layout_distance))
     community_idx_list = DBSCAN().fit(layout_similarity, eps=eps, min_samples=min_samples).labels_
     if -1 in community_idx_list:
@@ -76,12 +82,9 @@ def id_communities(g, layout_list, eps=0.42, min_samples=10):
     community_idx_list = [int(x) for x in community_idx_list]
     return VertexClustering(g, community_idx_list)
 
-def get_network_stats(network, g, vertex_clustering, layout_list):
+def get_network_stats(network, g, vertex_clustering):
     n = len(g.vs)
-    member_ids = np.array(g.vs['name'])
-    coordinates = np.array(layout_list)
     global_pagerank = np.array(g.pagerank(damping=0.65))
-
     #community stats
     community_pagerank, community_score = np.zeros(n), np.zeros(n)
     for i in range(len(vertex_clustering)):
@@ -91,12 +94,11 @@ def get_network_stats(network, g, vertex_clustering, layout_list):
         community_out = float(sum([len(network[x]) for x in community_graph.vs['name']]))
         community_graph_score = float(sum(community_graph.vs.indegree())) / community_out
         community_score[member_idxs] = community_graph_score
-
     #normalize
     global_pagerank = global_pagerank / np.max(global_pagerank)
     community_pagerank = community_pagerank / np.max(community_pagerank)
     community_score = community_score / np.max(community_score)
-    return member_ids, coordinates, global_pagerank, community_pagerank, community_score
+    return global_pagerank, community_pagerank, community_score
 
 def calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score):
     hybrid_pagerank = (global_pagerank * 1) * (community_pagerank * 1) * (community_score * 3)
@@ -122,14 +124,16 @@ if __name__ == "__main__":
     #get network and reduce
     network = TwitterUser.get_rooted_network(root_user, postgres_handle, distance=distance)
     g = get_igraph_graph(network)
-    layout_list = reduce_with_linloglayout(g, root_user)
+    member_ids = np.array(g.vs['name'])
+    coordinates = reduce_with_linloglayout(g, root_user)
+    coordinates = reproject_to_spherical_mercator(coordinates)
     
     #id_communities
-    vertex_clustering = id_communities(g, layout_list, eps=0.62, min_samples=12)
+    vertex_clustering = id_communities(g, coordinates, eps=0.62, min_samples=12)
 
     #network_stats
-    network_stats = get_network_stats(network, g, vertex_clustering, layout_list)
-    member_ids, coordinates, global_pagerank, community_pagerank, community_score = network_stats
+    network_stats = get_network_stats(network, g, vertex_clustering)
+    global_pagerank, community_pagerank, community_score = network_stats
     hybrid_pagerank = calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score)
 
     #save reduction
@@ -153,7 +157,8 @@ if __name__ == "__main__":
     for i in range(len(vertex_clustering)):
         member_idxs = vertex_clustering[i]
         if community_score[member_idxs][0] > 0.1:
-            print "community: %s, community_score: %s" % (i, community_score[member_idxs][0])
+            print "community: %s, community_score: %s, members: %s" % (i, 
+                community_score[member_idxs][0], len(member_idxs))
             community = TwitterCommunity.create_community(reduction.id, i, member_idxs, 
                 member_ids[member_idxs].tolist(), MultiPoint(coordinates[member_idxs]), 
                 community_score[member_idxs][0], community_pagerank.tolist(), postgres_handle)

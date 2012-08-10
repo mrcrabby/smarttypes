@@ -184,7 +184,7 @@ if __name__ == "__main__":
     style_file = 'mapnik.xml'
     tile_dir = '../static/tiles/'
     min_zoom = 0
-    max_zoom = 3
+    max_zoom = 4
     #SELECT ST_EXTENT(coordinates) from twitter_reduction_user where reduction_id = 9;
     #-404.917, -335.874, 428.171, 501.306
     #SELECT ST_Centroid(coordinates) from twitter_reduction_user where reduction_id = 9;

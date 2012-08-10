@@ -93,6 +93,7 @@ create table twitter_reduction(
     modifieddate timestamp not null default now(),
     id serial unique,
     root_user_id text not null references twitter_user(id),
+    tiles_are_written_to_disk boolean not null default False,
     translate_rotate_mask real[]
 );
 CREATE TRIGGER twitter_reduction_modified BEFORE UPDATE
@@ -117,7 +118,8 @@ create table twitter_reduction_user(
     full_txt_idx tsvector,
     unique (reduction_id, user_id)
 );
-SELECT AddGeometryColumn('twitter_reduction_user', 'coordinates', 900913, 'POINT', 2);
+--select * from spatial_ref_sys where srid = 4326;
+SELECT AddGeometryColumn('twitter_reduction_user', 'coordinates', -1, 'POINT', 2);
 CREATE TRIGGER twitter_reduction_user_modified BEFORE UPDATE
 ON twitter_reduction_user FOR EACH ROW
 EXECUTE PROCEDURE ts_modifieddate();
@@ -142,7 +144,8 @@ create table twitter_community(
     full_txt_idx tsvector,
     unique (reduction_id, index)
 );
-SELECT AddGeometryColumn('twitter_community', 'coordinates', 900913, 'MULTIPOINT', 2);
+--select * from spatial_ref_sys where srid = 4326;
+SELECT AddGeometryColumn('twitter_community', 'coordinates', -1, 'MULTIPOINT', 2);
 CREATE TRIGGER twitter_community_modified BEFORE UPDATE
 ON twitter_community FOR EACH ROW
 EXECUTE PROCEDURE ts_modifieddate();
