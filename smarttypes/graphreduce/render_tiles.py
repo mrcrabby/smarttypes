@@ -186,6 +186,8 @@ if __name__ == "__main__":
     min_zoom = 0
     max_zoom = 3
     #SELECT ST_EXTENT(coordinates) from twitter_reduction_user where reduction_id = 9;
+    #-404.917, -335.874, 428.171, 501.306
     #SELECT ST_Centroid(coordinates) from twitter_reduction_user where reduction_id = 9;
-    bbox = (-180.0,-90.0, 180.0,90.0)
+    #bbox = (-180.0,-90.0, 180.0,90.0)
+    bbox = (-180, -85.0511, 180, 85.0511)
     render_tiles(bbox, style_file, tile_dir, min_zoom, max_zoom)

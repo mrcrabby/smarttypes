@@ -117,7 +117,7 @@ create table twitter_reduction_user(
     full_txt_idx tsvector,
     unique (reduction_id, user_id)
 );
-SELECT AddGeometryColumn('twitter_reduction_user', 'coordinates', -1, 'POINT', 2);
+SELECT AddGeometryColumn('twitter_reduction_user', 'coordinates', 900913, 'POINT', 2);
 CREATE TRIGGER twitter_reduction_user_modified BEFORE UPDATE
 ON twitter_reduction_user FOR EACH ROW
 EXECUTE PROCEDURE ts_modifieddate();
@@ -142,7 +142,7 @@ create table twitter_community(
     full_txt_idx tsvector,
     unique (reduction_id, index)
 );
-SELECT AddGeometryColumn('twitter_community', 'coordinates', -1, 'MULTIPOINT', 2);
+SELECT AddGeometryColumn('twitter_community', 'coordinates', 900913, 'MULTIPOINT', 2);
 CREATE TRIGGER twitter_community_modified BEFORE UPDATE
 ON twitter_community FOR EACH ROW
 EXECUTE PROCEDURE ts_modifieddate();

@@ -35,16 +35,16 @@
         </a>
  
         <ul class="nav nav-pills pull-right">
-          <li class="${'active' if active_tab == 'social_map' else ''}">
+<!--           <li class="${'active' if active_tab == 'social_map' else ''}">
             <a style="font-size:16px;" href="/social_map">
               Explore
             </a>
-          </li>
-<!--           <li class="${'active' if active_tab == 'about' else ''}">
+          </li> -->
+          <li class="${'active' if active_tab == 'about' else ''}">
             <a style="font-size:16px;" href="/about">
               About 
             </a> 
-          </li> -->
+          </li>
           <li class="${'active' if active_tab == 'blog' else ''}">
             <a style="font-size:16px;" href="/blog">
               Blog 
@@ -68,7 +68,7 @@
     <div class="row-fluid" style="margin:15px 0 30px 0;">
       <div class="span1">&nbsp;</div>
       <div class="span10">
-        <div style="margin:0 30px;">
+        <div style="margin:0 0;">
           <div py:replace="select('*|text()')"></div>
         </div>
       </div>
@@ -76,7 +76,7 @@
     </div>
 
     <!--footer-->
-    <div class="row-fluid" style="margin:120px 0 15px 0;">
+    <div class="row-fluid" style="margin:60px 0 20px 0;">
 
       <div class="span12" style="text-align:center;">
 
@@ -89,9 +89,9 @@
           </div>
 
         <div style="width:160px; margin:0 auto 2px auto; 
-          border-bottom: solid 1px #666666;">&nbsp;</div>
+          border-bottom: solid 1px #666666;line-height:10px;">&nbsp;</div>
          <div style="width:168px; margin:2px auto 0 auto; 
-          border-top: solid 1px #333333;">&nbsp;</div> 
+          border-top: solid 1px #333333;line-height:10px;">&nbsp;</div> 
 
           <div>
             <a style="font-size:16px;" target="_blank" href="https://github.com/smarttypes/smarttypes">
