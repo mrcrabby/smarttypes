@@ -22,11 +22,11 @@
     <script type="text/javascript">
         $(function(){
             var map = L.map('map', {
-                scrollWheelZoom: false
+                //scrollWheelZoom: false
             }).setView([0, 0], 2);
 
             L.tileLayer('http://localhost:9999/static/tiles/{z}/{x}/{y}.png', {
-                maxZoom: 4
+                maxZoom: 6
             }).addTo(map);
         });
     </script>
@@ -35,16 +35,15 @@
 
 <body>
 
-    <div style="text-align:center;">
-        <div style="" class="pull-right">
-          <form style="text-align:center;" class="form-search pull-right">
+    <div style="text-align:center;margin-top:-20px;">
+<!--         <div style="text-align:right;">
+          <form style="text-align:center;" class="form-search">
             <input type="text" class="input-large" placeholder="@handle or some text ..." />
             <button type="submit" class="btn">
               <i class="icon-search"></i> Explore</button>
           </form>
-        </div>
-
-        <div style="clear:both;">
+        </div> -->
+        <div style="margin:20px 0;">
             <div id="map"></div>
         </div>
     </div>

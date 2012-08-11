@@ -261,7 +261,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1"
      inkscape:cx="262.95299"
-     inkscape:cy="823.233"
+     inkscape:cy="863.233"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="false"
@@ -314,9 +314,9 @@
            y="-24.637817" /></flowRegion><flowPara
          id="flowPara2865" /></flowRoot>    <text
        xml:space="preserve"
-       style="font-size:17px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:0px;fill:#999999;fill-opacity:1;stroke:none;font-family:Purisa;-inkscape-font-specification:Purisa"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:0px;fill:#999999;fill-opacity:1;stroke:none;font-family:Purisa;-inkscape-font-specification:Purisa"
        x="41.816803"
-       y="82.069183"
+       y="80.069183"
        id="text2381"
        inkscape:export-filename="/home/timmyt/projects/smarttypes/smarttypes/static/images/smarttypes_logo.png"
        inkscape:export-xdpi="90"
@@ -324,8 +324,8 @@
          sodipodi:role="line"
          id="tspan2383"
          x="41.816803"
-         y="82.069183"
-         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;letter-spacing:0px;fill:#999999;fill-opacity:1;font-family:Purisa;-inkscape-font-specification:Purisa Bold">A tool for social discovery.</tspan></text>
+         y="80.069183"
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;letter-spacing:0px;fill:#999999;fill-opacity:1;font-family:Purisa;-inkscape-font-specification:Purisa Bold">social discovery!</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:414.99986648999998806%;letter-spacing:2.82999920999999999px;fill:#1a1a1a;fill-opacity:1;stroke:none;font-family:Purisa;-inkscape-font-specification:Purisa Bold"
