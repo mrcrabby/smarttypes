@@ -129,7 +129,7 @@ if __name__ == "__main__":
     coordinates = reproject_to_spherical_mercator(coordinates)
     
     #id_communities
-    vertex_clustering = id_communities(g, coordinates, eps=0.62, min_samples=12)
+    vertex_clustering = id_communities(g, coordinates, eps=0.62, min_samples=15)
 
     #network_stats
     network_stats = get_network_stats(network, g, vertex_clustering)

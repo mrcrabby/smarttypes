@@ -15,6 +15,6 @@ Here are the steps:
 
  3. Use NLTK to generate community labels and full_txt_idx
 
- 4. Use Mapnik to generate image tiles
+ 4. Use TileMill and Mapnik to generate image tiles
 
 
