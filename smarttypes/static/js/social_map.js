@@ -54,7 +54,9 @@ Then we zoom to the community or person if specified
 
 */
 
-
+/*-------------------------------------
+init
+---------------------------------------*/
 function init_social_map(reduction_id, reductions_metadata) {
 
   if (typeof reduction_id == "undefined") return;
@@ -67,17 +69,39 @@ function init_social_map(reduction_id, reductions_metadata) {
       maxZoom: 6
   }).addTo(map);
 
-}
-
-function get_reduction_geojson(url) {
+  load_community_geojson_layer(reduction_id, map);
 
 }
 
+/*-------------------------------------
+community_geojson_layer
+---------------------------------------*/
+function load_community_geojson_layer(reduction_id, map) {
+    $.ajax(
+    	{type:"GET",
+        url:"/social_map/community_features/" + reduction_id,
+        cache:false,
+        data:{},
+        dataType:"json",
+        error:function(){},
+        success:function(community_features){
+            L.geoJson(community_features, {
+			    onEachFeature: oneach_community_feature
+			}).addTo(map);
+        }
+    });
+}
+
+function oneach_community_feature(feature, layer) {
+    if (feature.properties && feature.properties.popup_content) {
+        layer.bindPopup(feature.properties.popup_content);
+    }
+}
+
+/*-------------------------------------
+people_geojson_layer
+---------------------------------------*/
 function highlight_community(community_idx) {
-
-}
-
-function highlight_person(person_id) {
 
 }
 

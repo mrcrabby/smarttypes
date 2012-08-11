@@ -8,8 +8,12 @@ import smarttypes, random
 from smarttypes.utils.postgres_handle import PostgresHandle
 postgres_handle = PostgresHandle(smarttypes.connection_string)
 
-from smarttypes.model.twitter_user import TwitterUser
 from smarttypes.model.twitter_credentials import TwitterCredentials
+from smarttypes.model.twitter_user import TwitterUser
+from smarttypes.model.twitter_reduction import TwitterReduction
+from smarttypes.model.twitter_reduction_user import TwitterReductionUser
+from smarttypes.model.twitter_community import TwitterCommunity
+
 
 model_user = TwitterUser.by_screen_name('SmartTypes', postgres_handle)
 api_handle = model_user.credentials.api_handle

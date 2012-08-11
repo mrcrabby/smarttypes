@@ -1,4 +1,5 @@
 
+import copy
 from smarttypes.model.postgres_base_model import PostgresBaseModel
 
 class TwitterReduction(PostgresBaseModel):
@@ -41,6 +42,15 @@ class TwitterReduction(PostgresBaseModel):
         communities = TwitterCommunity.get_by_name_value('reduction_id', self.id, 
             self.postgres_handle)
         return sorted(communities, key=lambda k: k.community_score, reverse=True)
+
+    def get_geojson_community_features(self):
+        results = []
+        for community in self.communities():
+            results.append(community.geojson_dict())
+        return results
+
+    def get_geojson_user_features(self, bbox):
+        return []
 
     @classmethod
     def get_latest_reduction(cls, root_user_id, postgres_handle):

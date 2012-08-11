@@ -20,7 +20,7 @@ def index(req, session, postgres_handle):
         root_user = TwitterUser.by_screen_name(req.path.split('/')[1], postgres_handle)
         if root_user:
             reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
-        if not reduction:
+        if not reduction and int(req.path.split('/')[1]):
             reduction = TwitterReduction.get_by_id(req.path.split('/')[1], postgres_handle)
     else:
         root_user = TwitterUser.by_screen_name('SmartTypes', postgres_handle)

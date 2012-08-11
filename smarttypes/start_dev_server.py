@@ -18,6 +18,7 @@ def start_app():
     web_monitor.start(interval=1.0)
     project_path = os.path.dirname(os.path.abspath(__file__))
     web_monitor.track(project_path + '/templates/')
+    web_monitor.track(project_path + '/model/')
     port = 9999
     httpd = make_server('localhost', port, application, handler_class=CustomRequestHandler)
     print "Serving on port %s..." % port

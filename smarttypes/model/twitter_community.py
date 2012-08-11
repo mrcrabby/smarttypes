@@ -3,6 +3,7 @@ from smarttypes.model.postgres_base_model import PostgresBaseModel
 from datetime import datetime, timedelta
 from smarttypes.utils import time_utils, text_parsing
 import re, string, heapq, random, collections, numpy
+from smarttypes.utils import web_response
 
 class TwitterCommunity(PostgresBaseModel):
 
@@ -18,6 +19,15 @@ class TwitterCommunity(PostgresBaseModel):
         'community_pagerank',
     ]    
     table_defaults = {}
+
+    def centroid(self):
+        qry = """
+        select ST_Centroid(coordinates) as centroid
+        from twitter_community
+        where id = %(id)s;
+        """
+        params = {'id': self.id}
+        return self.postgres_handle.execute_query(qry, params)[0]['centroid']
 
     def get_members(self):
         return_list = []
@@ -41,6 +51,30 @@ class TwitterCommunity(PostgresBaseModel):
             else:
                 break
         return return_list
+
+    def popup_html(self):
+        template = web_response.loader.load('social_map/community.html')
+        template_with_dict = template.generate(**{
+            'community':self,
+            'content_type':'text/html',
+        })
+        return template_with_dict.render('xhtml')
+
+    def geojson_dict(self):
+        centroid = self.centroid()
+        return {
+            "type": "Feature",
+            "properties": {
+                "community_id": self.id,
+                "community_idx": self.index,
+                "community_score":self.community_score,
+                "popup_content":self.popup_html()
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [centroid.x, centroid.y]
+            }
+        }
 
     @classmethod
     def get_all(cls, reduction_id, postgres_handle):

@@ -21,7 +21,8 @@ urls = [
 
     (r'^blog/?', controllers.blog),
 
-    (r'^social_map/?', controllers.social_map.index),
+    (r'^social_map/community_features/?', controllers.social_map.community_features),
+    (r'^social_map/people_features/?', controllers.social_map.people_features),
 
     (r'^about/?$', controllers.about),
     (r'^contact/?$', controllers.about),
