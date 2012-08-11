@@ -15,16 +15,18 @@
     <script src="http://cdn.leafletjs.com/leaflet-0.4/leaflet.js"></script>
 
     <style type="text/css" media="screen">
-        #map { height: 400px; }
+        #map { height: 450px; }
         .leaflet-container { background:None; }
     </style>
 
     <script type="text/javascript">
         $(function(){
-            var map = L.map('map').setView([0, 0], 2);
+            var map = L.map('map', {
+                scrollWheelZoom: false
+            }).setView([0, 0], 2);
 
             L.tileLayer('http://localhost:9999/static/tiles/{z}/{x}/{y}.png', {
-                maxZoom: 4,
+                maxZoom: 4
             }).addTo(map);
         });
     </script>
@@ -33,15 +35,10 @@
 
 <body>
 
-    <div style="text-align:center;margin-top:20px;">
-
-        <div id="map"></div>
-
-        <form class="well form-search">
-          <input type="text" class="input-xlarge" placeholder="@handle or some text ..." />
-          <button type="submit" class="btn">Explore</button>
-        </form>
-
+    <div style="text-align:center;">
+        <div style="">
+            <div id="map"></div>
+        </div>
     </div>
 
 </body>                                     
