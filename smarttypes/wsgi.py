@@ -21,15 +21,14 @@ urls = [
 
     (r'^blog/?', controllers.blog),
 
-    (r'^social_map/?$', controllers.social_map.index),
-    (r'^social_map/reduction/?$', controllers.social_map.reduction),
-    (r'^social_map/community/?$', controllers.social_map.community),
-    (r'^social_map/?', controllers.social_map.reduction),
+    (r'^social_map/?', controllers.social_map.index),
 
     (r'^about/?$', controllers.about),
     (r'^contact/?$', controllers.about),
 
     (r'^static/?', controllers.static),
+
+    (r'^', controllers.index), #catch all
 ]
 
 

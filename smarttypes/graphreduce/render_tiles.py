@@ -7,6 +7,10 @@ import mapnik2
 import threading
 import argparse
 
+import smarttypes
+from smarttypes.utils.postgres_handle import PostgresHandle
+from smarttypes.model.twitter_reduction import TwitterReduction
+
 # custom_fonts_dir = '/Library/Fonts/'
 # mapnik2.register_fonts(custom_fonts_dir)
 
@@ -180,14 +184,33 @@ def render_tiles(bbox, mapfile, tile_dir, minZoom=1,maxZoom=18, name="unknown", 
 
 
 if __name__ == "__main__":
-        
+       
+    postgres_handle = PostgresHandle(smarttypes.connection_string)
+    #get reduction_id 
+    qry = """
+    select tc.reduction_id 
+    from twitter_community tc
+    join twitter_reduction tr on tc.reduction_id = tr.id
+    where tr.tiles_are_written_to_disk = False
+    order by tc.reduction_id desc limit 1;
+    """
+    reduction_id = postgres_handle.execute_query(qry, {})[0]['reduction_id']
+    tile_dir = '../static/tiles/%s/' % reduction_id
+    print tile_dir
+    if not os.path.isdir(tile_dir):
+        os.mkdir(tile_dir)
     style_file = 'mapnik.xml'
-    tile_dir = '../static/tiles/'
     min_zoom = 0
     max_zoom = 6
-    #SELECT ST_EXTENT(coordinates) from twitter_reduction_user where reduction_id = 9;
-    #-404.917, -335.874, 428.171, 501.306
-    #SELECT ST_Centroid(coordinates) from twitter_reduction_user where reduction_id = 9;
-    #bbox = (-180.0,-90.0, 180.0,90.0)
     bbox = (-180, -85.0511, 180, 85.0511)
     render_tiles(bbox, style_file, tile_dir, min_zoom, max_zoom)
+    reduction = TwitterReduction.get_by_id(reduction_id, postgres_handle)
+    reduction.tiles_are_written_to_disk = True
+    reduction.save()
+    postgres_handle.connection.commit()
+
+
+
+
+
+

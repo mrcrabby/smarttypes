@@ -11,7 +11,25 @@ from smarttypes.model.twitter_community import TwitterCommunity
 
 
 def index(req, session, postgres_handle):
-    return {}
+    #if it's not a valid request keep reduction_id None
+    #don't do work for bots that don't know what they're 
+    #looking for
+    reduction = None
+    reductions_metadata = []
+    if req.path.split('/') > 1 and req.path.split('/')[1]:  # path looks like '/something'
+        root_user = TwitterUser.by_screen_name(req.path.split('/')[1], postgres_handle)
+        if root_user:
+            reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
+        if not reduction:
+            reduction = TwitterReduction.get_by_id(req.path.split('/')[1], postgres_handle)
+    else:
+        root_user = TwitterUser.by_screen_name('SmartTypes', postgres_handle)
+        reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
+
+    return {
+        'reduction_id': reduction.id if reduction and reduction.tiles_are_written_to_disk else None,
+        'reductions_metadata': reductions_metadata,
+    }
 
 def sign_in(req, session, postgres_handle):
     raise RedirectException(twitter_api_utils.get_signin_w_twitter_url(postgres_handle))

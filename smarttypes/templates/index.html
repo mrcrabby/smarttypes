@@ -21,13 +21,9 @@
 
     <script type="text/javascript">
         $(function(){
-            var map = L.map('map', {
-                //scrollWheelZoom: false
-            }).setView([0, 0], 2);
-
-            L.tileLayer('http://localhost:9999/static/tiles/{z}/{x}/{y}.png', {
-                maxZoom: 6
-            }).addTo(map);
+            var reduction_id = ${reduction_id if reduction_id else 'undefined'};
+            var reductions_metadata = ${reductions_metadata if reductions_metadata else 'undefined'};
+            init_social_map(reduction_id, reductions_metadata);
         });
     </script>
 

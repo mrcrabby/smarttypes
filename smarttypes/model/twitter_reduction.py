@@ -7,6 +7,7 @@ class TwitterReduction(PostgresBaseModel):
     table_key = 'id'
     table_columns = [
         'root_user_id',
+        'tiles_are_written_to_disk',
         'translate_rotate_mask',
     ]
     table_defaults = {}

@@ -1,41 +1,89 @@
 
 
-    <!-- begin Chrome zoom bug workaround
+/*
 
-      From http://rklancer.github.com/lab/examples/css-layout/
+The map page does 2 things:
 
-      Force browser to reparse styles and media queries on all window resize events, including page
-      zoom. Works around Chromium bug in which media queries are not re-evaluated on page zoom.
-      Adapted from http://alastairc.ac/2012/01/zooming-bug-in-webkit/#comment-129553
-    -->
-    <style id="dummyStyle"></style>
-    <script type="text/javascript">
-      window.onresize = function() {
-        document.getElementById('dummyStyle').textContent = 'dummySelector {}';
-      };
-    </script>
-    <!-- end Chrome zoom bug workaround -->
+- It loads a list of all available reductions (metadata)
 
-    <script type="text/javascript">
-      if (!Modernizr.svg) alert("Your browsing from a device that does not support SVG.  That's unfortunate!");
-    </script>
+- Then it loads a specific reduction
+
+--------------------------
+
+To specify a specific map (reduction):
+
+/reduction_id
+
+or
+
+/root_user_screen_name
+
+--------------------------
+
+To specify a specific community, prefix w/ a 'c':
+
+/reduction_id/c_community_idx
+
+or
+
+/root_user_screen_name/c_community_idx
+
+--------------------------
+
+To specify a specific person, prefix w/ a 'p':
+
+/reduction_id/p_person_id
+
+or
+
+/root_user_screen_name/p_person_id
+
+--------------------------
+
+If no reduction is specified we'll see if the user's logged in
+
+Then finally we'll pick a random or popular reduction
+
+--------------------------
+
+First we load the page (this includes available reductions metadata)
+
+Then we load the reduction via ajax 
+
+Then we zoom to the community or person if specified
+
+*/
 
 
+function init_social_map(reduction_id, reductions_metadata) {
+
+  if (typeof reduction_id == "undefined") return;
+
+  var map = L.map('map', {
+      //scrollWheelZoom: false
+  }).setView([0, 0], 2);
+
+  L.tileLayer('http://localhost:9999/static/tiles/'+reduction_id+'/{z}/{x}/{y}.png', {
+      maxZoom: 6
+  }).addTo(map);
+
+}
+
+function get_reduction_geojson(url) {
+
+}
+
+function highlight_community(community_idx) {
+
+}
+
+function highlight_person(person_id) {
+
+}
 
 
-var chart = $("#chart"),
-    aspect = chart.width() / chart.height(),
-    container = chart.parent();
-$(window).on("resize", function() {
-    var targetWidth = container.width();
-    chart.attr("width", targetWidth);
-    chart.attr("height", Math.round(targetWidth / aspect));
-}).trigger("resize");
-
-
-
-
-
-
+/*
+if (!Modernizr.svg) alert("Your browsing from a device that does not support SVG.  That's unfortunate!");
+*/
 
 
