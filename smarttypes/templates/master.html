@@ -42,19 +42,11 @@
           </li>
           <li py:if="logged_in_user" class="${'active' if active_tab == 'my_account' else ''}">
             <a style="font-size:16px;" href="/my_account">
-              <i class="icon-heart"></i> ${logged_in_user.screen_name} 
+              <i class="icon-cog"></i> Settings &amp; preferences 
             </a> 
           </li>
         </ul>
-
-        <div style="clear:both;padding-right:10px;" class="pull-right">
-          <form style="text-align:center;" class="form-search pull-right">
-            <input type="text" class="input-large" placeholder="@handle or some text ..." />
-            <button type="submit" class="btn">
-              <i class="icon-search"></i> Explore</button>
-          </form>
-        </div>
-
+        
       </div>
     </div>
 
