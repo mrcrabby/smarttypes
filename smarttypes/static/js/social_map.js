@@ -65,7 +65,7 @@ function init_social_map(reduction_id, reductions_metadata) {
       //scrollWheelZoom: false
   }).setView([0, 0], 2);
 
-  L.tileLayer('http://localhost:9999/static/tiles/'+reduction_id+'/{z}/{x}/{y}.png', {
+  L.tileLayer('http://www.smarttypes.org/static/tiles/'+reduction_id+'/{z}/{x}/{y}.png', {
       maxZoom: 6
   }).addTo(map);
 
