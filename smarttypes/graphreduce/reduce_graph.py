@@ -137,7 +137,7 @@ if __name__ == "__main__":
     hybrid_pagerank = calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score)
 
     #save reduction
-    reduction = TwitterReduction.create_reduction(root_user.id, [0, 0, 0], postgres_handle)
+    reduction = TwitterReduction.create_reduction(root_user.id, [0, 0, 0], False, postgres_handle)
     postgres_handle.connection.commit()
 
     #save reduction users

@@ -96,9 +96,10 @@ class TwitterReduction(PostgresBaseModel):
         return return_users
 
     @classmethod
-    def create_reduction(cls, root_user_id, translate_rotate_mask, postgres_handle):
+    def create_reduction(cls, root_user_id, translate_rotate_mask, tiles_are_written_to_disk, postgres_handle):
         twitter_reduction = cls(postgres_handle=postgres_handle)
         twitter_reduction.root_user_id = root_user_id
         twitter_reduction.translate_rotate_mask = translate_rotate_mask
+        twitter_reduction.tiles_are_written_to_disk = tiles_are_written_to_disk
         twitter_reduction.save()
         return twitter_reduction
