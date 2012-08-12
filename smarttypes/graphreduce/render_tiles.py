@@ -188,15 +188,13 @@ if __name__ == "__main__":
     postgres_handle = PostgresHandle(smarttypes.connection_string)
     #get reduction_id 
     qry = """
-    select tc.reduction_id 
-    from twitter_community tc
-    join twitter_reduction tr on tc.reduction_id = tr.id
+    select tr.id 
+    from twitter_reduction tr
     where tr.tiles_are_written_to_disk = False
-    order by tc.reduction_id desc limit 1;
+    order by tr.id desc limit 1;
     """
-    reduction_id = postgres_handle.execute_query(qry, {})[0]['reduction_id']
+    reduction_id = postgres_handle.execute_query(qry, {})[0]['id']
     tile_dir = '../static/tiles/%s/' % reduction_id
-    print tile_dir
     if not os.path.isdir(tile_dir):
         os.mkdir(tile_dir)
     style_file = 'mapnik.xml'

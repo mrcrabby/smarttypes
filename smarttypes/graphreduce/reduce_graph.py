@@ -165,6 +165,9 @@ if __name__ == "__main__":
             communities.append(community)
             postgres_handle.connection.commit()
 
+    #render tiles
+    os.system('python render_tiles.py')
+
     #how long
     print datetime.now() - start_time
 

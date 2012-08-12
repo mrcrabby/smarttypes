@@ -26,7 +26,6 @@ def index(req, session, postgres_handle):
     else:
         root_user = TwitterUser.by_screen_name('SmartTypes', postgres_handle)
         reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
-
     return {
         'reduction_id': reduction.id if reduction and reduction.tiles_are_written_to_disk else None,
         'reductions_metadata': reductions_metadata,
