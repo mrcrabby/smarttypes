@@ -8,6 +8,7 @@ from smarttypes.utils import validation_utils
 from smarttypes.model.twitter_user import TwitterUser
 from smarttypes.model.twitter_reduction import TwitterReduction
 from smarttypes.model.twitter_community import TwitterCommunity
+from smarttypes.utils import is_int
 
 
 def index(req, session, postgres_handle):
@@ -20,7 +21,7 @@ def index(req, session, postgres_handle):
         root_user = TwitterUser.by_screen_name(req.path.split('/')[1], postgres_handle)
         if root_user:
             reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
-        if not reduction and int(req.path.split('/')[1]):
+        if not reduction and is_int(req.path.split('/')[1]):
             reduction = TwitterReduction.get_by_id(req.path.split('/')[1], postgres_handle)
     else:
         root_user = TwitterUser.by_screen_name('SmartTypes', postgres_handle)

@@ -3,7 +3,7 @@ import smarttypes, random
 from smarttypes.model.twitter_user import TwitterUser
 from smarttypes.model.twitter_reduction import TwitterReduction
 from smarttypes.model.twitter_community import TwitterCommunity
-
+from smarttypes.utils import is_int
 
 def community_features(req, session, postgres_handle):
     reduction = None
@@ -11,7 +11,7 @@ def community_features(req, session, postgres_handle):
         root_user = TwitterUser.by_screen_name(req.path.split('/')[3], postgres_handle)
         if root_user:
             reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
-        if not reduction and int(req.path.split('/')[3]):
+        if not reduction and is_int(req.path.split('/')[3]):
             reduction = TwitterReduction.get_by_id(req.path.split('/')[3], postgres_handle)
     return {
         'content_type': 'application/json',
@@ -24,7 +24,7 @@ def people_features(req, session, postgres_handle):
         root_user = TwitterUser.by_screen_name(req.path.split('/')[3], postgres_handle)
         if root_user:
             reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
-        if not reduction and int(req.path.split('/')[3]):
+        if not reduction and is_int(req.path.split('/')[3]):
             reduction = TwitterReduction.get_by_id(req.path.split('/')[3], postgres_handle)
     return {
         'content_type': 'application/json',
