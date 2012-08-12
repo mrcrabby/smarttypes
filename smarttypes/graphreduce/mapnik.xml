@@ -347,7 +347,7 @@ order by tc.reduction_id desc limit 1
        <Parameter name="key_field"><![CDATA[id]]></Parameter>
        <Parameter name="geometry_field"><![CDATA[coordinates]]></Parameter>
        <Parameter name="user"><![CDATA[timmyt]]></Parameter>
-       <Parameter name="password"><![CDATA[urllib2]]></Parameter>
+       <Parameter name="password"><![CDATA[]]></Parameter>
        <Parameter name="dbname"><![CDATA[smarttypes]]></Parameter>
        <Parameter name="id"><![CDATA[users]]></Parameter>
        <Parameter name="project"><![CDATA[test]]></Parameter>
