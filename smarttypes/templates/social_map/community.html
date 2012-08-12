@@ -1,34 +1,36 @@
 
 
 <div xmlns:py="http://genshi.edgewall.org/" style="text-align:center;">
-    <h2>
-        ${community.id} -- ${len(community.member_ids)} member community!
-    </h2>
-    <!-- <p py:if="len(community.member_ids) > 20" style="font-weight:bold;">Top 20 members:</p> -->
-    <ul style="height:200px;overflow:scroll;list-style:none;margin:10px 0;">
-        <li style="margin:30px 10px;" py:for="score, user in community.top_users()">
-            ${score}
-            <i class="icon-user"></i> 
-            <span style="font-weight:bold;">
-                <a target="_blank" href="https://twitter.com/${user.screen_name}">${user.screen_name}</a>
-            </span>
+    <div py:if="community">
+        <h2>
+            ${community.id} -- ${len(community.member_ids)} member community!
+        </h2>
+        <!-- <p py:if="len(community.member_ids) > 20" style="font-weight:bold;">Top 20 members:</p> -->
+        <ul style="height:200px;overflow:scroll;list-style:none;margin:10px 0;">
+            <li style="margin:30px 10px;" py:for="score, user in community.top_users()">
+                ${score}
+                <i class="icon-user"></i> 
+                <span style="font-weight:bold;">
+                    <a target="_blank" href="https://twitter.com/${user.screen_name}">${user.screen_name}</a>
+                </span>
 
-            <span style="font-style:italic;">
-                <br/>
-                ${user.location_name if user.location_name else 'No location given'}
-            </span>
+                <span style="font-style:italic;">
+                    <br/>
+                    ${user.location_name if user.location_name else 'No location given'}
+                </span>
 
-            <span py:if="user.description">
-                <br/>
-                ${user.description[:80]}${'...' if len(user.description) &gt; 80 else ''}
-            </span>
+                <span py:if="user.description">
+                    <br/>
+                    ${user.description[:80]}${'...' if len(user.description) &gt; 80 else ''}
+                </span>
 
-            <span py:if="user.url">
-                <br/>
-                <a href="${user.url}">${user.url}</a>
-            </span>
-        </li>
-    </ul>
+                <span py:if="user.url">
+                    <br/>
+                    <a href="${user.url}">${user.url}</a>
+                </span>
+            </li>
+        </ul>
+    </div>
 </div>
 
 
