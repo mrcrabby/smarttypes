@@ -227,12 +227,15 @@ class TwitterUser(PostgresBaseModel):
         return list(return_ids)
 
     @classmethod
-    def get_rooted_network(cls, root_user, postgres_handle, go_back_this_many_weeks=2, distance=100):
+    def get_rooted_network(cls, root_user, postgres_handle, go_back_this_many_weeks=2, 
+            start_here='now', distance=100):
         print 'Loading network in memory!'
         from collections import OrderedDict
         network = OrderedDict()
         network[root_user.id] = set(root_user.following_ids)
-        start_w_this_date = datetime.now() - timedelta(days=go_back_this_many_weeks * 7)
+        if start_here == 'now':
+            start_here = datetime.now()
+        start_w_this_date = start_here - timedelta(days=go_back_this_many_weeks * 7)
         year_weeknum_strs = time_utils.year_weeknum_strs(start_w_this_date, go_back_this_many_weeks + 1)
 
         #see these:

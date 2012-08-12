@@ -122,7 +122,12 @@ if __name__ == "__main__":
         distance = 10000 / len(root_user.following[:1000])
 
     #get network and reduce
-    network = TwitterUser.get_rooted_network(root_user, postgres_handle, distance=distance)
+    if smarttypes.config.IS_PROD:
+        start_here = datetime.now()
+    else:
+        start_here = datetime(2012, 8, 1)
+    network = TwitterUser.get_rooted_network(root_user, postgres_handle, 
+        start_here=start_here, distance=distance)
     g = get_igraph_graph(network)
     member_ids = np.array(g.vs['name'])
     coordinates = reduce_with_linloglayout(g, root_user)
