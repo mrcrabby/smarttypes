@@ -86,7 +86,8 @@ function load_community_geojson_layer(reduction_id, map) {
         error:function(){},
         success:function(community_features){
             L.geoJson(community_features, {
-			    onEachFeature: oneach_community_feature
+			    onEachFeature: oneach_community_feature,
+			    pointToLayer: point_to_layer,
 			}).addTo(map);
         }
     });
@@ -96,6 +97,21 @@ function oneach_community_feature(feature, layer) {
     if (feature.properties && feature.properties.popup_content) {
         layer.bindPopup(feature.properties.popup_content);
     }
+}
+
+var geojsonMarkerOptions = {
+    fillColor: "#FFCC33",
+    color: "#cccccc",
+    weight: 1,
+    opacity: 0.5,
+    fillOpacity: 0.6
+};
+
+function point_to_layer(feature, latlng) {
+	community_size = Math.max(0.15 * feature.properties.community_size, 8);
+	community_size = Math.min(community_size, 40);
+	geojsonMarkerOptions.radius = community_size;
+	return L.circleMarker(latlng, geojsonMarkerOptions);
 }
 
 /*-------------------------------------

@@ -27,7 +27,7 @@ connection_string = "host=localhost dbname='smarttypes' user='%s' password='%s'"
 root_dir = os.path.dirname(os.path.abspath(__file__))
 
 site_name = 'SmartTypes'
-site_mantra = 'A tool for social discovery.'
+site_mantra = 'a tool for social discovery.'
 default_title = '%s - %s' % (site_name, site_mantra)
 site_description = """
 SmartTypes is an open lab for online social network analysis (initially twitter).

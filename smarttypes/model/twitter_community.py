@@ -68,6 +68,7 @@ class TwitterCommunity(PostgresBaseModel):
                 "community_id": self.id,
                 "community_idx": self.index,
                 "community_score":self.community_score,
+                "community_size":len(self.member_ids),
                 "popup_content":self.popup_html()
             },
             "geometry": {

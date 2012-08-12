@@ -32,28 +32,28 @@
       <!-- <div class="span1">&nbsp;</div> -->
       <div class="span12">
         <a href="/">
-            <img style="width:70px;" src="/static/images/old_compass.jpg" alt="${site_name}: ${site_mantra}"/>
+            <img style="width:70px;" src="/static/images/smarttypes_tree.jpg" alt="${site_name}: ${site_mantra}"/>
             <img src="/static/images/smarttypes_logo.png" alt="${site_name}: ${site_mantra}"/>
         </a>
 
         <ul class="nav nav-pills pull-right">
           <li class="${'active' if active_tab == 'about' else ''}">
-            <a style="font-size:16px;" href="/about">
+            <a style="font-size:17px;" href="/about">
               About 
             </a> 
           </li>
           <li class="${'active' if active_tab == 'blog' else ''}">
-            <a style="font-size:16px;" href="/blog">
+            <a style="font-size:17px;" href="/blog">
               Words 
             </a> 
           </li>
           <li py:if="not logged_in_user" >
-            <a style="font-size:16px;" href="/sign_in">
+            <a style="font-size:17px;" href="/sign_in">
               Sign in w/ twitter 
             </a> 
           </li>
           <li py:if="logged_in_user" class="${'active' if active_tab == 'my_account' else ''}">
-            <a style="font-size:16px;" href="/my_account">
+            <a style="font-size:17px;" href="/my_account">
               Settings
             </a> 
           </li>
@@ -79,7 +79,7 @@
         <div>
 
           <div>
-            <a style="font-size:16px;color:#660066;" target="_blank" href="https://github.com/smarttypes/smarttypes">
+            <a style="font-size:17px;color:#660066;" target="_blank" href="https://github.com/smarttypes/smarttypes">
               <i class="icon-share"></i> Everything's on github
             </a>
           </div> 
@@ -90,7 +90,7 @@
             border-top: solid 1px #333333;line-height:25px;">&nbsp;</div> 
 
           <div>
-            <a style="font-size:16px;color:#660066;" target="_blank" href="http://twitter.com/smarttypes">
+            <a style="font-size:17px;color:#660066;" target="_blank" href="http://twitter.com/smarttypes">
               <i class="icon-share"></i> @SmartTypes
             </a>
           </div>
