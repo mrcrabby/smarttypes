@@ -63,7 +63,7 @@ function init_social_map(reduction_id, reductions_metadata) {
 
   var map = L.map('map', {
       //scrollWheelZoom: false
-  }).setView([0, 0], 2);
+  }).setView([0, 0], 3);
 
   L.tileLayer('/static/tiles/'+reduction_id+'/{z}/{x}/{y}.png', {
       maxZoom: 6
