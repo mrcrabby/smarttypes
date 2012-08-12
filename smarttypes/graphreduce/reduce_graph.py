@@ -161,7 +161,7 @@ if __name__ == "__main__":
                 community_score[member_idxs][0], len(member_idxs))
             community = TwitterCommunity.create_community(reduction.id, i, member_idxs, 
                 member_ids[member_idxs].tolist(), MultiPoint(coordinates[member_idxs]), 
-                community_score[member_idxs][0], community_pagerank.tolist(), postgres_handle)
+                community_score[member_idxs][0], community_pagerank[member_idxs].tolist(), postgres_handle)
             communities.append(community)
             postgres_handle.connection.commit()
 

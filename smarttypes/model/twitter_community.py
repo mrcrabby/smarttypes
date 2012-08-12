@@ -77,6 +77,21 @@ class TwitterCommunity(PostgresBaseModel):
             }
         }
 
+    def get_igraph_g(self):
+        from smarttypes.model.twitter_user import TwitterUser
+        from smarttypes.graphreduce.reduce_graph import get_igraph_graph
+        network = {}
+        for score, user_id in self.get_members():
+            user = TwitterUser.get_by_id(user_id, self.postgres_handle)
+            network[user.id] = set(user.following_ids)
+        g = get_igraph_graph(network)
+        pagerank = g.pagerank(damping=0.65)
+        both = zip(pagerank, g.vs['name'])
+        for x,y in sorted(both):
+            print x
+            print TwitterUser.get_by_id(y, self.postgres_handle).screen_name
+
+
     @classmethod
     def get_all(cls, reduction_id, postgres_handle):
         return cls.get_by_name_value('reduction_id', reduction_id, postgres_handle)
