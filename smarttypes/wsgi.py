@@ -77,7 +77,7 @@ def application(environ, start_response):
                 if smarttypes.config.IS_PROD:
                     email_utils.send_email('error@smarttypes.org',
                         ['timmyt@smarttypes.org', 'kevinroth82@gmail.com'],
-                        error_string, 'smarttypes site error')
+                        path + ' \n ' + error_string, 'smarttypes site error')
                 return [error_string]
 
     #couldn't find it
