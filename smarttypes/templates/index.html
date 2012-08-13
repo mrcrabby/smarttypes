@@ -53,9 +53,9 @@
             <div id="map"></div>
         </div>
 
-        <h2 style="margin-top:80px;">Some other social maps:</h2>
+        <h2 style="margin-top:80px;">More social maps:</h2>
         <ul style="list-style:none;margin:10px 0;">
-            <li style="margin:50px auto;width:200px;" 
+            <li py:if="user.id != root_user.id" style="margin:50px auto;width:400px;" 
                 py:for="user, count in user_reduction_counts">
 
                 <a py:if="user.profile_image_url" href="/${user.screen_name}">
