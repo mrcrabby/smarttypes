@@ -19,8 +19,8 @@ Map {
 }
 
 
-@zoom_start: 2;
-@zoom_stop: 6;
+@zoom_start: 0;
+@zoom_stop: 1.5;
 @zoom_diff: @zoom_stop - @zoom_start;
 @zoom_step: @zoom_diff / 6;
 
@@ -101,10 +101,11 @@ Map {
   [pagerank >= .64] { marker-width: @zoom_6_base + @zoom_step * 6; }
 }
 
+/*
 @community_base_pixels: 10;
 #community{
   marker-fill: #FFCC33;
-  marker-opacity: .5;
+  marker-opacity: .3;
   marker-line-color: #999999;
   marker-line-opacity: .1;
   marker-line-width: 2;
@@ -118,5 +119,5 @@ Map {
   [zoom = 5] { marker-width: @community_base_pixels * 12.8;}
   [zoom = 6] { marker-width: @community_base_pixels * 25.6}
 }
-
+*/
 
