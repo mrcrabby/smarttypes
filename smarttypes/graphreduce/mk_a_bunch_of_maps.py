@@ -10,16 +10,13 @@ if __name__ == "__main__":
 
 	mk_these_maps = [
 		# 'SmartTypes',
-		# 'maxdemarzi',
 		# 'utopiah',
 		'stamen',
 		'CocaCola',
 		'lojak',
 		'cgtheoret',
-		'davidseymour',
 		'bmabey',
 		'davemcclure',
-		'snikolov',
 		'socialphysicist',
 		'ogrisel',
 		'jessykate',
