@@ -16,7 +16,6 @@ def index(req, session, postgres_handle):
     #don't do work for bots that don't know what they're 
     #looking for
     reduction = None
-    reductions_metadata = []
     if req.path.split('/') > 1 and req.path.split('/')[1]:  # path looks like '/something'
         root_user = TwitterUser.by_screen_name(req.path.split('/')[1], postgres_handle)
         if root_user:
@@ -28,7 +27,8 @@ def index(req, session, postgres_handle):
         reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
     return {
         'reduction_id': reduction.id if reduction and reduction.tiles_are_written_to_disk else None,
-        'reductions_metadata': reductions_metadata,
+        'reduction': reduction if reduction and reduction.tiles_are_written_to_disk else None,
+        'user_reduction_counts': TwitterReduction.get_user_reduction_counts(postgres_handle),
     }
 
 def sign_in(req, session, postgres_handle):

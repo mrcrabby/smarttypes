@@ -25,7 +25,9 @@
 
                 <span py:if="user.url">
                     <br/>
-                    <a href="${user.url}">${user.url}</a>
+                    <a href="${user.url}">
+                        ${user.url[:25]}${'...' if len(user.description) &gt; 25 else ''}
+                    </a>
                 </span>
             </li>
         </ul>

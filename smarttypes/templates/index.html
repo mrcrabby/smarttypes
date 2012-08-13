@@ -24,8 +24,7 @@
     <script type="text/javascript">
         $(function(){
             var reduction_id = ${reduction_id if reduction_id else 'undefined'};
-            var reductions_metadata = ${reductions_metadata if reductions_metadata else 'undefined'};
-            init_social_map(reduction_id, reductions_metadata);
+            init_social_map(reduction_id);
         });
     </script>
 
@@ -41,9 +40,44 @@
               <i class="icon-search"></i> Explore</button>
           </form>
         </div> -->
+
+        <div py:if="reduction_id">
+            <?python root_user = reduction.root_user()?>
+            <h2>
+                <img py:if="root_user.profile_image_url" 
+                    src="${root_user.profile_image_url}" alt="root_user.screen_name" />
+                 ${root_user.screen_name}'s social world
+            </h2>
+        </div>
         <div style="margin:20px 0;">
             <div id="map"></div>
         </div>
+
+        <h2 style="margin-top:80px;">Some other social maps:</h2>
+        <ul style="list-style:none;margin:10px 0;">
+            <li style="margin:50px auto;width:200px;" 
+                py:for="user, count in user_reduction_counts">
+
+                <a py:if="user.profile_image_url" href="/${user.screen_name}">
+                    <img py:if="user.profile_image_url" 
+                        src="${user.profile_image_url}" alt="user.screen_name" />
+                </a>
+
+                <span style="font-weight:bold;">
+                    <a href="/${user.screen_name}">${user.screen_name}</a>
+                </span>
+
+                <span style="font-style:italic;">
+                    <br/>
+                    ${user.location_name if user.location_name else 'No location given'}
+                </span>
+
+                <span py:if="user.description">
+                    <br/>
+                    ${user.description[:80]}${'...' if len(user.description) &gt; 80 else ''}
+                </span>
+            </li>
+        </ul>
     </div>
 
 </body>                                     
