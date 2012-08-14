@@ -15,7 +15,6 @@ if __name__ == "__main__":
 		'CocaCola',
 		'lojak',
 		'cgtheoret',
-		'bmabey',
 		'davemcclure',
 		'socialphysicist',
 		'ogrisel',

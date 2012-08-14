@@ -134,7 +134,7 @@ if __name__ == "__main__":
     coordinates = reproject_to_spherical_mercator(coordinates)
     
     #id_communities
-    vertex_clustering = id_communities(g, coordinates, eps=0.62, min_samples=15)
+    vertex_clustering = id_communities(g, coordinates, eps=0.55, min_samples=12)
 
     #network_stats
     network_stats = get_network_stats(network, g, vertex_clustering)
@@ -161,7 +161,7 @@ if __name__ == "__main__":
     communities = []
     for i in range(len(vertex_clustering)):
         member_idxs = vertex_clustering[i]
-        if community_score[member_idxs][0] > 0.1 and i != 0:
+        if i != 0:
             print "community: %s, community_score: %s, members: %s" % (i, 
                 community_score[member_idxs][0], len(member_idxs))
             community = TwitterCommunity.create_community(reduction.id, i, member_idxs, 

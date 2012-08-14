@@ -25,45 +25,56 @@
 </head> 
 
 <body py:match="body" py:attrs="select('@*')">
-  <div class="container">
+  <div class="container-fluid">
 
-    <!--header-->
-    <div class="row-fluid" style="margin:15px 0 15px 0;">
-      <!-- <div class="span1">&nbsp;</div> -->
-      <div class="span12">
-        <a href="/">
-            <img style="width:70px;" src="/static/images/smarttypes_tree.jpg" alt="${site_name}: ${site_mantra}"/>
-            <img src="/static/images/smarttypes_logo.png" alt="${site_name}: ${site_mantra}"/>
-        </a>
+    <!-- header -->
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+     
+          <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
 
-        <ul class="nav nav-pills pull-right">
-          <li class="${'active' if active_tab == 'about' else ''}">
-            <a style="font-size:17px;" href="/about">
-              About 
-            </a> 
-          </li>
-          <li class="${'active' if active_tab == 'blog' else ''}">
-            <a style="font-size:17px;" href="/blog">
-              Words 
-            </a> 
-          </li>
-          <li py:if="not logged_in_user" >
-            <a style="font-size:17px;" href="/sign_in">
-              Sign in w/ twitter 
-            </a> 
-          </li>
-          <li py:if="logged_in_user" class="${'active' if active_tab == 'my_account' else ''}">
-            <a style="font-size:17px;" href="/my_account">
-              Settings
-            </a> 
-          </li>
-        </ul>
-        
-      </div>
-    </div>
+          <a class="brand" href="/">SmartTypes</a>
+     
+          <div class="nav-collapse">
+
+
+
+            <ul class="nav pull-right">
+              <li class="${'active' if active_tab == 'about' else ''}">
+                <a style="font-size:17px;" href="/about">
+                  About 
+                </a> 
+              </li>
+              <li class="${'active' if active_tab == 'blog' else ''}">
+                <a style="font-size:17px;" href="/blog">
+                  Words 
+                </a> 
+              </li>
+              <li py:if="not logged_in_user" >
+                <a style="font-size:17px;" href="/sign_in">
+                  Sign in w/ twitter 
+                </a> 
+              </li>
+              <li py:if="logged_in_user" class="${'active' if active_tab == 'my_account' else ''}">
+                <a style="font-size:17px;" href="/my_account">
+                  Settings
+                </a> 
+              </li>
+            </ul><!-- nav -->
+
+          </div><!-- nav-collapse -->
+        </div><!-- container -->
+      </div><!-- navbar-inner -->
+    </div><!-- navbar-fixed-top -->
 
     <!--crap from the child-->
-    <div class="row-fluid" style="margin:40px 0;">
+    <div class="row-fluid" style="margin:40px 0;padding-top:40px;">
       <div class="span1">&nbsp;</div>
       <div class="span10">
         <div py:replace="select('*|text()')"></div>
@@ -71,35 +82,36 @@
       <div class="span1">&nbsp;</div>
     </div>
 
-    <!--footer-->
-    <div class="row-fluid" style="margin:180px 0 10px 0;">
 
-      <div class="span12 hero-unit" style="text-align:center;background-color:#F8F8F8;">
+    <footer>
+      <div class="row-fluid" style="margin:40px 0 20px 0;">
 
-        <div>
+        <div class="span6">
+          <ul class="unstyled" style="text-align:center;">
+            <li>
+              <a target="_blank" href="http://twitter.com/smarttypes">
+                <i class="icon-share"></i> @SmartTypes
+              </a>
+            </li>
+          </ul>
+        </div>
 
-          <div>
-            <a style="font-size:17px;color:#660066;" target="_blank" href="https://github.com/smarttypes/smarttypes">
-              <i class="icon-share"></i> Everything's on github
-            </a>
-          </div> 
-
-          <div style="width:160px; margin:0 auto 2px auto; 
-            border-bottom: solid 1px #666666;line-height:25px;">&nbsp;</div>
-           <div style="width:168px; margin:2px auto 0 auto; 
-            border-top: solid 1px #333333;line-height:25px;">&nbsp;</div> 
-
-          <div>
-            <a style="font-size:17px;color:#660066;" target="_blank" href="http://twitter.com/smarttypes">
-              <i class="icon-share"></i> @SmartTypes
-            </a>
-          </div>
-
+        <div class="span6">
+          <ul class="unstyled" style="text-align:center;">
+            <li>
+              <a target="_blank" href="https://github.com/smarttypes/smarttypes">
+                <i class="icon-share"></i> Everything's on github
+              </a>
+            </li>
+          </ul>
         </div>
 
       </div>
-    </div>
-    <!--footer-->
+    </footer>
+
+
+
+
 
   </div>
 </body>

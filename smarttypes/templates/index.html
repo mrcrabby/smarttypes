@@ -32,52 +32,60 @@
 
 <body>
 
-    <div style="text-align:center;">
-<!--         <div style="text-align:right;">
-          <form style="text-align:center;" class="form-search">
-            <input type="text" class="input-large" placeholder="@handle or some text ..." />
-            <button type="submit" class="btn">
-              <i class="icon-search"></i> Explore</button>
-          </form>
-        </div> -->
 
-        <div py:if="reduction_id">
-            <?python root_user = reduction.root_user()?>
-            <h2>
+    <div class="row-fluid" style="">
+        <div class="span9">
+            <div style="margin:20px 0;">
+                <div id="map"></div>
+            </div>
+        </div>
+
+        <div class="span3">
+            <div py:if="reduction_id">
+                <?python root_user = reduction.root_user()?>
                 <img py:if="root_user.profile_image_url" 
                     src="${root_user.profile_image_url}" alt="root_user.screen_name" />
-                 ${root_user.screen_name}'s social world
-            </h2>
+                ${root_user.screen_name}
+
+
+                <form style="text-align:center;" class="form-search">
+                  <input type="text" class="input-large" placeholder="@handle or some text ..." />
+                  <button type="submit" class="btn">
+                    <i class="icon-search"></i> Explore</button>
+                </form>
+            </div>
         </div>
-        <div style="margin:20px 0;">
-            <div id="map"></div>
+    </div>
+
+
+    <div class="row-fluid" style="text-align:center;">
+        <div class="span12">
+            <h2 style="margin-top:80px;">More social maps:</h2>
+            <ul style="list-style:none;margin:10px 0;">
+                <li py:if="reduction_id and user.id != root_user.id" style="margin:50px auto;width:400px;" 
+                    py:for="user, count in user_reduction_counts">
+
+                    <a py:if="user.profile_image_url" href="/${user.screen_name}">
+                        <img py:if="user.profile_image_url" 
+                            src="${user.profile_image_url}" alt="user.screen_name" />
+                    </a>
+
+                    <span style="font-weight:bold;">
+                        <a href="/${user.screen_name}">${user.screen_name}</a>
+                    </span>
+
+                    <span style="font-style:italic;">
+                        <br/>
+                        ${user.location_name if user.location_name else 'No location given'}
+                    </span>
+
+                    <span py:if="user.description">
+                        <br/>
+                        ${user.description[:80]}${'...' if len(user.description) &gt; 80 else ''}
+                    </span>
+                </li>
+            </ul>
         </div>
-
-        <h2 style="margin-top:80px;">More social maps:</h2>
-        <ul style="list-style:none;margin:10px 0;">
-            <li py:if="reduction_id and user.id != root_user.id" style="margin:50px auto;width:400px;" 
-                py:for="user, count in user_reduction_counts">
-
-                <a py:if="user.profile_image_url" href="/${user.screen_name}">
-                    <img py:if="user.profile_image_url" 
-                        src="${user.profile_image_url}" alt="user.screen_name" />
-                </a>
-
-                <span style="font-weight:bold;">
-                    <a href="/${user.screen_name}">${user.screen_name}</a>
-                </span>
-
-                <span style="font-style:italic;">
-                    <br/>
-                    ${user.location_name if user.location_name else 'No location given'}
-                </span>
-
-                <span py:if="user.description">
-                    <br/>
-                    ${user.description[:80]}${'...' if len(user.description) &gt; 80 else ''}
-                </span>
-            </li>
-        </ul>
     </div>
 
 </body>                                     
