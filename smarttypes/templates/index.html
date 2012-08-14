@@ -41,7 +41,7 @@
                     <?python root_user = reduction.root_user()?>
                     <img py:if="root_user.profile_image_url" 
                         src="${root_user.profile_image_url}" alt="root_user.screen_name" />
-                    ${root_user.screen_name}
+                    <a href="/${root_user.screen_name}">${root_user.screen_name}</a>
                 </h2>
 
                 <div id="map"></div>
@@ -58,7 +58,7 @@
 
                 <h2 style="">More social maps:</h2>
                 <ul style="list-style:none;margin:0 10px;">
-                    <li py:if="reduction_id and user.id != root_user.id" style="margin:50px auto;" 
+                    <li py:if="reduction_id and user.id != root_user.id" style="margin:20px auto 50px auto;" 
                         py:for="user, count in user_reduction_counts">
 
                         <a py:if="user.profile_image_url" href="/${user.screen_name}">
