@@ -24,7 +24,7 @@
 
 </head> 
 
-<body style="padding-top:40px;" py:match="body" py:attrs="select('@*')">
+<body style="padding:40px 0;" py:match="body" py:attrs="select('@*')">
   <div class="container-fluid">
 
     <!-- header -->
@@ -44,7 +44,7 @@
           </a>
      
           <div class="nav-collapse">
-            
+
             <ul class="nav pull-right">
               <li class="${'active' if active_tab == 'about' else ''}">
                 <a style="font-size:17px;" href="/about">
@@ -83,7 +83,7 @@
     </div>
 
     <!-- footer -->
-    <div class="navbar navbar-fixed-bottom">
+    <div class="navbar navbar-fixed-bottom" style="">
       <div class="navbar-inner">
         <div class="container">
 
