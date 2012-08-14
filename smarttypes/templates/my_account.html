@@ -15,13 +15,13 @@
 
         <div style="background-color: #ffffff;padding-top: 0;" class="hero-unit">
             <h2>Thanks for signing up!</h2>
-            <p>
+            <p style="margin-top:10px;">
                 Enter your email below and we'll send you a note to say hi, 
                 and learn more about you.
             </p>
         </div>
 
-        <p style="margin:40px 0 0 0;">
+        <p style="margin:20px 0 0 0;">
             <form class="form-inline" name="input" action="/save_email" method="post" style="margin:20px 0;">
                 <?python
                     email_value = credentials.email if credentials else ''
