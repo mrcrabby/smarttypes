@@ -24,7 +24,7 @@
 
 </head> 
 
-<body py:match="body" py:attrs="select('@*')">
+<body style="padding-top:40px;" py:match="body" py:attrs="select('@*')">
   <div class="container-fluid">
 
     <!-- header -->
@@ -39,12 +39,12 @@
             <span class="icon-bar"></span>
           </a>
 
-          <a class="brand" href="/">SmartTypes</a>
+          <a class="brand" href="/">
+            SmartTypes
+          </a>
      
           <div class="nav-collapse">
-
-
-
+            
             <ul class="nav pull-right">
               <li class="${'active' if active_tab == 'about' else ''}">
                 <a style="font-size:17px;" href="/about">
@@ -74,7 +74,7 @@
     </div><!-- navbar-fixed-top -->
 
     <!--crap from the child-->
-    <div class="row-fluid" style="margin:40px 0;padding-top:40px;">
+    <div class="row-fluid" style="margin:40px 0;">
       <div class="span1">&nbsp;</div>
       <div class="span10">
         <div py:replace="select('*|text()')"></div>
@@ -82,35 +82,30 @@
       <div class="span1">&nbsp;</div>
     </div>
 
+    <!-- footer -->
+    <div class="navbar navbar-fixed-bottom">
+      <div class="navbar-inner">
+        <div class="container">
 
-    <footer>
-      <div class="row-fluid" style="margin:40px 0 20px 0;">
-
-        <div class="span6">
-          <ul class="unstyled" style="text-align:center;">
+          <ul class="nav pull-left">
             <li>
               <a target="_blank" href="http://twitter.com/smarttypes">
                 <i class="icon-share"></i> @SmartTypes
               </a>
             </li>
-          </ul>
-        </div>
+          </ul><!-- nav -->
 
-        <div class="span6">
-          <ul class="unstyled" style="text-align:center;">
+          <ul class="nav pull-right">
             <li>
               <a target="_blank" href="https://github.com/smarttypes/smarttypes">
                 <i class="icon-share"></i> Everything's on github
               </a>
             </li>
-          </ul>
-        </div>
+          </ul><!-- nav -->
 
-      </div>
-    </footer>
-
-
-
+        </div><!-- container -->
+      </div><!-- navbar-inner -->
+    </div><!-- navbar-fixed-bottom -->
 
 
   </div>

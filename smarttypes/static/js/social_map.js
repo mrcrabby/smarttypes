@@ -101,7 +101,7 @@ function oneach_community_feature(feature, layer) {
 
 var geojsonMarkerOptions = {
     //fillColor: "#FFCC33",
-    fillColor: "#999999",
+    fillColor: "#FFCC33",
     color: "#cccccc",
     weight: 1,
     opacity: 0.2,
