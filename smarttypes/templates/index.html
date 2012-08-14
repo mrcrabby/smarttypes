@@ -34,13 +34,13 @@
 
 
     <div class="row-fluid" style="">
-        <div class="span9">
+        <div class="span8">
             <div>
                 <div id="map"></div>
             </div>
         </div>
 
-        <div class="span3">
+        <div class="span4">
             <div py:if="reduction_id">
                 <?python root_user = reduction.root_user()?>
                 <img py:if="root_user.profile_image_url" 
@@ -62,7 +62,7 @@
         <div class="span12">
             <h2 style="margin-top:80px;">More social maps:</h2>
             <ul style="list-style:none;margin:10px 0;">
-                <li py:if="reduction_id and user.id != root_user.id" style="margin:50px auto;width:400px;" 
+                <li py:if="reduction_id and user.id != root_user.id" style="margin:50px auto;width:300px;" 
                     py:for="user, count in user_reduction_counts">
 
                     <a py:if="user.profile_image_url" href="/${user.screen_name}">
