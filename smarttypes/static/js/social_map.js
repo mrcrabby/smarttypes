@@ -105,7 +105,7 @@ var geojsonMarkerOptions = {
     color: "#cccccc",
     weight: 1,
     opacity: 0.2,
-    fillOpacity: 0.4
+    fillOpacity: 0.5
 };
 
 function point_to_layer(feature, latlng) {
