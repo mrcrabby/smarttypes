@@ -76,6 +76,15 @@ function init_social_map(reduction_id, reductions_metadata) {
 /*-------------------------------------
 community_geojson_layer
 ---------------------------------------*/
+var myStyle = {
+    //fillColor: "#FFCC33",
+    fillColor: "#FFCC33",
+    color: "#cccccc",
+    weight: 1,
+    opacity: 0.2,
+    fillOpacity: 0.0
+};
+
 function load_community_geojson_layer(reduction_id, map) {
     $.ajax(
     	{type:"GET",
@@ -86,8 +95,9 @@ function load_community_geojson_layer(reduction_id, map) {
         error:function(){},
         success:function(community_features){
             L.geoJson(community_features, {
+                style: myStyle,
       			    onEachFeature: oneach_community_feature,
-      			    pointToLayer: point_to_layer,
+      			    //pointToLayer: point_to_layer,
       			}).addTo(map);
         }
     });
@@ -99,13 +109,18 @@ function oneach_community_feature(feature, layer) {
     }
 }
 
+
+/*-------------------------------------
+need this if loading single points
+---------------------------------------*/
+/*
 var geojsonMarkerOptions = {
     //fillColor: "#FFCC33",
     fillColor: "#FFCC33",
     color: "#cccccc",
     weight: 1,
     opacity: 0.2,
-    fillOpacity: 0.2
+    fillOpacity: 0.3
 };
 
 function point_to_layer(feature, latlng) {
@@ -114,6 +129,8 @@ function point_to_layer(feature, latlng) {
 	geojsonMarkerOptions.radius = community_size;
 	return L.circleMarker(latlng, geojsonMarkerOptions);
 }
+*/
+
 
 /*-------------------------------------
 people_geojson_layer

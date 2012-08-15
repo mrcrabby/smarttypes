@@ -29,6 +29,15 @@ class TwitterCommunity(PostgresBaseModel):
         params = {'id': self.id}
         return self.postgres_handle.execute_query(qry, params)[0]['centroid']
 
+    def polygon(self):
+        qry = """
+        select ST_Envelope(coordinates) as polygon
+        from twitter_community
+        where id = %(id)s;
+        """
+        params = {'id': self.id}
+        return self.postgres_handle.execute_query(qry, params)[0]['polygon']
+
     def get_members(self):
         return_list = []
         for i in range(len(self.member_ids)):
@@ -61,7 +70,6 @@ class TwitterCommunity(PostgresBaseModel):
         return template_with_dict.render('xhtml')
 
     def geojson_dict(self):
-        centroid = self.centroid()
         return {
             "type": "Feature",
             "properties": {
@@ -72,8 +80,8 @@ class TwitterCommunity(PostgresBaseModel):
                 "popup_content":self.popup_html()
             },
             "geometry": {
-                "type": "Point",
-                "coordinates": [centroid.x, centroid.y]
+                "type": "Polygon",
+                "coordinates": self.polygon().geojson_list()
             }
         }
 

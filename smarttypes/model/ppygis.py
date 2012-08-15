@@ -31,6 +31,7 @@ $Id: ppygis.py 4 2011-04-13 16:01:24Z plush $
 import binascii
 import cStringIO
 import struct
+import simplejson
 
 import psycopg2.extensions
 
@@ -248,6 +249,12 @@ class Polygon(Geometry):
   @property
   def has_m(self):
     return self.rings[0].has_m
+
+  def geojson_list(self):
+    return_list = []
+    for ring in self.rings:
+      return_list.append([[point.x, point.y] for point in ring.points])
+    return return_list
 
   @classmethod
   def _read_ewkb_body(cls, reader, srid=None):
