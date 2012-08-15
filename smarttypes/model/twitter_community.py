@@ -31,7 +31,7 @@ class TwitterCommunity(PostgresBaseModel):
 
     def polygon(self):
         qry = """
-        select ST_Simplify(ST_MinimumBoundingCircle(coordinates), 1) as polygon
+        select ST_Simplify(ST_MinimumBoundingCircle(coordinates), .5) as polygon
         from twitter_community
         where id = %(id)s;
         """
@@ -70,7 +70,6 @@ class TwitterCommunity(PostgresBaseModel):
         return template_with_dict.render('xhtml')
 
     def geojson_dict(self):
-        polygon = self.polygon()
         return {
             "type": "Feature",
             "properties": {
@@ -82,7 +81,7 @@ class TwitterCommunity(PostgresBaseModel):
             },
             "geometry": {
                 "type": "Polygon",
-                "coordinates": polygon.geojson_list() if polygon else [[[]]]
+                "coordinates": self.polygon().geojson_list()
             }
         }
 
