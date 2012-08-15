@@ -3,6 +3,7 @@ import smarttypes, sys, os
 import numpy as np
 from igraph import Graph
 from scipy import spatial
+from scipy.stats import scoreatpercentile
 from igraph.clustering import VertexClustering
 from sklearn.cluster import DBSCAN
 from datetime import datetime, timedelta
@@ -102,7 +103,8 @@ def get_network_stats(network, g, vertex_clustering):
 
 def calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score):
     hybrid_pagerank = (global_pagerank * 1) * (community_pagerank * 1) * (community_score * 2)
-    return hybrid_pagerank / np.max(hybrid_pagerank)
+    ceiling = scoreatpercentile(hybrid_pagerank, 90)[1]
+    return hybrid_pagerank / ceiling
 
 if __name__ == "__main__":
 

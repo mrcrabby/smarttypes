@@ -9,8 +9,8 @@ from smarttypes.utils.postgres_handle import PostgresHandle
 if __name__ == "__main__":
 
 	mk_these_maps = [
-		# 'SmartTypes',
-		# 'utopiah',
+		'SmartTypes',
+		'utopiah',
 		'stamen',
 		'CocaCola',
 		'lojak',
