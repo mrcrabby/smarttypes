@@ -86,9 +86,9 @@ function load_community_geojson_layer(reduction_id, map) {
         error:function(){},
         success:function(community_features){
             L.geoJson(community_features, {
-			    onEachFeature: oneach_community_feature,
-			    pointToLayer: point_to_layer,
-			}).addTo(map);
+      			    onEachFeature: oneach_community_feature,
+      			    pointToLayer: point_to_layer,
+      			}).addTo(map);
         }
     });
 }
@@ -105,7 +105,7 @@ var geojsonMarkerOptions = {
     color: "#cccccc",
     weight: 1,
     opacity: 0.2,
-    fillOpacity: 0.6
+    fillOpacity: 0.2
 };
 
 function point_to_layer(feature, latlng) {

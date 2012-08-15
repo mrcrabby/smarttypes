@@ -101,7 +101,7 @@ def get_network_stats(network, g, vertex_clustering):
     return global_pagerank, community_pagerank, community_score
 
 def calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score):
-    hybrid_pagerank = (global_pagerank * 1) * (community_pagerank * 1) * (community_score * 3)
+    hybrid_pagerank = (global_pagerank * 1) * (community_pagerank * 1) * (community_score * 2)
     return hybrid_pagerank / np.max(hybrid_pagerank)
 
 if __name__ == "__main__":
@@ -131,10 +131,12 @@ if __name__ == "__main__":
     g = get_igraph_graph(network)
     member_ids = np.array(g.vs['name'])
     coordinates = reduce_with_linloglayout(g, root_user)
-    coordinates = reproject_to_spherical_mercator(coordinates)
     
     #id_communities
     vertex_clustering = id_communities(g, coordinates, eps=0.55, min_samples=12)
+
+    #do this after community detection because it causes distortion
+    coordinates = reproject_to_spherical_mercator(coordinates)
 
     #network_stats
     network_stats = get_network_stats(network, g, vertex_clustering)
