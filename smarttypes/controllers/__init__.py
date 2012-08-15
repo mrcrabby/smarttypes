@@ -27,7 +27,7 @@ def index(req, session, postgres_handle):
         reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
 
     user_reduction_counts = TwitterReduction.get_user_reduction_counts(postgres_handle)
-    user_reduction_counts = random.shuffle(user_reduction_counts)
+    random.shuffle(user_reduction_counts)
     return {
         'reduction_id': reduction.id if reduction and reduction.tiles_are_written_to_disk else None,
         'reduction': reduction if reduction and reduction.tiles_are_written_to_disk else None,
