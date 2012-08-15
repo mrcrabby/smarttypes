@@ -70,6 +70,7 @@ class TwitterCommunity(PostgresBaseModel):
         return template_with_dict.render('xhtml')
 
     def geojson_dict(self):
+        polygon = self.polygon()
         return {
             "type": "Feature",
             "properties": {
@@ -81,7 +82,7 @@ class TwitterCommunity(PostgresBaseModel):
             },
             "geometry": {
                 "type": "Polygon",
-                "coordinates": self.polygon().geojson_list()
+                "coordinates": polygon.geojson_list() if polygon else [[[]]]
             }
         }
 
