@@ -46,7 +46,9 @@ class TwitterReduction(PostgresBaseModel):
     def get_geojson_community_features(self):
         results = []
         for community in self.communities():
-            results.append(community.geojson_dict())
+            geojson_dict = community.geojson_dict()
+            if geojson_dict:
+                results.append(geojson_dict)
         return results
 
     def get_geojson_user_features(self, bbox):
