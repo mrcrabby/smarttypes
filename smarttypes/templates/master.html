@@ -76,7 +76,11 @@
     <!--crap from the child-->
     <div class="row-fluid" style="margin:40px 0;">
       <div class="span1">&nbsp;</div>
-      <div class="span10">
+      <div py:if="active_tab != 'blog' or template_path == 'blog/index.html'" class="span10">
+        <div py:replace="select('*|text()')"></div>
+      </div>
+      <div py:if="active_tab == 'blog' and template_path != 'blog/index.html'" 
+        style="max-width:800px;" class="span10">
         <div py:replace="select('*|text()')"></div>
       </div>
       <div class="span1">&nbsp;</div>
