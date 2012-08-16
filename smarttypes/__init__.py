@@ -27,11 +27,11 @@ connection_string = "host=localhost dbname='smarttypes' user='%s' password='%s'"
 root_dir = os.path.dirname(os.path.abspath(__file__))
 
 site_name = 'SmartTypes'
-site_mantra = 'mapping our social world'
+site_mantra = 'mapping our social world!'
 default_title = '%s - %s' % (site_name, site_mantra)
 site_description = """
 SmartTypes is an open lab for online social network analysis (initially twitter).
-Our goal is to provide accurate maps of our social world."""
+Our goal is to make accurate maps of our social world."""
 site_description = site_description.strip()
 
 #keep these down here

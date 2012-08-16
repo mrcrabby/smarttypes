@@ -57,12 +57,15 @@ Then we zoom to the community or person if specified
 /*-------------------------------------
 init
 ---------------------------------------*/
+
+
+
 function init_social_map(reduction_id, reductions_metadata) {
 
   if (typeof reduction_id == "undefined") return;
 
   var map = L.map('map', {
-      //scrollWheelZoom: false
+      //scrollWheelZoom: false,
   }).setView([0, 0], 2);
 
   L.tileLayer('/static/tiles/'+reduction_id+'/{z}/{x}/{y}.png', {
@@ -82,7 +85,7 @@ var myStyle = {
     color: "#cccccc",
     weight: 1,
     opacity: 0.2,
-    fillOpacity: 0.2
+    fillOpacity: 0.0
 };
 
 function load_community_geojson_layer(reduction_id, map) {
