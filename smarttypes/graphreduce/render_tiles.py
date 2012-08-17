@@ -199,7 +199,7 @@ if __name__ == "__main__":
         os.mkdir(tile_dir)
     style_file = 'mapnik.xml'
     min_zoom = 0
-    max_zoom = 6
+    max_zoom = 5
     bbox = (-180, -85.0511, 180, 85.0511)
     render_tiles(bbox, style_file, tile_dir, min_zoom, max_zoom)
     reduction = TwitterReduction.get_by_id(reduction_id, postgres_handle)

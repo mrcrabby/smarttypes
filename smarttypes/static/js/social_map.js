@@ -69,7 +69,7 @@ function init_social_map(reduction_id, reductions_metadata) {
   }).setView([0, 0], 2);
 
   L.tileLayer('/static/tiles/'+reduction_id+'/{z}/{x}/{y}.png', {
-      maxZoom: 6
+      maxZoom: 5
   }).addTo(map);
 
   load_community_geojson_layer(reduction_id, map);
