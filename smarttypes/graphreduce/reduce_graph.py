@@ -91,7 +91,8 @@ def get_network_stats(network, g, vertex_clustering):
     for i in range(len(vertex_clustering)):
         member_idxs = vertex_clustering[i]
         community_graph = vertex_clustering.subgraph(i)
-        community_pagerank[member_idxs] = community_graph.pagerank(damping=0.65)
+        tmp_community_pagerank = community_graph.pagerank(damping=0.65)
+        community_pagerank[member_idxs] = tmp_community_pagerank / np.max(tmp_community_pagerank)
         community_out = float(sum([len(network[x]) for x in community_graph.vs['name']]))
         community_graph_score = float(sum(community_graph.vs.indegree())) / community_out
         community_score[member_idxs] = community_graph_score
@@ -102,9 +103,7 @@ def get_network_stats(network, g, vertex_clustering):
     return global_pagerank, community_pagerank, community_score
 
 def calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score):
-    hybrid_pagerank = (global_pagerank * 1) * (community_pagerank * 1) * (community_score * 3)
-    ceiling = scoreatpercentile(hybrid_pagerank, 100)
-    return hybrid_pagerank / ceiling
+    return community_pagerank
 
 if __name__ == "__main__":
 
