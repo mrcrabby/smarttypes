@@ -32,60 +32,84 @@
 
 <body>
 
+    <!-- don't do anything if we don't have a reduction_id -->
+    <div py:if="reduction_id" class="row-fluid" style="">
+        <?python 
+            communities = reduction.communities()
+            root_user = reduction.root_user()
+        ?>
 
-    <div class="row-fluid" style="">
         <div class="span8">
-            <div py:if="reduction_id">
-
-                <h2>
-                    <?python root_user = reduction.root_user()?>
-                    <img py:if="root_user.profile_image_url" 
-                        src="${root_user.profile_image_url}" alt="root_user.screen_name" />
-                    <a href="/${root_user.screen_name}">${root_user.screen_name}</a>
-                </h2>
+            <div>
+                <div id="map_header">
+                    <div style="float:left;">
+                        <h2>
+                            <img py:if="root_user.profile_image_url" 
+                                src="${root_user.profile_image_url}" alt="root_user.screen_name" />
+                            <a target="_blank" href="https://twitter.com/${root_user.screen_name}">
+                                ${root_user.screen_name}</a>
+                        </h2>
+                    </div>
+                    <div style="float:right;">
+                        <h3 style="padding:10px 20px 0 0;">${len(communities)} communities</h3>
+                    </div>
+                    <div style="clear:both;">&nbsp;</div>
+                </div><!-- map_header -->
 
                 <div id="map"></div>
             </div>
         </div>
 
         <div class="span4">
-            <div py:if="reduction_id">
-<!--                 <form style="text-align:center;" class="form-search">
-                  <input type="text" class="input-large" placeholder="@handle or some text ..." />
-                  <button type="submit" class="btn">
-                    <i class="icon-search"></i> Explore</button>
-                </form> -->
 
-                <h2 style="">More social maps:</h2>
-                <ul style="list-style:none;margin:0 10px;">
-                    <li py:if="reduction_id and user.id != root_user.id" style="margin:20px auto 50px auto;" 
-                        py:for="user, count in user_reduction_counts">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#this_map" data-toggle="tab">Search this map</a>
+                </li>
+                <li>
+                    <a href="#all_maps" data-toggle="tab">Search all maps</a>
+                </li>
+            </ul>
 
-                        <a py:if="user.profile_image_url" href="/${user.screen_name}">
-                            <img py:if="user.profile_image_url" 
-                                src="${user.profile_image_url}" alt="user.screen_name" />
-                        </a>
+            <div class="tab-content">
 
-                        <span style="font-weight:bold;">
-                            <a href="/${user.screen_name}">${user.screen_name}</a>
-                        </span>
+                <div style="height:420px;overflow:scroll;" class="tab-pane active" id="this_map">
+                    <ul style="list-style:none;margin:0 10px;">
+                        <li py:for="community in communities" style="margin:20px auto 50px auto;">
+                            <a href="#">${len(community.member_ids)} member community</a>
+                        </li>
+                    </ul>
+                </div><!-- this_map -->
 
-                        <span style="font-style:italic;">
-                            <br/>
-                            ${user.location_name if user.location_name else 'No location given'}
-                        </span>
+                <div style="height:420px;overflow:scroll;" class="tab-pane" id="all_maps">
+                    <ul style="list-style:none;margin:0 10px;">
+                        <li py:if="user.id != root_user.id" style="margin:20px auto 50px auto;" 
+                            py:for="user, count in user_reduction_counts">
 
-                        <span py:if="user.description">
-                            <br/>
-                            ${user.description[:80]}${'...' if len(user.description) &gt; 80 else ''}
-                        </span>
-                    </li>
-                </ul>
+                            <a py:if="user.profile_image_url" href="/${user.screen_name}">
+                                <img py:if="user.profile_image_url" 
+                                    src="${user.profile_image_url}" alt="user.screen_name" />
+                            </a>
 
+                            <span style="font-weight:bold;">
+                                <a href="/${user.screen_name}">${user.screen_name}</a>
+                            </span>
 
-            </div>
-        </div>
-    </div>
+                            <span style="font-style:italic;">
+                                <br/>
+                                ${user.location_name if user.location_name else 'No location given'}
+                            </span>
+
+                            <span py:if="user.description">
+                                <br/>
+                                ${user.description[:80]}${'...' if len(user.description) &gt; 80 else ''}
+                            </span>
+                        </li>
+                    </ul>
+                </div><!-- all_maps -->
+            </div><!-- tab-content -->
+        </div><!-- span4 -->
+    </div><!-- row-fluid -->
 
 
 
