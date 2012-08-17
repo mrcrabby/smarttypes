@@ -84,7 +84,7 @@ var myStyle = {
     fillColor: "#FFCC33",
     color: "#cccccc",
     weight: 1,
-    opacity: 0.2,
+    opacity: 0.0,
     fillOpacity: 0.0
 };
 
