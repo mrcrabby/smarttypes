@@ -42,7 +42,7 @@
         <div class="span8">
             <div>
                 <div id="map_header">
-                    <div style="float:left;width:60%;">
+                    <div style="float:left;width:80%;">
                         <h2>
                             <img width="50px" py:if="root_user.profile_image_url" 
                                 src="${root_user.profile_image_url}" alt="root_user.screen_name" />
@@ -58,7 +58,7 @@
                         </span>
                     </div>
                     <div style="float:right;">
-                        <h3 style="padding:10px 20px 0 0;">${len(communities)} communities</h3>
+                        <!-- <h3 style="padding:10px 20px 0 0;">${len(communities)} communities</h3> -->
                     </div>
                     <div style="clear:both;">&nbsp;</div>
                 </div><!-- map_header -->
@@ -71,7 +71,7 @@
 
             <ul class="nav nav-tabs">
                 <li class="active">
-                    <a href="#this_map" data-toggle="tab">This map</a>
+                    <a href="#this_map" data-toggle="tab">${len(communities)} communities</a>
                 </li>
                 <li>
                     <a href="#all_maps" data-toggle="tab">Other maps</a>
