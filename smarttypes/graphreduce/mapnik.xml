@@ -17,42 +17,42 @@
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.64)</Filter>
-    <MarkersSymbolizer width="118.4" fill="#915a36" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="201.60000000000002" fill="#915a36" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.64)</Filter>
-    <MarkersSymbolizer width="59.2" fill="#915a36" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="100.80000000000001" fill="#915a36" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.64)</Filter>
-    <MarkersSymbolizer width="29.6" fill="#915a36" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="50.400000000000006" fill="#915a36" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000000</MaxScaleDenominator>
     <MinScaleDenominator>50000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.64)</Filter>
-    <MarkersSymbolizer width="14.8" fill="#915a36" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="25.200000000000003" fill="#915a36" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>200000000</MaxScaleDenominator>
     <MinScaleDenominator>100000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.64)</Filter>
-    <MarkersSymbolizer width="7.4" fill="#915a36" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="12.600000000000001" fill="#915a36" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>500000000</MaxScaleDenominator>
     <MinScaleDenominator>200000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.64)</Filter>
-    <MarkersSymbolizer width="3.7" fill="#915a36" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="6.300000000000001" fill="#915a36" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MinScaleDenominator>500000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.64)</Filter>
-    <MarkersSymbolizer width="1.85" fill="#915a36" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="3.1500000000000004" fill="#915a36" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
@@ -63,42 +63,42 @@
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.32)</Filter>
-    <MarkersSymbolizer width="67.2" fill="#938176" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="124.80000000000001" fill="#938176" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.32)</Filter>
-    <MarkersSymbolizer width="33.6" fill="#938176" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="62.400000000000006" fill="#938176" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.32)</Filter>
-    <MarkersSymbolizer width="16.8" fill="#938176" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="31.200000000000003" fill="#938176" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000000</MaxScaleDenominator>
     <MinScaleDenominator>50000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.32)</Filter>
-    <MarkersSymbolizer width="8.4" fill="#938176" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="15.600000000000001" fill="#938176" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>200000000</MaxScaleDenominator>
     <MinScaleDenominator>100000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.32)</Filter>
-    <MarkersSymbolizer width="4.2" fill="#938176" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="7.800000000000001" fill="#938176" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>500000000</MaxScaleDenominator>
     <MinScaleDenominator>200000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.32)</Filter>
-    <MarkersSymbolizer width="2.1" fill="#938176" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="3.9000000000000004" fill="#938176" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MinScaleDenominator>500000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.32)</Filter>
-    <MarkersSymbolizer width="1.05" fill="#938176" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="1.9500000000000002" fill="#938176" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
@@ -109,42 +109,42 @@
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.16)</Filter>
-    <MarkersSymbolizer width="41.6" fill="#bb9475" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="86.4" fill="#bb9475" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.16)</Filter>
-    <MarkersSymbolizer width="20.8" fill="#bb9475" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="43.2" fill="#bb9475" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.16)</Filter>
-    <MarkersSymbolizer width="10.4" fill="#bb9475" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="21.6" fill="#bb9475" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000000</MaxScaleDenominator>
     <MinScaleDenominator>50000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.16)</Filter>
-    <MarkersSymbolizer width="5.2" fill="#bb9475" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="10.8" fill="#bb9475" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>200000000</MaxScaleDenominator>
     <MinScaleDenominator>100000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.16)</Filter>
-    <MarkersSymbolizer width="2.6" fill="#bb9475" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="5.4" fill="#bb9475" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>500000000</MaxScaleDenominator>
     <MinScaleDenominator>200000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.16)</Filter>
-    <MarkersSymbolizer width="1.3" fill="#bb9475" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="2.7" fill="#bb9475" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MinScaleDenominator>500000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.16)</Filter>
-    <MarkersSymbolizer width="0.65" fill="#bb9475" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="1.35" fill="#bb9475" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
@@ -155,42 +155,42 @@
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.08)</Filter>
-    <MarkersSymbolizer width="28.8" fill="#939393" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="67.19999999999999" fill="#939393" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.08)</Filter>
-    <MarkersSymbolizer width="14.4" fill="#939393" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="33.599999999999994" fill="#939393" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.08)</Filter>
-    <MarkersSymbolizer width="7.2" fill="#939393" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="16.799999999999997" fill="#939393" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000000</MaxScaleDenominator>
     <MinScaleDenominator>50000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.08)</Filter>
-    <MarkersSymbolizer width="3.6" fill="#939393" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="8.399999999999999" fill="#939393" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>200000000</MaxScaleDenominator>
     <MinScaleDenominator>100000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.08)</Filter>
-    <MarkersSymbolizer width="1.8" fill="#939393" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="4.199999999999999" fill="#939393" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>500000000</MaxScaleDenominator>
     <MinScaleDenominator>200000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.08)</Filter>
-    <MarkersSymbolizer width="0.9" fill="#939393" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="2.0999999999999996" fill="#939393" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MinScaleDenominator>500000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.08)</Filter>
-    <MarkersSymbolizer width="0.45" fill="#939393" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="1.0499999999999998" fill="#939393" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
@@ -201,42 +201,42 @@
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.04)</Filter>
-    <MarkersSymbolizer width="22.4" fill="#adadad" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="57.599999999999994" fill="#adadad" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.04)</Filter>
-    <MarkersSymbolizer width="11.2" fill="#adadad" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="28.799999999999997" fill="#adadad" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.04)</Filter>
-    <MarkersSymbolizer width="5.6" fill="#adadad" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="14.399999999999999" fill="#adadad" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000000</MaxScaleDenominator>
     <MinScaleDenominator>50000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.04)</Filter>
-    <MarkersSymbolizer width="2.8" fill="#adadad" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="7.199999999999999" fill="#adadad" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>200000000</MaxScaleDenominator>
     <MinScaleDenominator>100000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.04)</Filter>
-    <MarkersSymbolizer width="1.4" fill="#adadad" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="3.5999999999999996" fill="#adadad" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>500000000</MaxScaleDenominator>
     <MinScaleDenominator>200000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.04)</Filter>
-    <MarkersSymbolizer width="0.7" fill="#adadad" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="1.7999999999999998" fill="#adadad" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MinScaleDenominator>500000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.04)</Filter>
-    <MarkersSymbolizer width="0.35" fill="#adadad" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="0.8999999999999999" fill="#adadad" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
@@ -247,42 +247,42 @@
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.02)</Filter>
-    <MarkersSymbolizer width="19.2" fill="#c6c6c6" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="52.800000000000004" fill="#c6c6c6" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.02)</Filter>
-    <MarkersSymbolizer width="9.6" fill="#c6c6c6" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="26.400000000000002" fill="#c6c6c6" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.02)</Filter>
-    <MarkersSymbolizer width="4.8" fill="#c6c6c6" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="13.200000000000001" fill="#c6c6c6" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000000</MaxScaleDenominator>
     <MinScaleDenominator>50000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.02)</Filter>
-    <MarkersSymbolizer width="2.4" fill="#c6c6c6" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="6.6000000000000005" fill="#c6c6c6" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>200000000</MaxScaleDenominator>
     <MinScaleDenominator>100000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.02)</Filter>
-    <MarkersSymbolizer width="1.2" fill="#c6c6c6" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="3.3000000000000003" fill="#c6c6c6" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>500000000</MaxScaleDenominator>
     <MinScaleDenominator>200000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.02)</Filter>
-    <MarkersSymbolizer width="0.6" fill="#c6c6c6" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="1.6500000000000001" fill="#c6c6c6" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MinScaleDenominator>500000000</MinScaleDenominator>
     <Filter>([hybrid_pagerank] &gt;= 0.02)</Filter>
-    <MarkersSymbolizer width="0.3" fill="#c6c6c6" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
+    <MarkersSymbolizer width="0.8250000000000001" fill="#c6c6c6" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
@@ -292,36 +292,36 @@
   <Rule>
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
-    <MarkersSymbolizer width="16" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" fill="#e0e0e0" />
+    <MarkersSymbolizer width="48" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" fill="#e0e0e0" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
-    <MarkersSymbolizer width="8" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" fill="#e0e0e0" />
+    <MarkersSymbolizer width="24" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" fill="#e0e0e0" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
-    <MarkersSymbolizer width="4" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" fill="#e0e0e0" />
+    <MarkersSymbolizer width="12" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" fill="#e0e0e0" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000000</MaxScaleDenominator>
     <MinScaleDenominator>50000000</MinScaleDenominator>
-    <MarkersSymbolizer width="2" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" fill="#e0e0e0" />
+    <MarkersSymbolizer width="6" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" fill="#e0e0e0" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>200000000</MaxScaleDenominator>
     <MinScaleDenominator>100000000</MinScaleDenominator>
-    <MarkersSymbolizer width="1" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" fill="#e0e0e0" />
+    <MarkersSymbolizer width="3" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" fill="#e0e0e0" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>500000000</MaxScaleDenominator>
     <MinScaleDenominator>200000000</MinScaleDenominator>
-    <MarkersSymbolizer width="0.5" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" fill="#e0e0e0" />
+    <MarkersSymbolizer width="1.5" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" fill="#e0e0e0" />
   </Rule>
   <Rule>
     <MinScaleDenominator>500000000</MinScaleDenominator>
-    <MarkersSymbolizer width="0.25" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" fill="#e0e0e0" />
+    <MarkersSymbolizer width="0.75" stroke="#cccccc" stroke-width="0.2" stroke-opacity="0.1" allow-overlap="true" ignore-placement="true" fill="#e0e0e0" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
@@ -341,7 +341,7 @@ where tru.reduction_id in (select reduction_id from twitter_reduction_user order
        <Parameter name="key_field"><![CDATA[id]]></Parameter>
        <Parameter name="geometry_field"><![CDATA[coordinates]]></Parameter>
        <Parameter name="user"><![CDATA[timmyt]]></Parameter>
-       <Parameter name="password"><![CDATA[]]></Parameter>
+       <Parameter name="password"><![CDATA[urllib2]]></Parameter>
        <Parameter name="dbname"><![CDATA[smarttypes]]></Parameter>
        <Parameter name="id"><![CDATA[users]]></Parameter>
        <Parameter name="project"><![CDATA[test]]></Parameter>

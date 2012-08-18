@@ -15,7 +15,7 @@
     <script src="http://cdn.leafletjs.com/leaflet-0.4/leaflet.js"></script>
 
     <style type="text/css" media="screen">
-        #map { height: 450px; }
+        #map { height: 430px; }
         .leaflet-container { background:None; }
         .leaflet-popup-content {font:inherit;}
         .leaflet-container a {color: #606;}
@@ -51,7 +51,7 @@
                         </h2>
                     </div>
                     <div style="float:right;">
-                        <h3 style="padding:10px 20px 0 0;">${len(communities)} communities</h3>
+                        <!-- <h3 style="padding:10px 20px 0 0;">${len(communities)} communities</h3> -->
                     </div>
                     <div style="clear:both;">&nbsp;</div>
                 </div><!-- map_header -->
@@ -64,24 +64,50 @@
 
             <ul class="nav nav-tabs">
                 <li class="active">
-                    <a href="#this_map" data-toggle="tab">Search this map</a>
+                    <a href="#this_map" data-toggle="tab">This map</a>
                 </li>
                 <li>
-                    <a href="#all_maps" data-toggle="tab">Search all maps</a>
+                    <a href="#all_maps" data-toggle="tab">Other maps</a>
                 </li>
             </ul>
 
             <div class="tab-content">
 
-                <div style="height:420px;overflow:scroll;" class="tab-pane active" id="this_map">
+                <div style="height:430px;overflow:scroll;" class="tab-pane active" id="this_map">
                     <ul style="list-style:none;margin:0 10px;">
                         <li py:for="community in communities" style="margin:20px auto 50px auto;">
-                            <a href="#">${len(community.member_ids)} member community</a>
+                            <?python top_user = community.top_users(1)[0][1] ?>
+
+                            <h3>
+                                <a href="#">${len(community.member_ids)} member community</a>
+                            </h3>
+                            
+                            <b>Community leader:</b>
+                            <br/>
+                            <img py:if="top_user.profile_image_url" 
+                                    src="${top_user.profile_image_url}" alt="top_user.screen_name" />
+
+                            <span style="font-weight:bold;">
+                                <a target="_blank" href="https://twitter.com/${top_user.screen_name}">
+                                    ${top_user.screen_name}</a>
+                            </span>
+
+                            <span style="font-style:italic;">
+                                <br/>
+                                ${top_user.location_name if top_user.location_name else 'No location given'}
+                            </span>
+
+                            <span py:if="top_user.description">
+                                <br/>
+                                ${top_user.description[:80]}${'...' if len(top_user.description) &gt; 80 else ''}
+                            </span>
+
+
                         </li>
                     </ul>
                 </div><!-- this_map -->
 
-                <div style="height:420px;overflow:scroll;" class="tab-pane" id="all_maps">
+                <div style="height:430px;overflow:scroll;" class="tab-pane" id="all_maps">
                     <ul style="list-style:none;margin:0 10px;">
                         <li py:if="user.id != root_user.id" style="margin:20px auto 50px auto;" 
                             py:for="user, count in user_reduction_counts">
