@@ -69,7 +69,8 @@ function init_social_map(reduction_id, reductions_metadata) {
   }).setView([0, 0], 2);
 
   L.tileLayer('/static/tiles/'+reduction_id+'/{z}/{x}/{y}.png', {
-      maxZoom: 5
+      maxZoom: 5,
+      noWrap: true
   }).addTo(map);
 
   load_community_geojson_layer(reduction_id, map);
@@ -107,9 +108,13 @@ function load_community_geojson_layer(reduction_id, map) {
 }
 
 function oneach_community_feature(feature, layer) {
-    if (feature.properties && feature.properties.popup_content) {
-        layer.bindPopup(feature.properties.popup_content);
-    }
+  if (feature.properties && feature.properties.popup_content) {
+    var popup = layer.bindPopup(feature.properties.popup_content);
+    $('#community_'+feature.properties.community_id).click(function(){
+      popup.openPopup();
+      return false;
+    });
+  }
 }
 
 

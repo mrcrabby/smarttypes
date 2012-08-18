@@ -79,30 +79,30 @@
                             <?python top_user = community.top_users(1)[0][1] ?>
 
                             <h3>
-                                <a href="#">${len(community.member_ids)} member community</a>
+                                <a id="community_${community.id}" 
+                                    href="#">${len(community.member_ids)} member community</a>
                             </h3>
                             
-                            <b>Community leader:</b>
-                            <br/>
-                            <img py:if="top_user.profile_image_url" 
-                                    src="${top_user.profile_image_url}" alt="top_user.screen_name" />
+                            <b>Leader:</b>
+                            
+                            <div style="padding:5px 0 0 10px;">
+                                <img py:if="top_user.profile_image_url" 
+                                        src="${top_user.profile_image_url}" alt="top_user.screen_name" />
 
-                            <span style="font-weight:bold;">
-                                <a target="_blank" href="https://twitter.com/${top_user.screen_name}">
-                                    ${top_user.screen_name}</a>
-                            </span>
+                                <span style="font-weight:bold;">
+                                    ${top_user.screen_name}
+                                </span>
 
-                            <span style="font-style:italic;">
-                                <br/>
-                                ${top_user.location_name if top_user.location_name else 'No location given'}
-                            </span>
+                                <span style="font-style:italic;">
+                                    <br/>
+                                    ${top_user.location_name if top_user.location_name else 'No location given'}
+                                </span>
 
-                            <span py:if="top_user.description">
-                                <br/>
-                                ${top_user.description[:80]}${'...' if len(top_user.description) &gt; 80 else ''}
-                            </span>
-
-
+                                <span py:if="top_user.description">
+                                    <br/>
+                                    ${top_user.description[:80]}${'...' if len(top_user.description) &gt; 80 else ''}
+                                </span>
+                            </div>
                         </li>
                     </ul>
                 </div><!-- this_map -->
