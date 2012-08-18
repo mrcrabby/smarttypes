@@ -12,7 +12,6 @@ if __name__ == "__main__":
 		'SmartTypes',
 		'utopiah',
 		'stamen',
-		'CocaCola',
 		'lojak',
 		'cgtheoret',
 		'davemcclure',
@@ -24,6 +23,10 @@ if __name__ == "__main__":
 		'twarko',
 		'swixHQ',
 		'sfi_news',
+		'ReWorkJobs',
+		'rjs',
+		'wilsonminer',
+		'maxdemarzi',
 	]
 	for screen_name in mk_these_maps:
 		print 'making a map for %s' % screen_name
