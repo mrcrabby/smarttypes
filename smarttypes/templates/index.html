@@ -15,7 +15,7 @@
     <script src="http://cdn.leafletjs.com/leaflet-0.4/leaflet.js"></script>
 
     <style type="text/css" media="screen">
-        #map { height: 430px; }
+        #map { height: 400px; }
         .leaflet-container { background:None; }
         .leaflet-popup-content {font:inherit;}
         .leaflet-container a {color: #606;}
@@ -49,6 +49,13 @@
                             <a target="_blank" href="https://twitter.com/${root_user.screen_name}">
                                 ${root_user.screen_name}</a>
                         </h2>
+                        <span style="font-style:italic;">
+                            ${root_user.location_name if root_user.location_name else 'No location given'}
+                        </span>
+                        <span py:if="root_user.description">
+                            -- 
+                            ${root_user.description[:80]}${'...' if len(root_user.description) &gt; 80 else ''}
+                        </span>
                     </div>
                     <div style="float:right;">
                         <h3 style="padding:10px 20px 0 0;">${len(communities)} communities</h3>
@@ -73,7 +80,7 @@
 
             <div class="tab-content">
 
-                <div style="height:430px;overflow:scroll;" class="tab-pane active" id="this_map">
+                <div style="height:400px;overflow:scroll;" class="tab-pane active" id="this_map">
                     <ul style="list-style:none;margin:0 10px;">
                         <li py:for="community in communities" style="margin:20px auto 50px auto;">
                             <?python top_user = community.top_users(1)[0][1] ?>
@@ -107,7 +114,7 @@
                     </ul>
                 </div><!-- this_map -->
 
-                <div style="height:430px;overflow:scroll;" class="tab-pane" id="all_maps">
+                <div style="height:400px;overflow:scroll;" class="tab-pane" id="all_maps">
                     <ul style="list-style:none;margin:0 10px;">
                         <li py:if="user.id != root_user.id" style="margin:20px auto 50px auto;" 
                             py:for="user, count in user_reduction_counts">
