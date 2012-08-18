@@ -10,7 +10,7 @@
             <li style="margin:30px 10px;" py:for="score, user in community.top_users(10)">
 
                 <img py:if="user.profile_image_url" 
-                    src="${user.profile_image_url}" alt="user.screen_name" />
+                    width="40px" src="${user.profile_image_url}" alt="user.screen_name" />
 
                 <span style="font-weight:bold;">
                     <a target="_blank" href="https://twitter.com/${user.screen_name}">${user.screen_name}</a>
