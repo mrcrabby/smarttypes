@@ -44,7 +44,7 @@
                 <div id="map_header">
                     <div style="float:left;width:60%;">
                         <h2>
-                            <img py:if="root_user.profile_image_url" 
+                            <img width="50px" py:if="root_user.profile_image_url" 
                                 src="${root_user.profile_image_url}" alt="root_user.screen_name" />
                             <a target="_blank" href="https://twitter.com/${root_user.screen_name}">
                                 ${root_user.screen_name}</a>
@@ -93,7 +93,7 @@
                             <b>Leader:</b>
                             
                             <div style="padding:5px 0 0 10px;">
-                                <img py:if="top_user.profile_image_url" 
+                                <img width="50px" py:if="top_user.profile_image_url" 
                                         src="${top_user.profile_image_url}" alt="top_user.screen_name" />
 
                                 <span style="font-weight:bold;">
@@ -120,7 +120,7 @@
                             py:for="user, count in user_reduction_counts">
 
                             <a py:if="user.profile_image_url" href="/${user.screen_name}">
-                                <img py:if="user.profile_image_url" 
+                                <img width="50px" py:if="user.profile_image_url" 
                                     src="${user.profile_image_url}" alt="user.screen_name" />
                             </a>
 
