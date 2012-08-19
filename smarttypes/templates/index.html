@@ -49,8 +49,7 @@
                         <h2>
                             <img width="50px" py:if="root_user.profile_image_url" 
                                 src="${root_user.profile_image_url}" alt="root_user.screen_name" />
-                            <a target="_blank" href="https://twitter.com/${root_user.screen_name}">
-                                ${root_user.screen_name}</a>
+                            <a target="_blank" href="https://twitter.com/${root_user.screen_name}">${root_user.screen_name}</a>
                         </h2>
                         <span style="font-style:italic;">
                             ${root_user.location_name if root_user.location_name else 'No location given'}
