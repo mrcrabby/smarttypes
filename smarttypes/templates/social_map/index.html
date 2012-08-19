@@ -40,8 +40,8 @@
                     ${user.location_name if user.location_name else 'No location given'}
                 </span>
                 <br/>
-                ${user.description[:80]}
-                ${'...' if len(user.description) &gt; 80 else ''}
+                ${user.description[:100]}
+                ${'...' if len(user.description) &gt; 100 else ''}
                 <span py:if="user.url">
                     <br/>
                     <a href="${user.url}">${user.url}</a>

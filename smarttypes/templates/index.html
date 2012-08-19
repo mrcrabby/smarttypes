@@ -56,7 +56,7 @@
                         </span>
                         <span py:if="root_user.description">
                             -- 
-                            ${root_user.description[:80]}${'...' if len(root_user.description) &gt; 80 else ''}
+                            ${root_user.description[:100]}${'...' if len(root_user.description) &gt; 100 else ''}
                         </span>
                     </div>
                     <div style="float:right;">
@@ -111,7 +111,7 @@
 
                                 <span py:if="top_user.description">
                                     <br/>
-                                    ${top_user.description[:80]}${'...' if len(top_user.description) &gt; 80 else ''}
+                                    ${top_user.description[:100]}${'...' if len(top_user.description) &gt; 100 else ''}
                                 </span>
                             </div>
                         </li>
@@ -139,7 +139,7 @@
 
                             <span py:if="user.description">
                                 <br/>
-                                ${user.description[:80]}${'...' if len(user.description) &gt; 80 else ''}
+                                ${user.description[:100]}${'...' if len(user.description) &gt; 100 else ''}
                             </span>
                         </li>
                     </ul>
