@@ -15,6 +15,9 @@
     <script src="http://cdn.leafletjs.com/leaflet-0.4/leaflet.js"></script>
 
     <style type="text/css" media="screen">
+        @media (min-width:500px) {
+            .tab-pane {height:400px;overflow:scroll;}
+        }
         #map { height: 400px; }
         .leaflet-container { background:None; }
         .leaflet-popup-content {font:inherit;}
@@ -33,13 +36,13 @@
 <body>
 
     <!-- don't do anything if we don't have a reduction_id -->
-    <div py:if="reduction_id" class="row-fluid" style="">
+    <div id="social_map" py:if="reduction_id" class="row-fluid" style="">
         <?python 
             communities = reduction.communities()
             root_user = reduction.root_user()
         ?>
 
-        <div class="span8">
+        <div class="span8 hidden-phone">
             <div>
                 <div id="map_header">
                     <div style="float:left;width:80%;">
@@ -80,7 +83,7 @@
 
             <div class="tab-content">
 
-                <div style="height:400px;overflow:scroll;" class="tab-pane active" id="this_map">
+                <div style="" class="tab-pane active" id="this_map">
                     <ul style="list-style:none;margin:0 10px;">
                         <li py:for="community in communities" style="margin:20px auto 50px auto;">
                             <?python top_user = community.top_users(1)[0][1] ?>
@@ -114,7 +117,7 @@
                     </ul>
                 </div><!-- this_map -->
 
-                <div style="height:400px;overflow:scroll;" class="tab-pane" id="all_maps">
+                <div style="" class="tab-pane" id="all_maps">
                     <ul style="list-style:none;margin:0 10px;">
                         <li py:if="user.id != root_user.id" style="margin:20px auto 50px auto;" 
                             py:for="user, count in user_reduction_counts">
