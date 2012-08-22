@@ -20,6 +20,9 @@ def load_user_and_the_people_they_follow(creds, user_id, postgres_handle):
     if root_user.id == user_id:
         is_root_user = True
 
+    # if is_root_user and 'root_user.is_fake_user':
+    #     return None
+
     remaining_hits, reset_time = get_rate_limit_status(api_handle)
     if remaining_hits < remaining_hits_threshold:
         raise Exception("%s: remaining_hits less than threshold!" % root_user.screen_name)
@@ -52,7 +55,7 @@ def load_user_and_the_people_they_follow(creds, user_id, postgres_handle):
     following_ids = []
     print "%s: loading the people %s follows." % (root_user.screen_name, screen_name)
     try:
-        max_pages = 5 if is_root_user else 1
+        max_pages = 1#5 if is_root_user else 1
         following_id_pages = tweepy.Cursor(api_handle.friends_ids, user_id=user_id).pages(max_pages)
         for following_ids_page in following_id_pages:
             following_ids += [str(x) for x in following_ids_page]
@@ -64,7 +67,7 @@ def load_user_and_the_people_they_follow(creds, user_id, postgres_handle):
             model_user.save()
             postgres_handle.connection.commit()
             return model_user
-    model_user.save_following_ids(following_ids)
+    model_user.save_following_ids(following_ids[:1000])
     postgres_handle.connection.commit()
     return model_user
 

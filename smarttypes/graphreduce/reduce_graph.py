@@ -95,7 +95,7 @@ def get_network_stats(network, g, vertex_clustering):
         community_pagerank[member_idxs] = tmp_community_pagerank / np.max(tmp_community_pagerank)
         community_out = float(sum([len(network[x]) for x in community_graph.vs['name']]))
         community_graph_score = float(sum(community_graph.vs.indegree())) / community_out
-        community_score[member_idxs] = community_graph_score if i != 0 else 0
+        community_score[member_idxs] = community_graph_score if i != 0 else (community_graph_score * 0.1)
     #normalize
     global_pagerank = global_pagerank / np.max(global_pagerank)
     community_pagerank = community_pagerank / np.max(community_pagerank)

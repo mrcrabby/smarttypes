@@ -92,7 +92,7 @@ class TwitterUser(PostgresBaseModel):
             if user.is_expired:
                 return_list.append(user.id)
         #move on if we have more than some # in the db + not expired
-        if len(self.following_ids) - len(return_list) > 2000:
+        if len(self.following_ids) - len(return_list) > 1000:
             return []
         return return_list
 
@@ -249,7 +249,7 @@ class TwitterUser(PostgresBaseModel):
         from twitter_user u
         join twitter_user_following_%s f on u.id = f.twitter_user_id 
         join only_these_ids on only_these_ids.id = u.id
-        where u.followers_count > 4 
+        where u.followers_count > 10 
         ;
         """
         following_following_ids = cls.get_following_following_ids(root_user, distance=distance)

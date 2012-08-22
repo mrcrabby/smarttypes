@@ -31,7 +31,10 @@ class TwitterCommunity(PostgresBaseModel):
 
     def polygon(self):
         qry = """
-        select ST_Simplify(ST_MinimumBoundingCircle(coordinates), .5) as polygon
+        --below returns none sometimes
+        --select ST_Simplify(ST_MinimumBoundingCircle(coordinates), .5) as polygon
+
+        select ST_Envelope(coordinates) as polygon
         from twitter_community
         where id = %(id)s;
         """

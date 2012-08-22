@@ -15,7 +15,7 @@
     <script src="http://cdn.leafletjs.com/leaflet-0.4/leaflet.js"></script>
 
     <style type="text/css" media="screen">
-        @media (min-width:500px) {
+        @media (min-width:600px) {
             .tab-pane {height:400px;overflow:scroll;}
         }
         #map { height: 400px; }
@@ -78,48 +78,73 @@
                     <a href="#this_map" data-toggle="tab">${len(communities)} communities</a>
                 </li>
                 <li>
-                    <a href="#all_maps" data-toggle="tab">Other maps</a>
+                    <a href="#other_maps" data-toggle="tab">Other maps</a>
                 </li>
             </ul>
 
             <div class="tab-content">
 
+                <!-- this_map -->
                 <div style="" class="tab-pane active" id="this_map">
                     <ul style="list-style:none;margin:0 10px;">
-                        <li py:for="community in communities" style="margin:20px auto 50px auto;">
+                        <li py:for="community in communities" 
+                            id="community_${community.id}"
+                            style="margin:20px auto 50px auto;">
+
                             <?python top_user = community.top_users(1)[0][1] ?>
 
                             <h3>
-                                <a id="community_${community.id}" 
+                                <a class="community_link" 
                                     href="#">${len(community.member_ids)} member community</a>
                             </h3>
                             
-                            <b>Leader:</b>
-                            
-                            <div style="padding:5px 0 0 10px;">
-                                <img width="50px" py:if="top_user.profile_image_url" 
-                                        src="${top_user.profile_image_url}" alt="top_user.screen_name" />
+                            <div class="community_leader_container">
+                                <div>
+                                    <a href="#" class="show_all">Show more members</a>
+                                </div>
 
-                                <span style="font-weight:bold;">
-                                    <a target="_blank" 
-                                        href="https://twitter.com/${top_user.screen_name}">${top_user.screen_name}</a>
-                                </span>
+                                <div style="margin:20px 10px;">
+                                    <img width="50px" py:if="top_user.profile_image_url" 
+                                            src="${top_user.profile_image_url}" alt="top_user.screen_name" />
 
-                                <span style="font-style:italic;">
-                                    <br/>
-                                    ${top_user.location_name if top_user.location_name else 'No location given'}
-                                </span>
+                                    <span style="font-weight:bold;">
+                                        <a target="_blank" 
+                                            href="https://twitter.com/${top_user.screen_name}">
+                                                ${top_user.screen_name}</a>
+                                    </span>
 
-                                <span py:if="top_user.description">
-                                    <br/>
-                                    ${top_user.description[:100]}${'...' if len(top_user.description) &gt; 100 else ''}
-                                </span>
+                                    <span style="font-style:italic;">
+                                        <br/>
+                                        ${top_user.location_name if top_user.location_name else 'No location given'}
+                                    </span>
+
+                                    <span py:if="top_user.description">
+                                        <br/>
+                                        ${top_user.description[:100]}${'...' if len(top_user.description) &gt; 100 else ''}
+                                    </span>
+
+                                    <span py:if="top_user.url">
+                                        <br/>
+                                        <a href="${top_user.url}">
+                                            ${top_user.url[:25]}${'...' if len(top_user.url) &gt; 25 else ''}
+                                        </a>
+                                    </span>
+                                </div>
                             </div>
+
+                            <div class="community_expand_container" style="display:none;">
+                                <div>
+                                    <a href="#" class="hide_all">Show less members</a>
+                                </div>
+                                <div class="community_expand_content"></div>
+                            </div> 
+
                         </li>
                     </ul>
                 </div><!-- this_map -->
 
-                <div style="" class="tab-pane" id="all_maps">
+                <!-- other_maps -->
+                <div style="" class="tab-pane" id="other_maps">
                     <ul style="list-style:none;margin:0 10px;">
                         <li py:if="user.id != root_user.id" style="margin:20px auto 50px auto;" 
                             py:for="user, count in user_reduction_counts">
@@ -144,7 +169,9 @@
                             </span>
                         </li>
                     </ul>
-                </div><!-- all_maps -->
+                </div><!-- other_maps -->
+
+
             </div><!-- tab-content -->
         </div><!-- span4 -->
     </div><!-- row-fluid -->
