@@ -86,7 +86,7 @@ var myStyle = {
     color: "#cccccc",
     weight: 1,
     opacity: 0.0,
-    fillOpacity: 0.1
+    fillOpacity: 0.0
 };
 
 function load_community_geojson_layer(reduction_id, map) {
