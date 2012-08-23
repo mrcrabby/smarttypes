@@ -112,7 +112,7 @@ function oneach_community_feature(feature, layer) {
 
     //bind map popup
     var popup = layer.bindPopup(feature.properties.popup_content);
-    $('#community_'+feature.properties.community_id+ ' a.community_link').click(function(){
+    $('#community_'+feature.properties.community_id+ ' a.map_popup_link').click(function(){
       popup.openPopup();
       return false;
     });

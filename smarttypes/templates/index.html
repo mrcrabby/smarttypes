@@ -15,7 +15,7 @@
     <script src="http://cdn.leafletjs.com/leaflet-0.4/leaflet.js"></script>
 
     <style type="text/css" media="screen">
-        @media (min-width:600px) {
+        @media (min-width:980px) {
             .tab-pane {height:400px;overflow:scroll;overflow-x:hidden;}
         }
         #map { height: 400px; }
@@ -65,7 +65,7 @@
                     <div style="clear:both;">&nbsp;</div>
                 </div><!-- map_header -->
 
-                <div class="hidden-phone">
+                <div class="visible-desktop">
                     <div id="map"></div>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                     <a href="#this_map" data-toggle="tab">${len(communities)} communities</a>
                 </li>
                 <li>
-                    <a href="#other_maps" data-toggle="tab">Other maps</a>
+                    <a href="#other_maps" data-toggle="tab">More maps</a>
                 </li>
             </ul>
 
@@ -93,15 +93,16 @@
 
                             <?python top_user = community.top_users(1)[0][1] ?>
 
-                            <h3>
-                                <a class="community_link" 
+                            <h3 class="visible-desktop">
+                                <a class="map_popup_link" 
                                     href="#">${len(community.member_ids)} member community</a>
                             </h3>
                             
                             <div class="community_leader_container">
-                                <div>
-                                    <a href="#" class="show_all">Show more members</a>
-                                </div>
+                                <h3 class="hidden-desktop">
+                                    <a class="show_all" 
+                                        href="#">${len(community.member_ids)} member community</a>
+                                </h3>
 
                                 <div style="margin:20px 10px;">
                                     <img width="50px" py:if="top_user.profile_image_url" 
@@ -133,9 +134,10 @@
                             </div>
 
                             <div class="community_expand_container" style="display:none;">
-                                <div>
-                                    <a href="#" class="hide_all">Show less members</a>
-                                </div>
+                                <h3>
+                                    <a class="hide_all" 
+                                        href="#">${len(community.member_ids)} member community</a>
+                                </h3>
                                 <div class="community_expand_content"></div>
                             </div> 
 
