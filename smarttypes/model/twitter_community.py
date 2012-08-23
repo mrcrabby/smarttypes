@@ -75,7 +75,7 @@ class TwitterCommunity(PostgresBaseModel):
     def geojson_dict(self):
         #ST_Simplify can return none
         polygon = self.polygon()
-        if not type(polygon).__name__ == 'Point': return None
+        if type(polygon).__name__ == 'Point': return None
         return {
             "type": "Feature",
             "properties": {
