@@ -99,13 +99,14 @@ def get_network_stats(network, g, vertex_clustering):
     #normalize
     global_pagerank = global_pagerank / np.max(global_pagerank)
     community_pagerank = community_pagerank / np.max(community_pagerank)
-    community_score = community_score / scoreatpercentile(community_score, 80)
+    community_score = community_score / np.max(community_score)
     return global_pagerank, community_pagerank, community_score
 
 def calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score):
-    hybrid_pagerank = community_pagerank * community_score
-    hybrid_pagerank = hybrid_pagerank / np.max(hybrid_pagerank)
-    return hybrid_pagerank
+    # hybrid_pagerank = community_pagerank * community_score
+    # hybrid_pagerank = hybrid_pagerank / np.max(hybrid_pagerank)
+    # return hybrid_pagerank
+    return community_pagerank
 
 if __name__ == "__main__":
 

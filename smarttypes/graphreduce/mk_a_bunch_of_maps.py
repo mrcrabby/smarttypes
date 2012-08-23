@@ -23,7 +23,6 @@ if __name__ == "__main__":
 		'twarko',
 		'swixHQ',
 		'sfi_news',
-		'ReWorkJobs',
 		'rjs',
 		'wilsonminer',
 		'maxdemarzi',
