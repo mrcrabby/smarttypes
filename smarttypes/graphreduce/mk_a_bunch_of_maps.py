@@ -15,10 +15,10 @@ if __name__ == "__main__":
         root_user = creds.root_user
         if root_user and root_user.screen_name not in mk_these_maps:
             following_following_ids = TwitterUser.get_following_following_ids(root_user, distance=100)
-            if len(following_following_ids) > 2000:
+            if len(following_following_ids) > 4000:
                 mk_these_maps.append(root_user.screen_name)
 
     for screen_name in mk_these_maps:
         print 'making a map for %s' % screen_name
-        #os.system('python reduce_graph.py %s 0' % screen_name)
+        os.system('python reduce_graph.py %s 0' % screen_name)
 
