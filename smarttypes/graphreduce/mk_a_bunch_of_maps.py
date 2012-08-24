@@ -15,8 +15,10 @@ if __name__ == "__main__":
         root_user = creds.root_user
         if root_user and root_user.screen_name not in mk_these_maps:
             following_following_ids = TwitterUser.get_following_following_ids(root_user, distance=100)
-            if len(following_following_ids) > 4000:
+            if len(following_following_ids) > 3000:
                 mk_these_maps.append(root_user.screen_name)
+            else:
+                print '%s only has %s users' % (root_user.screen_name, len(following_following_ids))
 
     for screen_name in mk_these_maps:
         print 'making a map for %s' % screen_name
