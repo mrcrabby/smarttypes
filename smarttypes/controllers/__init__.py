@@ -16,6 +16,9 @@ def index(req, session, postgres_handle):
     #don't do work for bots that don't know what they're 
     #looking for
     reduction = None
+    user_reduction_counts = TwitterReduction.get_user_reduction_counts(postgres_handle)
+    random.shuffle(user_reduction_counts)
+
     if req.path.split('/') > 1 and req.path.split('/')[1]:  # path looks like '/something'
         root_user = TwitterUser.by_screen_name(req.path.split('/')[1], postgres_handle)
         if root_user:
@@ -23,11 +26,8 @@ def index(req, session, postgres_handle):
         if not reduction and is_int(req.path.split('/')[1]):
             reduction = TwitterReduction.get_by_id(req.path.split('/')[1], postgres_handle)
     else:
-        root_user = TwitterUser.by_screen_name('SmartTypes', postgres_handle)
-        reduction = TwitterReduction.get_latest_reduction(root_user.id, postgres_handle)
+        reduction = TwitterReduction.get_latest_reduction(user_reduction_counts[0][0].id, postgres_handle)
 
-    user_reduction_counts = TwitterReduction.get_user_reduction_counts(postgres_handle)
-    random.shuffle(user_reduction_counts)
     return {
         'reduction_id': reduction.id if reduction and reduction.tiles_are_written_to_disk else None,
         'reduction': reduction if reduction and reduction.tiles_are_written_to_disk else None,
