@@ -104,7 +104,7 @@ def get_network_stats(network, g, vertex_clustering):
 
 def calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score):
     hybrid_pagerank = community_pagerank * community_score
-    hybrid_pagerank = hybrid_pagerank / scoreatpercentile(hybrid_pagerank, 80)
+    hybrid_pagerank = hybrid_pagerank / scoreatpercentile(hybrid_pagerank, 90)
     return hybrid_pagerank
 
 if __name__ == "__main__":
