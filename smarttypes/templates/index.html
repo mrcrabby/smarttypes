@@ -42,7 +42,7 @@
             root_user = reduction.root_user()
         ?>
 
-        <div class="span8 visible-desktop">
+        <div class="span8">
             <div>
                 <div id="map_header">
                     <div style="float:left;width:80%;">
@@ -65,28 +65,13 @@
                     <div style="clear:both;">&nbsp;</div>
                 </div><!-- map_header -->
 
-                <div>
+                <div class="hidden-phone">
                     <div id="map"></div>
                 </div>
             </div>
         </div>
 
         <div class="span4">
-
-            <div class="hidden-desktop" style="margin:10px 0;">
-                <h2>
-                    <img width="50px" py:if="root_user.profile_image_url" 
-                        src="${root_user.profile_image_url}" alt="root_user.screen_name" />
-                    <a target="_blank" href="https://twitter.com/${root_user.screen_name}">${root_user.screen_name}</a>
-                </h2>
-                <span style="font-style:italic;padding-left:10px;">
-                    ${root_user.location_name if root_user.location_name else 'No location given'}
-                </span>
-                <span py:if="root_user.description">
-                    -- 
-                    ${root_user.description[:100]}${'...' if len(root_user.description) &gt; 100 else ''}
-                </span>
-            </div>
 
             <ul class="nav nav-tabs">
                 <li class="active">
@@ -104,7 +89,7 @@
                     <ul style="list-style:none;margin:0 10px;">
                         <li py:for="community in communities" 
                             id="community_${community.id}"
-                            style="margin:20px auto 50px auto;">
+                            style="margin:20px 0;padding:0 10px;border-bottom:solid 1px #cccccc;">
 
                             <?python top_user = community.top_users(1)[0][1] ?>
 
