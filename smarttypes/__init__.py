@@ -30,8 +30,8 @@ site_name = 'SmartTypes'
 site_mantra = 'mapping our social world!'
 default_title = '%s - %s' % (site_name, site_mantra)
 site_description = """
-SmartTypes is an open lab for online social network analysis (initially twitter).
-Our goal is to make accurate maps of our social world."""
+SmartTypes is an open lab for online social discovery (initially twitter).
+By mapping our social world, we make it easy to establish new / interesting relationships."""
 site_description = site_description.strip()
 
 #keep these down here
