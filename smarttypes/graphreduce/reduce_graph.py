@@ -146,7 +146,7 @@ if __name__ == "__main__":
     
     #id_communities
     #vertex_clustering = id_communities(g, coordinates, eps=0.55, min_samples=12)
-    vertex_clustering = id_communities(g, coordinates, eps=0.53, min_samples=15)
+    vertex_clustering = id_communities(g, coordinates, eps=0.53, min_samples=13)
 
     #do this after community detection because it causes distortion
     coordinates = reproject_to_spherical_mercator(coordinates)
