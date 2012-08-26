@@ -17,6 +17,7 @@ if __name__ == "__main__":
             mk_these_maps.append(root_user.screen_name)
 
     for screen_name in mk_these_maps:
-        print 'making a map for %s' % screen_name
-        os.system('python reduce_graph.py %s 0' % screen_name)
+    	if screen_name not in ['CocaCola']:
+        	print 'making a map for %s' % screen_name
+        	os.system('python reduce_graph.py %s 0' % screen_name)
 

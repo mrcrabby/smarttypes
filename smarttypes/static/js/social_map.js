@@ -83,9 +83,9 @@ community_geojson_layer
 var myStyle = {
     //fillColor: "#FFCC33",
     fillColor: "#FFCC33",
-    color: "#cccccc",
-    weight: 1,
-    opacity: 0.0,
+    color: "#999999",
+    weight: .8,
+    opacity: 0.9,
     fillOpacity: 0.0
 };
 
