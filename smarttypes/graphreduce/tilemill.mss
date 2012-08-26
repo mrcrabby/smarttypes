@@ -10,95 +10,92 @@ Map {
   marker-allow-overlap: true;
   marker-ignore-placement: true;  
   marker-fill: lighten(@darkest, 50%);
-  [pagerank >= .02] { marker-fill: lighten(@darkest, 40%); }
-  [pagerank >= .04] { marker-fill: lighten(@darkest, 30%); }
-  [pagerank >= .08] { marker-fill: lighten(@darkest, 20%); }
-  [pagerank >= .16] { marker-fill: rgb(187, 148, 117); } 
-  [pagerank >= .32] { marker-fill: rgb(147, 129, 118); }
-  [pagerank >= .64] { marker-fill: rgb(145, 90, 54); }
+  [hybrid_pagerank >= .02] { marker-fill: lighten(@darkest, 40%); }
+  [hybrid_pagerank >= .04] { marker-fill: lighten(@darkest, 30%); }
+  [hybrid_pagerank >= .08] { marker-fill: lighten(@darkest, 20%); }
+  [hybrid_pagerank >= .16] { marker-fill: rgb(187, 148, 117); } 
+  [hybrid_pagerank >= .32] { marker-fill: rgb(147, 129, 118); }
+  [hybrid_pagerank >= .64] { marker-fill: rgb(145, 90, 54); }
 }
 
+@zoom_base_multiplier: 1.2;
+//@zoom_base_multiplier: 2.6;
 
-@zoom_start: 0;
-@zoom_stop: 1.5;
-@zoom_diff: @zoom_stop - @zoom_start;
-@zoom_step: @zoom_diff / 6;
-
-@zoom_0_base: .50;
+@zoom_0_base: .25 * @zoom_base_multiplier;
 #users [zoom = 0]{
   marker-width: @zoom_0_base;
-  [pagerank >= .02] { marker-width: @zoom_0_base + @zoom_step * 1; }
-  [pagerank >= .04] { marker-width: @zoom_0_base + @zoom_step * 2; }
-  [pagerank >= .08] { marker-width: @zoom_0_base + @zoom_step * 3; }
-  [pagerank >= .16] { marker-width: @zoom_0_base + @zoom_step * 4; }
-  [pagerank >= .32] { marker-width: @zoom_0_base + @zoom_step * 5; }
-  [pagerank >= .64] { marker-width: @zoom_0_base + @zoom_step * 6; }
+  [hybrid_pagerank >= .02] { marker-width: @zoom_0_base * 1.1; }
+  [hybrid_pagerank >= .04] { marker-width: @zoom_0_base * 1.2; }
+  [hybrid_pagerank >= .08] { marker-width: @zoom_0_base * 1.4; }
+  [hybrid_pagerank >= .16] { marker-width: @zoom_0_base * 1.8; }
+  [hybrid_pagerank >= .32] { marker-width: @zoom_0_base * 2.6; }
+  [hybrid_pagerank >= .64] { marker-width: @zoom_0_base * 4.2; }
 }
 
-@zoom_1_base: .70;
+@zoom_1_base: .50 * @zoom_base_multiplier;
 #users [zoom = 1]{
   marker-width: @zoom_1_base;
-  [pagerank >= .02] { marker-width: @zoom_1_base + @zoom_step * 1; }
-  [pagerank >= .04] { marker-width: @zoom_1_base + @zoom_step * 2; }
-  [pagerank >= .08] { marker-width: @zoom_1_base + @zoom_step * 3; }
-  [pagerank >= .16] { marker-width: @zoom_1_base + @zoom_step * 4; }
-  [pagerank >= .32] { marker-width: @zoom_1_base + @zoom_step * 5; }
-  [pagerank >= .64] { marker-width: @zoom_1_base + @zoom_step * 6; } 
+  [hybrid_pagerank >= .02] { marker-width: @zoom_1_base * 1.1; }
+  [hybrid_pagerank >= .04] { marker-width: @zoom_1_base * 1.2; }
+  [hybrid_pagerank >= .08] { marker-width: @zoom_1_base * 1.4; }
+  [hybrid_pagerank >= .16] { marker-width: @zoom_1_base * 1.8; }
+  [hybrid_pagerank >= .32] { marker-width: @zoom_1_base * 2.6; }
+  [hybrid_pagerank >= .64] { marker-width: @zoom_1_base * 4.2; }
 }
 
-@zoom_2_base: 1.1;
+@zoom_2_base: 1.0 * @zoom_base_multiplier;
 #users [zoom = 2]{
   marker-width: @zoom_2_base;
-  [pagerank >= .02] { marker-width: @zoom_2_base + @zoom_step * 1; }
-  [pagerank >= .04] { marker-width: @zoom_2_base + @zoom_step * 2; }
-  [pagerank >= .08] { marker-width: @zoom_2_base + @zoom_step * 3; }
-  [pagerank >= .16] { marker-width: @zoom_2_base + @zoom_step * 4; }
-  [pagerank >= .32] { marker-width: @zoom_2_base + @zoom_step * 5; }
-  [pagerank >= .64] { marker-width: @zoom_2_base + @zoom_step * 6; }
+  [hybrid_pagerank >= .02] { marker-width: @zoom_2_base * 1.1; }
+  [hybrid_pagerank >= .04] { marker-width: @zoom_2_base * 1.2; }
+  [hybrid_pagerank >= .08] { marker-width: @zoom_2_base * 1.4; }
+  [hybrid_pagerank >= .16] { marker-width: @zoom_2_base * 1.8; }
+  [hybrid_pagerank >= .32] { marker-width: @zoom_2_base * 2.6; }
+  [hybrid_pagerank >= .64] { marker-width: @zoom_2_base * 4.2; }
 }
 
-@zoom_3_base: 2;
+@zoom_3_base: 2 * @zoom_base_multiplier;
 #users [zoom = 3]{
   marker-width: @zoom_3_base;
-  [pagerank >= .02] { marker-width: @zoom_3_base + @zoom_step * 1; }
-  [pagerank >= .04] { marker-width: @zoom_3_base + @zoom_step * 2; }
-  [pagerank >= .08] { marker-width: @zoom_3_base + @zoom_step * 3; }
-  [pagerank >= .16] { marker-width: @zoom_3_base + @zoom_step * 4; }
-  [pagerank >= .32] { marker-width: @zoom_3_base + @zoom_step * 5; }
-  [pagerank >= .64] { marker-width: @zoom_3_base + @zoom_step * 6; }
+  [hybrid_pagerank >= .02] { marker-width: @zoom_3_base * 1.1; }
+  [hybrid_pagerank >= .04] { marker-width: @zoom_3_base * 1.2; }
+  [hybrid_pagerank >= .08] { marker-width: @zoom_3_base * 1.4; }
+  [hybrid_pagerank >= .16] { marker-width: @zoom_3_base * 1.8; }
+  [hybrid_pagerank >= .32] { marker-width: @zoom_3_base * 2.6; }
+  [hybrid_pagerank >= .64] { marker-width: @zoom_3_base * 4.2; }
 }
 
-@zoom_4_base: 4;
+@zoom_4_base: 4 * @zoom_base_multiplier;
 #users [zoom = 4]{
   marker-width: @zoom_4_base;
-  [pagerank >= .02] { marker-width: @zoom_4_base + @zoom_step * 1; }
-  [pagerank >= .04] { marker-width: @zoom_4_base + @zoom_step * 2; }
-  [pagerank >= .08] { marker-width: @zoom_4_base + @zoom_step * 3; }
-  [pagerank >= .16] { marker-width: @zoom_4_base + @zoom_step * 4; }
-  [pagerank >= .32] { marker-width: @zoom_4_base + @zoom_step * 5; }
-  [pagerank >= .64] { marker-width: @zoom_4_base + @zoom_step * 6; }
+  [hybrid_pagerank >= .02] { marker-width: @zoom_4_base * 1.1; }
+  [hybrid_pagerank >= .04] { marker-width: @zoom_4_base * 1.2; }
+  [hybrid_pagerank >= .08] { marker-width: @zoom_4_base * 1.4; }
+  [hybrid_pagerank >= .16] { marker-width: @zoom_4_base * 1.8; }
+  [hybrid_pagerank >= .32] { marker-width: @zoom_4_base * 2.6; }
+  [hybrid_pagerank >= .64] { marker-width: @zoom_4_base * 4.2; }
 }
 
-@zoom_5_base: 8;
+@zoom_5_base: 8 * @zoom_base_multiplier;
 #users [zoom = 5]{
   marker-width: @zoom_5_base;
-  [pagerank >= .02] { marker-width: @zoom_5_base + @zoom_step * 1; }
-  [pagerank >= .04] { marker-width: @zoom_5_base + @zoom_step * 2; }
-  [pagerank >= .08] { marker-width: @zoom_5_base + @zoom_step * 3; }
-  [pagerank >= .16] { marker-width: @zoom_5_base + @zoom_step * 4; }
-  [pagerank >= .32] { marker-width: @zoom_5_base + @zoom_step * 5; }
-  [pagerank >= .64] { marker-width: @zoom_5_base + @zoom_step * 6; }
+  [hybrid_pagerank >= .02] { marker-width: @zoom_5_base * 1.1; }
+  [hybrid_pagerank >= .04] { marker-width: @zoom_5_base * 1.2; }
+  [hybrid_pagerank >= .08] { marker-width: @zoom_5_base * 1.4; }
+  [hybrid_pagerank >= .16] { marker-width: @zoom_5_base * 1.8; }
+  [hybrid_pagerank >= .32] { marker-width: @zoom_5_base * 2.6; }
+  [hybrid_pagerank >= .64] { marker-width: @zoom_5_base * 4.2; }
 }
 
-@zoom_6_base: 16;
+@zoom_6_base: 16 * @zoom_base_multiplier;
 #users [zoom = 6]{
   marker-width: @zoom_6_base;
-  [pagerank >= .02] { marker-width: @zoom_6_base + @zoom_step * 1; }
-  [pagerank >= .04] { marker-width: @zoom_6_base + @zoom_step * 2; }
-  [pagerank >= .08] { marker-width: @zoom_6_base + @zoom_step * 3; }
-  [pagerank >= .16] { marker-width: @zoom_6_base + @zoom_step * 4; }
-  [pagerank >= .32] { marker-width: @zoom_6_base + @zoom_step * 5; }
-  [pagerank >= .64] { marker-width: @zoom_6_base + @zoom_step * 6; }
+  [hybrid_pagerank >= .02] { marker-width: @zoom_6_base * 1.1; }
+  [hybrid_pagerank >= .04] { marker-width: @zoom_6_base * 1.2; }
+  [hybrid_pagerank >= .08] { marker-width: @zoom_6_base * 1.4; }
+  [hybrid_pagerank >= .16] { marker-width: @zoom_6_base * 1.8; }
+  [hybrid_pagerank >= .32] { marker-width: @zoom_6_base * 2.6; }
+  [hybrid_pagerank >= .64] { marker-width: @zoom_6_base * 4.2; }
 }
 
 /*

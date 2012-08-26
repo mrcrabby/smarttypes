@@ -89,13 +89,22 @@ def get_network_stats(network, g, vertex_clustering):
     #community stats
     community_pagerank, community_score = np.zeros(n), np.zeros(n)
     for i in range(len(vertex_clustering)):
+        #idxs and community_graph
         member_idxs = vertex_clustering[i]
         community_graph = vertex_clustering.subgraph(i)
+
+        #community_pagerank
         tmp_community_pagerank = community_graph.pagerank(damping=0.75)
         community_pagerank[member_idxs] = tmp_community_pagerank / np.max(tmp_community_pagerank)
+
+        #community_score
         community_out = float(sum([len(network[x]) for x in community_graph.vs['name']]))
         community_graph_score = float(sum(community_graph.vs.indegree())) / community_out
-        community_score[member_idxs] = community_graph_score if i != 0 else (community_graph_score * 0.01)
+        if i != 0:
+            community_score[member_idxs] = community_graph_score * 1 #np.log(len(member_idxs))
+        else:
+            community_score[member_idxs] = community_graph_score * 0.01
+
     #normalize
     global_pagerank = global_pagerank / np.max(global_pagerank)
     community_pagerank = community_pagerank / np.max(community_pagerank)
@@ -104,7 +113,7 @@ def get_network_stats(network, g, vertex_clustering):
 
 def calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score):
     hybrid_pagerank = community_pagerank * community_score
-    hybrid_pagerank = hybrid_pagerank / scoreatpercentile(hybrid_pagerank, 97)
+    hybrid_pagerank = hybrid_pagerank / scoreatpercentile(hybrid_pagerank, 98)
     return hybrid_pagerank
 
 if __name__ == "__main__":
@@ -136,7 +145,8 @@ if __name__ == "__main__":
     coordinates = reduce_with_linloglayout(g, root_user)
     
     #id_communities
-    vertex_clustering = id_communities(g, coordinates, eps=0.55, min_samples=12)
+    #vertex_clustering = id_communities(g, coordinates, eps=0.55, min_samples=12)
+    vertex_clustering = id_communities(g, coordinates, eps=0.60, min_samples=20)
 
     #do this after community detection because it causes distortion
     coordinates = reproject_to_spherical_mercator(coordinates)

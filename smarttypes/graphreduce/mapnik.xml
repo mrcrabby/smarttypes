@@ -7,7 +7,7 @@
   <Parameter name="center">0,0,2</Parameter>
   <Parameter name="format">png</Parameter>
   <Parameter name="minzoom">0</Parameter>
-  <Parameter name="maxzoom">6</Parameter>
+  <Parameter name="maxzoom">5</Parameter>
   <Parameter name="name"><![CDATA[smarttypes]]></Parameter>
 </Parameters>
 

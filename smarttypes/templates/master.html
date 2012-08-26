@@ -21,8 +21,8 @@
     <title>${title}</title>
 
     <style type="text/css" media="screen">
-        @media (max-width:500px) {
-            #content_holder {margin-top:-60px;}
+        @media (min-width:981px) {
+            #content_container {padding:40px 0;}
         }
     </style>
 
@@ -83,16 +83,20 @@
     </div><!-- navbar-fixed-top -->
 
     <!--crap from the child-->
-    <div class="row-fluid" style="padding:40px 0;margin:30px 0;">
-      <div class="span1">&nbsp;</div>
-      <div id="content_holder" py:if="active_tab != 'blog' or template_path == 'blog/index.html'" class="span10">
+    <div id="content_container" class="row-fluid" style="margin:25px 0;">
+      <!-- <div class="span1">&nbsp;</div> -->
+
+      <div id="content_holder" py:if="active_tab != 'blog' or template_path == 'blog/index.html'" 
+        class="span12">
         <div py:replace="select('*|text()')"></div>
       </div>
+
       <div id="content_holder" py:if="active_tab == 'blog' and template_path != 'blog/index.html'" 
-        style="max-width:800px;" class="span10">
+        style="max-width:800px;" class="span12">
         <div py:replace="select('*|text()')"></div>
       </div>
-      <div class="span1">&nbsp;</div>
+
+      <!-- <div class="span1">&nbsp;</div> -->
     </div>
 
     <!-- footer -->

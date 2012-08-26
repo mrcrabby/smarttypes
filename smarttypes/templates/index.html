@@ -15,7 +15,7 @@
     <script src="http://cdn.leafletjs.com/leaflet-0.4/leaflet.js"></script>
 
     <style type="text/css" media="screen">
-        @media (min-width:980px) {
+        @media (min-width:1024px) {
             .tab-pane {height:400px;overflow:scroll;overflow-x:hidden;}
         }
         #map { height: 400px; }
@@ -49,7 +49,10 @@
                         <h2>
                             <img width="50px" py:if="root_user.profile_image_url" 
                                 src="${root_user.profile_image_url}" alt="root_user.screen_name" />
-                            <a target="_blank" href="https://twitter.com/${root_user.screen_name}">${root_user.screen_name}</a>
+
+                            <i class="icon-share"></i>
+                            <a target="_blank" 
+                                href="https://twitter.com/${root_user.screen_name}">${root_user.screen_name}</a>
                         </h2>
                         <span style="font-style:italic;padding-left:10px;">
                             ${root_user.location_name if root_user.location_name else 'No location given'}
@@ -109,6 +112,7 @@
                                             src="${top_user.profile_image_url}" alt="top_user.screen_name" />
 
                                     <span style="font-weight:bold;">
+                                        <i class="icon-share"></i>
                                         <a target="_blank" 
                                             href="https://twitter.com/${top_user.screen_name}">
                                                 ${top_user.screen_name}</a>
