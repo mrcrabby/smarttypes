@@ -101,7 +101,7 @@ def get_network_stats(network, g, vertex_clustering):
         community_out = float(sum([len(network[x]) for x in community_graph.vs['name']]))
         community_graph_score = float(sum(community_graph.vs.indegree())) / community_out
         if i != 0:
-            community_score[member_idxs] = community_graph_score * np.log(len(member_idxs))
+            community_score[member_idxs] = community_graph_score * (2 + np.log10(len(member_idxs)))
         else:
             community_score[member_idxs] = community_graph_score * 0.01
 
@@ -145,8 +145,8 @@ if __name__ == "__main__":
     coordinates = reduce_with_linloglayout(g, root_user)
     
     #id_communities
-    #vertex_clustering = id_communities(g, coordinates, eps=0.55, min_samples=12)
-    vertex_clustering = id_communities(g, coordinates, eps=0.52, min_samples=18)
+    vertex_clustering = id_communities(g, coordinates, eps=0.55, min_samples=12)
+    #vertex_clustering = id_communities(g, coordinates, eps=0.52, min_samples=18)
 
     #do this after community detection because it causes distortion
     coordinates = reproject_to_spherical_mercator(coordinates)
