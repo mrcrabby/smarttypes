@@ -112,10 +112,9 @@ def get_network_stats(network, g, vertex_clustering):
     return global_pagerank, community_pagerank, community_score
 
 def calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score):
-    # hybrid_pagerank = community_pagerank * community_score
-    # hybrid_pagerank = hybrid_pagerank / scoreatpercentile(hybrid_pagerank, 98)
-    # return hybrid_pagerank
-    return community_pagerank
+    hybrid_pagerank = community_pagerank * community_score
+    hybrid_pagerank = hybrid_pagerank / scoreatpercentile(hybrid_pagerank, 97)
+    return hybrid_pagerank
 
 if __name__ == "__main__":
 
@@ -147,7 +146,7 @@ if __name__ == "__main__":
     
     #id_communities
     #vertex_clustering = id_communities(g, coordinates, eps=0.55, min_samples=12)
-    vertex_clustering = id_communities(g, coordinates, eps=0.48, min_samples=18)
+    vertex_clustering = id_communities(g, coordinates, eps=0.52, min_samples=18)
 
     #do this after community detection because it causes distortion
     coordinates = reproject_to_spherical_mercator(coordinates)

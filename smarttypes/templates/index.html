@@ -42,7 +42,7 @@
             root_user = reduction.root_user()
         ?>
 
-        <div class="span8">
+        <div class="span7">
             <div>
                 <div id="map_header">
                     <div style="float:left;width:80%;">
@@ -74,7 +74,7 @@
             </div>
         </div>
 
-        <div class="span4">
+        <div class="span5">
 
             <ul class="nav nav-tabs">
                 <li class="active">
@@ -130,7 +130,7 @@
 
                                     <span py:if="top_user.url">
                                         <br/>
-                                        <a href="${top_user.url}">
+                                        <a target="_blank" href="${top_user.url}">
                                             ${top_user.url[:25]}${'...' if len(top_user.url) &gt; 25 else ''}
                                         </a>
                                     </span>
