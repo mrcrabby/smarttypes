@@ -101,7 +101,7 @@ def get_network_stats(network, g, vertex_clustering):
         community_out = float(sum([len(network[x]) for x in community_graph.vs['name']]))
         community_graph_score = float(sum(community_graph.vs.indegree())) / community_out
         if i != 0:
-            community_score[member_idxs] = community_graph_score * (2 + np.log10(len(member_idxs)))
+            community_score[member_idxs] = community_graph_score * (4 + np.log10(len(member_idxs)))
         else:
             community_score[member_idxs] = community_graph_score * 0.01
 
