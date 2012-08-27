@@ -131,7 +131,7 @@ if __name__ == "__main__":
         distance = int(sys.argv[2])
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
     if distance < 1:
-        distance = 10000 / len(root_user.following[:1000])
+        distance = 50000 / len(root_user.following[:1000])
 
     #get network and reduce
     if smarttypes.config.IS_PROD:

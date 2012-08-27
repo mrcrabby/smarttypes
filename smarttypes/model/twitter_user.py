@@ -116,9 +116,6 @@ class TwitterUser(PostgresBaseModel):
             return random_id
 
     def get_id_of_someone_in_my_network_to_load(self):
-        """
-        'loading' a user means storing all the edges to the people they follow (followies)
-        """
         #the people self follows
         following_and_expired_list = self.following_and_expired_ids
         if following_and_expired_list:
@@ -126,7 +123,7 @@ class TwitterUser(PostgresBaseModel):
             return following_and_expired_list[random_index]
         #the people self follows follows
         else:
-            print '%s: pulling second layer of followies' % self.screen_name
+            #print '%s: pulling second layer of followies' % self.screen_name
             tried_to_load_these_ids = []
             for i in range(150):  # give up at some point (this could be anything)
                 random_following_id = self.get_random_followie_id(tried_to_load_these_ids)
@@ -134,7 +131,7 @@ class TwitterUser(PostgresBaseModel):
                 if random_following:
                     random_following_following_and_expired_list = random_following.following_and_expired_ids
                     if random_following_following_and_expired_list:
-                        print '%s: took %s attempts to find someone in second layer' % (self.screen_name, i)
+                        #print '%s: took %s attempts to find someone in second layer' % (self.screen_name, i)
                         return random_following_following_and_expired_list[0]
                     else:
                         tried_to_load_these_ids.append(random_following_id)
@@ -249,7 +246,7 @@ class TwitterUser(PostgresBaseModel):
         from twitter_user u
         join twitter_user_following_%s f on u.id = f.twitter_user_id 
         join only_these_ids on only_these_ids.id = u.id
-        where u.followers_count > 5 
+        where u.followers_count > 15 
         ;
         """
         following_following_ids = cls.get_following_following_ids(root_user, distance=distance)

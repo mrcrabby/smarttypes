@@ -77,7 +77,6 @@ def pull_some_users(access_key):
     creds = TwitterCredentials.get_by_access_key(access_key, postgres_handle)
     root_user = load_user_and_the_people_they_follow(creds, creds.root_user_id, postgres_handle)
     
-    
     load_this_user_id = root_user.get_id_of_someone_in_my_network_to_load()
     while load_this_user_id:
         load_user_and_the_people_they_follow(creds, load_this_user_id, postgres_handle)

@@ -30,7 +30,7 @@
 
                     <span py:if="user.url">
                         <br/>
-                        <a href="${user.url}">
+                        <a target="_blank" href="${user.url}">
                             ${user.url[:25]}${'...' if len(user.url) &gt; 25 else ''}
                         </a>
                     </span>
