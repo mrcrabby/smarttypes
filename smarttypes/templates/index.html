@@ -45,7 +45,7 @@
         <div class="span7">
             <div>
                 <div id="map_header">
-                    <div style="float:left;width:90%;">
+                    <div style="padding:0 20px;">
                         <h2>
                             <img width="50px" py:if="root_user.profile_image_url" 
                                 src="${root_user.profile_image_url}" alt="root_user.screen_name" />
@@ -61,9 +61,6 @@
                             -- 
                             ${root_user.description[:100]}${'...' if len(root_user.description) &gt; 100 else ''}
                         </span>
-                    </div>
-                    <div style="float:right;">
-                        <!-- <h3 style="padding:10px 20px 0 0;">${len(communities)} communities</h3> -->
                     </div>
                     <div style="clear:both;">&nbsp;</div>
                 </div><!-- map_header -->
