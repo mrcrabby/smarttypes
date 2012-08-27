@@ -145,7 +145,7 @@ if __name__ == "__main__":
     coordinates = reduce_with_linloglayout(g, root_user)
     
     #id_communities
-    vertex_clustering = id_communities(g, coordinates, eps=0.55, min_samples=12)
+    vertex_clustering = id_communities(g, coordinates, eps=0.50, min_samples=12)
     #vertex_clustering = id_communities(g, coordinates, eps=0.52, min_samples=18)
 
     #do this after community detection because it causes distortion
