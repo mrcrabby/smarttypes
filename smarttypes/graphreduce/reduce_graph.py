@@ -74,14 +74,25 @@ def reproject_to_spherical_mercator(coordinates):
     reprojection = (spherical_mercator_bb / current_projection_bb).min(0)
     return coordinates * reprojection
 
-def id_communities(g, coordinates, eps=0.42, min_samples=10):
+def id_communities(g, coordinates, min_samples=10):
     layout_distance = spatial.distance.squareform(spatial.distance.pdist(coordinates))
-    print np.max(layout_distance)
-    layout_similarity = 1 - (layout_distance / np.max(layout_distance))
+    max_distance = np.max(layout_distance)
+    print 'max_distance: %s' % max_distance
+    layout_distance = layout_distance / max_distance
+    median_distance = np.median(layout_distance)
+    std_distance = np.std(layout_distance)
+    print 'median_distance: %s' % median_distance
+    print 'std_distance: %s' % std_distance
+    eps = median_distance
+    print 'eps: %s' % eps    
+
+    layout_similarity = 1 - layout_distance
     community_idx_list = DBSCAN().fit(layout_similarity, eps=eps, min_samples=min_samples).labels_
     if -1 in community_idx_list:
+        print '-1 in community_idx_list'
         community_idx_list = list(np.array(community_idx_list) + 1)
     community_idx_list = [int(x) for x in community_idx_list]
+    print set(community_idx_list)
     return VertexClustering(g, community_idx_list)
 
 def get_network_stats(network, g, vertex_clustering):
@@ -109,7 +120,7 @@ def get_network_stats(network, g, vertex_clustering):
             community_score[member_idxs] = 0
         else:
             #reward bigger communities
-            community_score[member_idxs] = community_graph_score * (9 + np.log10(community_out))
+            community_score[member_idxs] = community_graph_score * (12 + min(np.log10(community_out), 4))
 
     #normalize
     global_pagerank = global_pagerank / np.max(global_pagerank)
@@ -151,53 +162,52 @@ if __name__ == "__main__":
     coordinates = reduce_with_linloglayout(g, root_user)
     
     #id_communities
-    vertex_clustering = id_communities(g, coordinates, eps=0.40, min_samples=10)
-    #vertex_clustering = id_communities(g, coordinates, eps=0.52, min_samples=18)
+    vertex_clustering = id_communities(g, coordinates, min_samples=10)
 
-    # #do this after community detection because it causes distortion
-    # coordinates = reproject_to_spherical_mercator(coordinates)
+    #do this after community detection because it causes distortion
+    coordinates = reproject_to_spherical_mercator(coordinates)
 
-    # #network_stats
-    # network_stats = get_network_stats(network, g, vertex_clustering)
-    # global_pagerank, community_pagerank, community_score = network_stats
-    # hybrid_pagerank = calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score)
+    #network_stats
+    network_stats = get_network_stats(network, g, vertex_clustering)
+    global_pagerank, community_pagerank, community_score = network_stats
+    hybrid_pagerank = calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score)
 
-    # #save reduction
-    # reduction = TwitterReduction.create_reduction(root_user.id, [0, 0, 0], False, postgres_handle)
-    # postgres_handle.connection.commit()
+    #save reduction
+    reduction = TwitterReduction.create_reduction(root_user.id, [0, 0, 0], False, postgres_handle)
+    postgres_handle.connection.commit()
 
-    # #save reduction users
-    # reduction_users = []
-    # for i in range(len(member_ids)):
-    #     tru = TwitterReductionUser(postgres_handle=postgres_handle)
-    #     tru.reduction_id = reduction.id
-    #     tru.user_id = member_ids[i]
-    #     tru.coordinates = Point(coordinates[i][0], coordinates[i][1])
-    #     tru.pagerank = global_pagerank[i]
-    #     tru.hybrid_pagerank = hybrid_pagerank[i]
-    #     reduction_users.append(tru.save())
-    #     postgres_handle.connection.commit()
+    #save reduction users
+    reduction_users = []
+    for i in range(len(member_ids)):
+        tru = TwitterReductionUser(postgres_handle=postgres_handle)
+        tru.reduction_id = reduction.id
+        tru.user_id = member_ids[i]
+        tru.coordinates = Point(coordinates[i][0], coordinates[i][1])
+        tru.pagerank = global_pagerank[i]
+        tru.hybrid_pagerank = hybrid_pagerank[i]
+        reduction_users.append(tru.save())
+        postgres_handle.connection.commit()
 
-    # #save communities
-    # communities = []
-    # for i in range(len(vertex_clustering)):
-    #     member_idxs = vertex_clustering[i]
-    #     if i != 0:
-    #         print "community: %s, community_score: %s, members: %s" % (i, 
-    #             community_score[member_idxs][0], len(member_idxs))
-    #         community = TwitterCommunity.create_community(reduction.id, i, member_idxs, 
-    #             member_ids[member_idxs].tolist(), MultiPoint(coordinates[member_idxs]), 
-    #             community_score[member_idxs][0], community_pagerank[member_idxs].tolist(), postgres_handle)
-    #         communities.append(community)
-    #         postgres_handle.connection.commit()
-    #     else:
-    #         print 'community 0 has %s members' % len(member_idxs)
+    #save communities
+    communities = []
+    for i in range(len(vertex_clustering)):
+        member_idxs = vertex_clustering[i]
+        if i != 0:
+            print "community: %s, community_score: %s, members: %s" % (i, 
+                community_score[member_idxs][0], len(member_idxs))
+            community = TwitterCommunity.create_community(reduction.id, i, member_idxs, 
+                member_ids[member_idxs].tolist(), MultiPoint(coordinates[member_idxs]), 
+                community_score[member_idxs][0], community_pagerank[member_idxs].tolist(), postgres_handle)
+            communities.append(community)
+            postgres_handle.connection.commit()
+        else:
+            print 'community 0 has %s members' % len(member_idxs)
 
-    # #render tiles
-    # os.system('python render_tiles.py')
+    #render tiles
+    os.system('python render_tiles.py')
 
-    # #how long
-    # print datetime.now() - start_time
+    #how long
+    print datetime.now() - start_time
 
 
 
