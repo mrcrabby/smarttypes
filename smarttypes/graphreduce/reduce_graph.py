@@ -76,6 +76,7 @@ def reproject_to_spherical_mercator(coordinates):
 
 def id_communities(g, coordinates, eps=0.42, min_samples=10):
     layout_distance = spatial.distance.squareform(spatial.distance.pdist(coordinates))
+    print np.max(layout_distance)
     layout_similarity = 1 - (layout_distance / np.max(layout_distance))
     community_idx_list = DBSCAN().fit(layout_similarity, eps=eps, min_samples=min_samples).labels_
     if -1 in community_idx_list:
@@ -148,13 +149,10 @@ if __name__ == "__main__":
     g = get_igraph_graph(network)
     member_ids = np.array(g.vs['name'])
     coordinates = reduce_with_linloglayout(g, root_user)
-
-    print np.min(coordinates)
-    print np.max(coordinates)
     
-    # #id_communities
-    # vertex_clustering = id_communities(g, coordinates, eps=0.40, min_samples=10)
-    # #vertex_clustering = id_communities(g, coordinates, eps=0.52, min_samples=18)
+    #id_communities
+    vertex_clustering = id_communities(g, coordinates, eps=0.40, min_samples=10)
+    #vertex_clustering = id_communities(g, coordinates, eps=0.52, min_samples=18)
 
     # #do this after community detection because it causes distortion
     # coordinates = reproject_to_spherical_mercator(coordinates)
