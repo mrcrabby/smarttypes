@@ -14,9 +14,7 @@ if __name__ == "__main__":
     for creds in TwitterCredentials.get_all(postgres_handle):
         root_user = creds.root_user
         if root_user and root_user.screen_name not in mk_these_maps:
-            distance = 25000 / len(root_user.following[:1000])
-            if len(TwitterUser.get_following_following_ids(root_user, distance=distance)) > 10000:
-                mk_these_maps.append(root_user.screen_name)
+            mk_these_maps.append(root_user.screen_name)
 
     for screen_name in mk_these_maps:
         if screen_name not in ['CocaCola']:
