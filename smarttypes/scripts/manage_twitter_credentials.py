@@ -33,6 +33,14 @@ if __name__ == "__main__":
     """
     if len(sys.argv) == 1:
         list_cred_details()
+
+    elif len(sys.argv) == 2:
+        creds_user = TwitterUser.by_screen_name(sys.argv[1], postgres_handle)
+        creds = TwitterCredentials.get_by_twitter_id(creds_user.id, postgres_handle)
+        creds.root_user_id = None
+        creds.save()
+        postgres_handle.connection.commit()
+        
     else:
         creds_user = TwitterUser.by_screen_name(sys.argv[1], postgres_handle)
         root_user = TwitterUser.by_screen_name(sys.argv[2], postgres_handle)
