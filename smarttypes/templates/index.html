@@ -43,23 +43,23 @@
         ?>
 
         <div class="span7">
-            <div>
+            <div style="padding:0 10px;">
                 <div id="map_header">
-                    <div style="padding:0 20px;">
-                        <h2>
-                            <img width="50px" py:if="root_user.profile_image_url" 
+                    <div>
+                        <img width="50px" style="padding:0 15px 0 0;vertical-align: top;" align="left" py:if="root_user.profile_image_url" 
                                 src="${root_user.profile_image_url}" alt="root_user.screen_name" />
+                        
+                        <i class="icon-share"></i>
+                        <a target="_blank" 
+                            href="https://twitter.com/${root_user.screen_name}">${root_user.screen_name}</a>
 
-                            <i class="icon-share"></i>
-                            <a target="_blank" 
-                                href="https://twitter.com/${root_user.screen_name}">${root_user.screen_name}</a>
-                        </h2>
                         <span style="font-style:italic;">
                             ${root_user.location_name if root_user.location_name else 'No location given'}
                         </span>
-                        <span py:if="root_user.description">
-                            -- 
-                            ${root_user.description[:100]}${'...' if len(root_user.description) &gt; 100 else ''}
+
+                        <span style="" py:if="root_user.description">
+                            <br/>
+                            ${root_user.description}
                         </span>
                     </div>
                     <div style="clear:both;">&nbsp;</div>
@@ -75,10 +75,10 @@
 
             <ul class="nav nav-tabs">
                 <li class="active">
-                    <a href="#this_map" data-toggle="tab">${len(communities)} communities</a>
+                    <a href="#this_map" data-toggle="tab">Communities</a>
                 </li>
                 <li>
-                    <a href="#other_maps" data-toggle="tab">More maps</a>
+                    <a href="#other_maps" data-toggle="tab">Explore</a>
                 </li>
             </ul>
 
@@ -122,7 +122,7 @@
 
                                     <span py:if="top_user.description">
                                         <br/>
-                                        ${top_user.description[:100]}${'...' if len(top_user.description) &gt; 100 else ''}
+                                        ${top_user.description}
                                     </span>
 
                                     <span py:if="top_user.url">
@@ -168,7 +168,7 @@
 
                             <span py:if="user.description">
                                 <br/>
-                                ${user.description[:100]}${'...' if len(user.description) &gt; 100 else ''}
+                                ${user.description}
                             </span>
                         </li>
                     </ul>

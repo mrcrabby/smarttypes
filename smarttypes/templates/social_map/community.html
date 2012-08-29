@@ -8,7 +8,7 @@
         <div class="user_list" style="height:200px;overflow:scroll;overflow-x:hidden;">
 
             <ul style="list-style:none;margin:10px 0;">
-                <li style="margin:20px 10px;" py:for="score, user in community.top_users(10)">
+                <li style="margin:20px 10px;" py:for="score, user in community.top_users(7)">
 
                     <img py:if="user.profile_image_url" 
                         width="50px" src="${user.profile_image_url}" alt="user.screen_name" />
@@ -25,7 +25,7 @@
 
                     <span py:if="user.description">
                         <br/>
-                        ${user.description[:100]}${'...' if len(user.description) &gt; 100 else ''}
+                        ${user.description}
                     </span>
 
                     <span py:if="user.url">
