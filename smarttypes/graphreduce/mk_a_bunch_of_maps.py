@@ -14,11 +14,11 @@ if __name__ == "__main__":
     for creds in TwitterCredentials.get_all(postgres_handle):
         root_user = creds.root_user
         if root_user and root_user.screen_name not in mk_these_maps:
-        	if len(TwitterUser.get_following_following_ids(root_user, distance=500)) > 6000:
-            	mk_these_maps.append(root_user.screen_name)
+            if len(TwitterUser.get_following_following_ids(root_user, distance=500)) > 6000:
+                mk_these_maps.append(root_user.screen_name)
 
     for screen_name in mk_these_maps:
-    	if screen_name not in ['CocaCola']:
-        	print 'making a map for %s' % screen_name
-        	#os.system('python reduce_graph.py %s 0' % screen_name)
+        if screen_name not in ['CocaCola']:
+            print 'making a map for %s' % screen_name
+            #os.system('python reduce_graph.py %s 0' % screen_name)
 
