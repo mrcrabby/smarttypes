@@ -17,12 +17,10 @@ def list_cred_details():
         root_username = root_user.screen_name if root_user else 'None'
         last_api_query = creds.last_root_user_api_query if creds.last_root_user_api_query else datetime(2000,1,1)
 
-        print '%s -- %s -- %s -- %s -- %s' % (
-            string.ljust(creds_username, 12),
-            string.ljust(root_username, 12), 
-            string.ljust(creds.email if creds.email else '', 30),
-            creds.createddate.strftime('%y_%m_%d'),
-            last_api_query.strftime('%y_%m_%d'),
+        print '%s %s %s' % (
+            string.ljust(creds_username, 20),
+            string.ljust(root_username, 20), 
+            string.ljust(creds.email if creds.email else '', 30)
         )
 
 if __name__ == "__main__":
@@ -40,7 +38,7 @@ if __name__ == "__main__":
         creds.root_user_id = None
         creds.save()
         postgres_handle.connection.commit()
-        
+
     else:
         creds_user = TwitterUser.by_screen_name(sys.argv[1], postgres_handle)
         root_user = TwitterUser.by_screen_name(sys.argv[2], postgres_handle)
