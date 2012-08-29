@@ -79,11 +79,14 @@ def id_communities(g, coordinates):
     max_distance = np.max(layout_distance)
     print 'max_distance: %s' % max_distance
     layout_distance = layout_distance / max_distance
-    layout_similarity = 1 - layout_distance
-    eps = np.mean(layout_similarity) * 0.6
-    min_samples = 15 / np.mean(layout_similarity)  
+    mean_distance = np.mean(layout_distance)
+    print 'mean_distance: %s' % mean_distance
+    eps = mean_distance / 1.3
+    min_samples = mean_distance * 35
     print 'eps: %s' % eps
     print 'min_samples: %s' % min_samples
+
+    layout_similarity = 1 - layout_distance
     community_idx_list = DBSCAN().fit(layout_similarity, eps=eps, min_samples=min_samples).labels_
     if -1 in community_idx_list:
         print '-1 in community_idx_list'
@@ -116,7 +119,7 @@ def get_network_stats(network, g, vertex_clustering):
             community_pagerank[member_idxs] = 0
             community_score[member_idxs] = 0
         else:
-            #reward bigger communities
+            #reward bigger communities a little
             community_score[member_idxs] = community_graph_score * (12 + min(np.log10(community_out), 4))
 
     #normalize
