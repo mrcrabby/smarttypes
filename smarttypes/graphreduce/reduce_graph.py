@@ -81,8 +81,8 @@ def id_communities(g, coordinates):
     layout_distance = layout_distance / max_distance
     mean_distance = np.mean(layout_distance)
     print 'mean_distance: %s' % mean_distance
-    eps = mean_distance / 1.3
-    min_samples = mean_distance * 35
+    eps = mean_distance / .85
+    min_samples = 8.5 / mean_distance
     print 'eps: %s' % eps
     print 'min_samples: %s' % min_samples
 
