@@ -80,7 +80,7 @@ def id_communities(g, coordinates, min_samples=10):
     print 'max_distance: %s' % max_distance
     layout_distance = layout_distance / max_distance
     layout_similarity = 1 - layout_distance
-    eps = np.mean(layout_similarity)
+    eps = np.mean(layout_similarity) * 0.6
     print 'eps: %s' % eps
     community_idx_list = DBSCAN().fit(layout_similarity, eps=eps, min_samples=min_samples).labels_
     if -1 in community_idx_list:
