@@ -100,10 +100,12 @@ def get_network_stats(network, g, vertex_clustering):
         #community_score
         community_out = float(sum([len(network[x]) for x in community_graph.vs['name']]))
         community_graph_score = float(sum(community_graph.vs.indegree())) / community_out
-        if i != 0:
-            community_score[member_idxs] = community_graph_score * (4 + np.log10(len(member_idxs)))
+        #the first community really isnt a community
+        if i == 0:
+            community_score[member_idxs] = community_graph_score * 1
         else:
-            community_score[member_idxs] = community_graph_score * 0.01
+            #reward bigger communities
+            community_score[member_idxs] = community_graph_score * (9 + np.log10(community_out))
 
     #normalize
     global_pagerank = global_pagerank / np.max(global_pagerank)
@@ -112,8 +114,8 @@ def get_network_stats(network, g, vertex_clustering):
     return global_pagerank, community_pagerank, community_score
 
 def calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score):
-    hybrid_pagerank = community_pagerank * community_score
-    hybrid_pagerank = hybrid_pagerank / scoreatpercentile(hybrid_pagerank, 98)
+    hybrid_pagerank = (community_pagerank * 0.9) + (community_score * 0.7) + (global_pagerank * 0.5)
+    hybrid_pagerank = hybrid_pagerank / scoreatpercentile(hybrid_pagerank, 95)
     return hybrid_pagerank
 
 if __name__ == "__main__":
@@ -132,6 +134,7 @@ if __name__ == "__main__":
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
     if distance < 1:
         distance = 50000 / len(root_user.following[:1000])
+    distance = min(distance, 500)
 
     #get network and reduce
     if smarttypes.config.IS_PROD:
@@ -145,7 +148,7 @@ if __name__ == "__main__":
     coordinates = reduce_with_linloglayout(g, root_user)
     
     #id_communities
-    vertex_clustering = id_communities(g, coordinates, eps=0.45, min_samples=16)
+    vertex_clustering = id_communities(g, coordinates, eps=0.43, min_samples=10)
     #vertex_clustering = id_communities(g, coordinates, eps=0.52, min_samples=18)
 
     #do this after community detection because it causes distortion

@@ -246,7 +246,7 @@ class TwitterUser(PostgresBaseModel):
         from twitter_user u
         join twitter_user_following_%s f on u.id = f.twitter_user_id 
         join only_these_ids on only_these_ids.id = u.id
-        where u.followers_count > 15 
+        where u.followers_count > 20 
         ;
         """
         following_following_ids = cls.get_following_following_ids(root_user, distance=distance)
