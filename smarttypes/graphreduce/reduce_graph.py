@@ -84,8 +84,10 @@ def id_communities(g, coordinates, eps=0.42, min_samples=10):
     return VertexClustering(g, community_idx_list)
 
 def get_network_stats(network, g, vertex_clustering):
+
     n = len(g.vs)
     global_pagerank = np.array(g.pagerank(damping=0.75))
+
     #community stats
     community_pagerank, community_score = np.zeros(n), np.zeros(n)
     for i in range(len(vertex_clustering)):
@@ -102,7 +104,8 @@ def get_network_stats(network, g, vertex_clustering):
         community_graph_score = float(sum(community_graph.vs.indegree())) / community_out
         #the first community isnt a community
         if i == 0:
-            community_score[member_idxs] = community_graph_score * 0
+            community_pagerank[member_idxs] = 0
+            community_score[member_idxs] = 0
         else:
             #reward bigger communities
             community_score[member_idxs] = community_graph_score * (9 + np.log10(community_out))
@@ -133,7 +136,7 @@ if __name__ == "__main__":
         distance = int(sys.argv[2])
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
     if distance < 1:
-        distance = 40000 / len(root_user.following[:1000])
+        distance = 30000 / len(root_user.following[:1000])
 
     #get network and reduce
     if smarttypes.config.IS_PROD:
