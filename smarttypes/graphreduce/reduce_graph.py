@@ -148,55 +148,58 @@ if __name__ == "__main__":
     g = get_igraph_graph(network)
     member_ids = np.array(g.vs['name'])
     coordinates = reduce_with_linloglayout(g, root_user)
+
+    print np.min(coordinates)
+    print np.max(coordinates)
     
-    #id_communities
-    vertex_clustering = id_communities(g, coordinates, eps=0.40, min_samples=10)
-    #vertex_clustering = id_communities(g, coordinates, eps=0.52, min_samples=18)
+    # #id_communities
+    # vertex_clustering = id_communities(g, coordinates, eps=0.40, min_samples=10)
+    # #vertex_clustering = id_communities(g, coordinates, eps=0.52, min_samples=18)
 
-    #do this after community detection because it causes distortion
-    coordinates = reproject_to_spherical_mercator(coordinates)
+    # #do this after community detection because it causes distortion
+    # coordinates = reproject_to_spherical_mercator(coordinates)
 
-    #network_stats
-    network_stats = get_network_stats(network, g, vertex_clustering)
-    global_pagerank, community_pagerank, community_score = network_stats
-    hybrid_pagerank = calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score)
+    # #network_stats
+    # network_stats = get_network_stats(network, g, vertex_clustering)
+    # global_pagerank, community_pagerank, community_score = network_stats
+    # hybrid_pagerank = calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score)
 
-    #save reduction
-    reduction = TwitterReduction.create_reduction(root_user.id, [0, 0, 0], False, postgres_handle)
-    postgres_handle.connection.commit()
+    # #save reduction
+    # reduction = TwitterReduction.create_reduction(root_user.id, [0, 0, 0], False, postgres_handle)
+    # postgres_handle.connection.commit()
 
-    #save reduction users
-    reduction_users = []
-    for i in range(len(member_ids)):
-        tru = TwitterReductionUser(postgres_handle=postgres_handle)
-        tru.reduction_id = reduction.id
-        tru.user_id = member_ids[i]
-        tru.coordinates = Point(coordinates[i][0], coordinates[i][1])
-        tru.pagerank = global_pagerank[i]
-        tru.hybrid_pagerank = hybrid_pagerank[i]
-        reduction_users.append(tru.save())
-        postgres_handle.connection.commit()
+    # #save reduction users
+    # reduction_users = []
+    # for i in range(len(member_ids)):
+    #     tru = TwitterReductionUser(postgres_handle=postgres_handle)
+    #     tru.reduction_id = reduction.id
+    #     tru.user_id = member_ids[i]
+    #     tru.coordinates = Point(coordinates[i][0], coordinates[i][1])
+    #     tru.pagerank = global_pagerank[i]
+    #     tru.hybrid_pagerank = hybrid_pagerank[i]
+    #     reduction_users.append(tru.save())
+    #     postgres_handle.connection.commit()
 
-    #save communities
-    communities = []
-    for i in range(len(vertex_clustering)):
-        member_idxs = vertex_clustering[i]
-        if i != 0:
-            print "community: %s, community_score: %s, members: %s" % (i, 
-                community_score[member_idxs][0], len(member_idxs))
-            community = TwitterCommunity.create_community(reduction.id, i, member_idxs, 
-                member_ids[member_idxs].tolist(), MultiPoint(coordinates[member_idxs]), 
-                community_score[member_idxs][0], community_pagerank[member_idxs].tolist(), postgres_handle)
-            communities.append(community)
-            postgres_handle.connection.commit()
-        else:
-            print 'community 0 has %s members' % len(member_idxs)
+    # #save communities
+    # communities = []
+    # for i in range(len(vertex_clustering)):
+    #     member_idxs = vertex_clustering[i]
+    #     if i != 0:
+    #         print "community: %s, community_score: %s, members: %s" % (i, 
+    #             community_score[member_idxs][0], len(member_idxs))
+    #         community = TwitterCommunity.create_community(reduction.id, i, member_idxs, 
+    #             member_ids[member_idxs].tolist(), MultiPoint(coordinates[member_idxs]), 
+    #             community_score[member_idxs][0], community_pagerank[member_idxs].tolist(), postgres_handle)
+    #         communities.append(community)
+    #         postgres_handle.connection.commit()
+    #     else:
+    #         print 'community 0 has %s members' % len(member_idxs)
 
-    #render tiles
-    os.system('python render_tiles.py')
+    # #render tiles
+    # os.system('python render_tiles.py')
 
-    #how long
-    print datetime.now() - start_time
+    # #how long
+    # print datetime.now() - start_time
 
 
 
