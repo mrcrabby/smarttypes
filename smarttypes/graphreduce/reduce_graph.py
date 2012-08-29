@@ -117,7 +117,7 @@ def get_network_stats(network, g, vertex_clustering):
     return global_pagerank, community_pagerank, community_score
 
 def calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score):
-    hybrid_pagerank = (community_pagerank * 0.9) + (community_score * 0.9) + (global_pagerank * 0.5)
+    hybrid_pagerank = (community_pagerank * 0.9) + (community_score * 0.7) + (global_pagerank * 0.5)
     hybrid_pagerank = hybrid_pagerank / scoreatpercentile(hybrid_pagerank, 98)
     return hybrid_pagerank
 

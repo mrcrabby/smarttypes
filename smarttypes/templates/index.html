@@ -49,6 +49,7 @@
                         <img width="50px" style="padding:0 15px 0 0;vertical-align: top;" align="left" py:if="root_user.profile_image_url" 
                                 src="${root_user.profile_image_url}" alt="root_user.screen_name" />
                         
+                        <br/>
                         <i class="icon-share"></i>
                         <a target="_blank" 
                             href="https://twitter.com/${root_user.screen_name}">${root_user.screen_name}</a>
@@ -75,10 +76,10 @@
 
             <ul class="nav nav-tabs">
                 <li class="active">
-                    <a href="#this_map" data-toggle="tab">Communities</a>
+                    <a style="font-weight:bold;" href="#this_map" data-toggle="tab">${len(communities)} Communities</a>
                 </li>
                 <li>
-                    <a href="#other_maps" data-toggle="tab">Explore</a>
+                    <a style="font-weight:bold;" href="#other_maps" data-toggle="tab">Explore</a>
                 </li>
             </ul>
 
@@ -108,7 +109,7 @@
                                     <img width="50px" py:if="top_user.profile_image_url" 
                                             src="${top_user.profile_image_url}" alt="top_user.screen_name" />
 
-                                    <span style="font-weight:bold;">
+                                    <span>
                                         <i class="icon-share"></i>
                                         <a target="_blank" 
                                             href="https://twitter.com/${top_user.screen_name}">

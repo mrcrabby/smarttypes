@@ -37,7 +37,7 @@ class TwitterReduction(PostgresBaseModel):
             results.append(TwitterReductionUser(postgres_handle=self.postgres_handle, **result))
         return results
 
-    def communities(self, offset=0, limit=30):
+    def communities(self, offset=0, limit=100):
         from smarttypes.model.twitter_community import TwitterCommunity
         communities = TwitterCommunity.get_by_name_value('reduction_id', self.id, 
             self.postgres_handle)
