@@ -82,7 +82,7 @@ def id_communities(g, coordinates):
     mean_distance = np.mean(layout_distance)
     print 'mean_distance: %s' % mean_distance
     eps = mean_distance / .85
-    min_samples = 8.5 / mean_distance
+    min_samples = 7.5 / mean_distance
     print 'eps: %s' % eps
     print 'min_samples: %s' % min_samples
 
@@ -148,7 +148,8 @@ if __name__ == "__main__":
         distance = int(sys.argv[2])
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
     if distance < 1:
-        distance = 25000 / len(root_user.following[:1000])
+        #distance = 25000 / len(root_user.following[:1000])
+        distance = 15000 / len(root_user.following[:1000])
 
     #get network and reduce
     if smarttypes.config.IS_PROD:
