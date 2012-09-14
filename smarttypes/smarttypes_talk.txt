@@ -45,6 +45,11 @@ This project has exposed me to a lot of interesting libraries and ideas:
 - agent based modeling
 
 DETAILED ABSTRACT
+Networks are a convenient (fertile) abstraction. At a high level, networks are about objects and relationships between objects. It's surprising how much can be done w/ this simple abstraction. I'll focus on social network analysis, but these same methods and tools can be applied to any network (gene expression network, network of pages on the web, percolation of diseases, linguistic lexical networks, ...).
+
+There's a lot one can do within the umbrella of network analysis. I'll focus specifically on reducing a network to 2 dimensions.  I think of this as network compression. This problem is commonly called 'graph embedding':
+
+http://en.wikipedia.org/wiki/Graph_embedding
 
 Getting the data
 
