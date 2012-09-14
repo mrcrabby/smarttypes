@@ -1,0 +1,90 @@
+
+TITLE
+Mapping our social world
+
+CATEGORY
+Social network analysis
+
+AUDIENCE LEVEL
+Intermediate
+
+DURATION
+I prefer a 30 minute slot
+
+BRIEF OUTLINE
+Networks, social science, chaos & complexity, prediction, big data: these are all common buzzwords in a technologist's vocabulary today. We live in a great & crazy time.  Social scientists of yore would be amazed to see the data & tools the average hacker has at their disposal. Large scale social studies were a luxury enjoyed by an elite few, the best public source of info, a ten year census. Today, we have more social data than we know what to do with.
+
+This is from a recent DARPA request for proposals:
+
+https://www.fbo.gov/index?s=opportunity&mode=form&id=6ef12558b44258382452fcf02942396a&tab=core&_cview=0
+
+- Recognize persuasion campaign structures and influence operations across social media sites and communities.
+- Counter messaging of detected adversary influence operations. 
+- Identify participants and intent, and measure effects of persuasion campaigns.
+
+These are a few of the things people, governments, and big business are doing w/ social data.
+
+I want to talk about my python-based open-source side-project (probably the most hyphenated words i've ever strung together):
+
+http://www.smarttypes.org/
+
+SmartTypes is concerned w/ mapping our social world.  I don't mean showing where twitter users live on a geographic map (although that would be cool).  I'm talking about reducing a social network to 2 dimensions while preserving the essence of the network.  I'll explain more.
+
+This project has exposed me to a lot of interesting libraries and ideas: 
+
+- linear algebra (numpy & scipy)
+- network (graph) analysis (networkx & igraph)
+- machine learning (scikit-learn) 
+- parallel processing (multiprocessing)
+- distributed graph analysis frameworks (pregel & graphlab) 
+- graph theory
+- statistics and probability
+- agent based modeling
+- web mapping tools (tillmile & leaflet)
+
+I'll explain more
+
+DETAILED ABSTRACT
+
+Network analysis
+
+Dimension reduction
+
+Community detection
+
+Distributed graph analysis
+
+Belief propagation 
+
+
+ADDITIONAL NOTES
+SmartTypes is entirely open source software. You can check out the source tree at https://github.com/smarttypes/smarttypes
+
+This would be my first time speaking at a conference like PyCon. I spoke about this (when i was first starting the project) -- at pyohio in 2011 -- http://python.mirocommunity.org/video/4380/pyohio-2011-using-pymc-to-clus
+
+I've since gained a lot of technical experience.  This talk will be 95% technical.  I feel like my 2011 pyohio talk was to abstract, unrehearsed, and philosophical. This talk will be much more to the point and polished.
+
+Here’s what I’m thinking for timing:
+
+Intro (5 min)
+- Who am I?
+- Social science then and now
+- Some examples of social network analysis today
+Making a social map (10 min)
+- Networks (a handy abstraction)
+- Dimension reduction
+- Graph reduction
+- Community detection
+- Web display and interaction
+Scaling (mapping millions of nodes) (10 min)
+- MapReduce & Pregel (similarities & differences)
+- Graphlab
+- Agent based modeling
+- Objective function 
+- Belief propagation & partial derivatives (a simple perspective)
+Questions (5 mins)
+
+
+
+
+
