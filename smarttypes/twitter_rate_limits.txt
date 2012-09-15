@@ -1,0 +1,31 @@
+
+
+https://dev.twitter.com/docs/rate-limiting/1.1
+
+ - 15 calls every 15 minutes, and 180 calls every 15 minutes
+
+https://dev.twitter.com/docs/api/1.1/get/friends/ids (15)
+
+ - Results are given in groups of 5,000 user IDs
+
+https://dev.twitter.com/docs/api/1.1/get/users/lookup (180)
+
+ - Returns fully-hydrated user objects for up to 100 users per request
+
+ - This method is especially useful when used in conjunction with collections of user IDs returned from GET friends/ids and GET followers/ids.
+
+https://dev.twitter.com/docs/api/1.1/get/application/rate_limit_status (180)
+
+ - Need to pay attention to this
+
+research twitter cards
+
+-----------------------------------------------------
+
+
+
+180 * 15 * 100 = 72000 users
+
+
+
+

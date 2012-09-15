@@ -12,7 +12,7 @@ DURATION
 I prefer a 30 minute slot
 
 BRIEF OUTLINE
-Networks, social networks, chaos & complexity, prediction, big data: just a few of the buzzwords in a technologist's vocabulary today. Social scientists of yore would be amazed to see the data & tools the average hacker has at their disposal. Large scale social studies were a luxury enjoyed by an elite few, the best public source of info, a ten year census. Today, we have more social data than we know what to do with.
+Networks, social networks, chaos & complexity, prediction, big data: these are just a few of the buzzwords in a technologist's vocabulary today. Social scientists 'of yore' would be thrilled to see the data & tools the average hacker has at their disposal. Large scale social studies were a luxury enjoyed by an elite few, the best public source of info, a ten year census. Today, we have more social data than we know what to do with.
 
 This is from a recent DARPA request for proposals:
 
@@ -45,19 +45,26 @@ This project has exposed me to a lot of interesting libraries and ideas:
 - agent based modeling
 
 DETAILED ABSTRACT
-Networks are a convenient (fertile) abstraction. At a high level, networks are about objects and relationships between objects. It's surprising how much can be done w/ this simple abstraction. I'll focus on social network analysis, but these same methods and tools can be applied to any network (gene expression network, network of pages on the web, percolation of diseases, linguistic lexical networks, ...).
+Networks are a convenient (fertile) abstraction. At a high level, networks are about objects and relationships between objects. It's surprising how much can be done w/ this simple abstraction. I'll talk about social network analysis, but the same methods and tools can be applied to any network (gene expression network, network of pages on the web, percolation of diseases, linguistic lexical networks, so forth and so on...).
 
-There's a lot one can do within the umbrella of network analysis. I'll focus specifically on reducing a network to 2 dimensions.  I think of this as network compression. This problem is commonly called 'graph embedding':
+There's a lot one can do within the umbrella of network analysis. I'll focus specifically on reducing a network to 2 dimensions. I'll explain more. Think of this as network compression, this is commonly called 'graph embedding'.
 
-http://en.wikipedia.org/wiki/Graph_embedding
+*Getting the data
+There has been a lot of talk about twitter's rate limits. I will talk about the newest (1.1) version, and differences from the prior version. Sad spoiler: we can pull 1/6 of the data. Even so, it's still possible to pull a lot of data (thousands and millions of users).
 
-Getting the data
+I will also talk about getting & storing the data.
 
-Making a social map
+*Making a social map
+Reducing the dimensionality of graphs is actually an easy concept when you understand the Adjacency Matrix: 
 
-Display and interaction
+http://en.wikipedia.org/wiki/Adjacency_matrix
 
-One map to rule them all
+I will describe the adjacency matrix and how we'll go about reducing it to 2 dimensions, so that distance on our 2 dimensional plane is the same as similarity (technically dis-similarity). Happy spoiler: our objective function is incredible simple.
+
+*Display and interaction
+I will talk about different web mapping options (canvas, svg, and tiled images). I'll also talk about handy 
+
+*One map to rule them all
 
 
 ADDITIONAL NOTES

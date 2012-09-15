@@ -1,15 +1,8 @@
 
 
-**twitter_community
 
-- community_edges
-- x_axis
-- y_axis
-- member_scores
+new twitter rate limits:
 
-+ center_coordinate
-+ global_pagerank
-+ community_pagerank
 
-+ hybrid_pagerank
+
 
