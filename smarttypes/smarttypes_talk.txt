@@ -12,7 +12,7 @@ DURATION
 I prefer a 30 minute slot
 
 BRIEF OUTLINE
-Networks, social networks, chaos & complexity, prediction, big data: these are just a few of the buzzwords in a technologist's vocabulary today. Social scientists 'of yore' would be thrilled to see the data & tools the average hacker has at their disposal. Large scale social studies were a luxury enjoyed by an elite few, the best public source of info, a ten year census. Today, we have more social data than we know what to do with.
+Networks, social networks, chaos & complexity, prediction, big data; these are common buzzwords in a technologist's vocab. Social scientists of yore would be thrilled to see the data & tools the average hacker has at their disposal. 
 
 This is from a recent DARPA request for proposals:
 
@@ -22,59 +22,58 @@ https://www.fbo.gov/index?s=opportunity&mode=form&id=6ef12558b44258382452fcf0294
 - Counter messaging of detected adversary influence operations. 
 - Identify participants and intent, and measure effects of persuasion campaigns.
 
-These are a few of the things people, governments, and big business are doing w/ social data.
+These are a few of the things people, governments, and big business are doing w/ social data today.
 
 I want to talk about my python-based open-source side-project (probably the most hyphenated words i've ever strung together):
 
 http://www.smarttypes.org/
 
-SmartTypes is concerned w/ mapping our social world.  I don't mean showing where twitter users live on a geographic map (although that would be cool).  I'm talking about reducing a social network to 2 dimensions, while preserving the essence of the network.  I'll explain more.
+SmartTypes is about mapping our social world.  I don't mean showing where twitter users live on a geographic map (although that would be cool).  I mean reducing a social network to 2 dimensions (network compression). I'll explain more.
 
-This project has exposed me to a lot of interesting libraries and ideas: 
+Thanks to this project, i've been exposed to a lot of new / interesting libraries and ideas: 
 
-- twitter scraping (oauth & tweepy)
-- parallel processing (multiprocessing)
-- linear algebra (numpy & scipy)
-- network analysis (networkx & igraph)
-- machine learning (scikit-learn)
-- gis (postgis)
-- web mapping tools (tillmile & leaflet) 
-- distributed graph analysis (pregel & graphlab) 
-- graph theory
-- statistics and probability
-- agent based modeling
+- Twitter data collection (oauth & tweepy)
+- Parallel processing w/ python (multiprocessing)
+- Linear algebra w/ python (numpy & scipy)
+- Network analysis (networkx & igraph)
+- Machine learning w/ python (scikit-learn)
+- GIS (postgis)
+- Web mapping tools (tillmile & leaflet) 
+- Distributed graph analysis (pregel & graphlab) 
+- Graph theory
+- Statistics and probability
+- Agent based modeling
 
 DETAILED ABSTRACT
-Networks are a convenient (fertile) abstraction. At a high level, networks are about objects and relationships between objects. It's surprising how much can be done w/ this simple abstraction. I'll talk about social network analysis, but the same methods and tools can be applied to any network (gene expression network, network of pages on the web, percolation of diseases, linguistic lexical networks, so forth and so on...).
+Networks are a convenient (fertile) abstraction. At a high level, networks are about objects and relationships between objects. It's surprising what can be done w/ this simple abstraction. I'll focus on social network analysis, keep in mind, the same methods and tools can be applied to any network abstraction (gene expression networks, the web, percolation of diseases, lexical networks, ...)
 
-There's a lot one can do within the umbrella of network analysis. I'll focus specifically on reducing a network to 2 dimensions. I'll explain more. Think of this as network compression, this is commonly called 'graph embedding'.
+There's a lot one can do within the umbrella of network analysis. I'll focus on reducing a network to 2 dimensions, and using this reduction to easily learn about communities and user similarities.
 
 *Getting the data
-There has been a lot of talk about twitter's rate limits. I will talk about the newest (1.1) version, and differences from the prior version. Sad spoiler: we can pull 1/6 of the data. Even so, it's still possible to pull a lot of data (thousands and millions of users).
+Twitter rate limits have been a popular topic lately. I'll talk about the newest (1.1) version, and differences between the prior version. Sad spoiler: we can pull 1/6 of the data. Even so, we can still pull a lot of data (thousands and millions of users).
 
-I will also talk about getting & storing the data.
+I will also talk about getting & storing the twitter network data.
 
 *Making a social map
-Reducing the dimensionality of graphs is actually an easy concept when you understand the Adjacency Matrix: 
+Reducing the dimensionality of network is an easy concept once you understand the Adjacency Matrix: 
 
 http://en.wikipedia.org/wiki/Adjacency_matrix
 
-I will describe the adjacency matrix and how we'll go about reducing it to 2 dimensions, so that distance on our 2 dimensional plane is the same as similarity (technically dis-similarity). Happy spoiler: our objective function is incredible simple.
+I will describe the adjacency matrix, and how we reduce it to 2 dimensions. Happy spoiler: our objective function is incredibly simple.
 
 *Display and interaction
-I will talk about different web mapping options (canvas, svg, and tiled images). I'll also talk about handy 
+I will talk about different web mapping options (canvas, svg, and tiled images). I'll also talk about web mapping tools tilemill & leaflet.
 
-*One map to rule them all
-
+I'll show the application, and show a map of someone the audience knows.
 
 ADDITIONAL NOTES
 SmartTypes is entirely open source software. You can check out the source tree at https://github.com/smarttypes/smarttypes
 
-This would be my first time speaking at a conference like PyCon. I spoke about this (when i was first starting the project) at pyohio in 2011:
+I spoke about this (when i was first starting the project) at pyohio in 2011:
 
 http://python.mirocommunity.org/video/4380/pyohio-2011-using-pymc-to-clus
 
-I've since gained a lot of technical insight & direction.  This talk will be 95% technical.  I feel like my 2011 pyohio talk was too abstract and philosophical. This talk will be much more technical and to the point.
+I've since gained a lot of technical insight & direction. I feel like my 2011 pyohio talk was too abstract and philosophical. This talk will be more technical and to the point.
 
 Here’s what I’m thinking for timing:
 
@@ -86,36 +85,32 @@ Intro (5 min)
 
 Getting the data (5 min)
 - Twitters terms of service
-- Getting auth tokens
+- Auth tokens
 - Pulling & storing twitter info
 
 Making a social map (5 min)
+- The adjacency Matrix
 - Dimension reduction
-- Network embedding
 - Why 
-- Community detection
 - Similarity
-- Location based indexing
+- Community detection
+- Indexing
 
 Display and interaction (5 min)
 - Web maps
-- Canvas vs. SVG vs. Imagine tiling
+- Canvas -- SVG -- Image tiling
 - Tilemill
 - Leaflet
 - A quick look at the UI
 
 One map to rule them all (5 min)
-- Enter distributed graph analysis 
+- Distributed graph analysis 
 - MapReduce & Pregel (similarities & differences)
-- Graphlab (asynchronous & disk-based)
+- The Bulk Synchronous Parallel (BSP) model
 - The life of a vertex
-- Individual and collective objective
+- The individual objective -- the collective objective
 - Dealing w/ incomplete information 
-- Belief propagation & partial derivatives (a simple perspective)
 
 Questions (5 mins)
-
-
-
 
 
