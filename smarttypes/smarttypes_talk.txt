@@ -47,19 +47,19 @@ Thanks to this project, i've been exposed to a lot of new / interesting librarie
 DETAILED ABSTRACT
 Networks are a convenient (fertile) abstraction. At a high level, networks are about objects and relationships between objects. It's surprising what can be done w/ this simple abstraction. I'll focus on social network analysis, keep in mind, the same methods and tools can be applied to any network abstraction (gene expression networks, the web, percolation of diseases, lexical networks, ...)
 
-There's a lot one can do within the umbrella of network analysis. I'll focus on reducing a network to 2 dimensions, and using this reduction to easily learn about communities and user similarities.
+There's a lot one can do within the umbrella of network analysis. I'll focus on reducing a network to 2 dimensions (graph embedding), and using this reduction to index communities and similarities.
 
 *Getting the data
 Twitter rate limits have been a popular topic lately. I'll talk about the newest (1.1) version, and differences between the prior version. Sad spoiler: we can pull 1/6 of the data. Even so, we can still pull a lot of data (thousands and millions of users).
 
-I will also talk about getting & storing the twitter network data.
+I will also talk about how i'm getting & storing the data.
 
 *Making a social map
 Reducing the dimensionality of network is an easy concept once you understand the Adjacency Matrix: 
 
 http://en.wikipedia.org/wiki/Adjacency_matrix
 
-I will describe the adjacency matrix, and how we reduce it to 2 dimensions. Happy spoiler: our objective function is incredibly simple.
+I will describe the adjacency matrix, and different ways to reduce the dimensionality of this matrix. Then i will talk specifically about the forced-based model i settled on. Happy spoiler: our objective function is incredibly simple.
 
 *Display and interaction
 I will talk about different web mapping options (canvas, svg, and tiled images). I'll also talk about web mapping tools tilemill & leaflet.
