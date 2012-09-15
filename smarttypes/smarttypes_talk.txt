@@ -45,7 +45,7 @@ Thanks to this project, i've been exposed to a lot of new / interesting librarie
 - Agent based modeling
 
 DETAILED ABSTRACT
-Networks are a convenient (fertile) abstraction. At a high level, networks are about objects and relationships between objects. It's surprising what can be done w/ this simple abstraction. I'll focus on social network analysis, keep in mind, the same methods and tools can be applied to any network abstraction (gene expression networks, the web, percolation of diseases, lexical networks, ...)
+Networks are a convenient (fertile) abstraction. At a high level, networks are about objects and relationships between objects. It's surprising what can be done w/ this simple abstraction. I'll focus on social network analysis, keep in mind, the same methods and tools can be applied to any network (gene expression networks, the web, percolation of diseases, lexical networks, ...)
 
 There's a lot one can do within the umbrella of network analysis. I'll focus on reducing a network to 2 dimensions (graph embedding), and using this reduction to index communities and similarities.
 
@@ -55,16 +55,14 @@ Twitter rate limits have been a popular topic lately. I'll talk about the newest
 I will also talk about how i'm getting & storing the data.
 
 *Making a social map
-Reducing the dimensionality of network is an easy concept once you understand the Adjacency Matrix: 
+Reducing the dimensionality of network is an easy concept once you understand the Adjacency Matrix. I will describe the adjacency matrix, and different methods to reduce the dimensionality of this matrix. Then i will then talk specifically about the forced-based model i settled on. Happy spoiler: our objective function is incredibly simple.
 
-http://en.wikipedia.org/wiki/Adjacency_matrix
-
-I will describe the adjacency matrix, and different ways to reduce the dimensionality of this matrix. Then i will talk specifically about the forced-based model i settled on. Happy spoiler: our objective function is incredibly simple.
+When we're done we'll have a 2D map w/ all our users in their social space. Social space is a proxy for similarity, similar nodes are close together, different nodes are far apart. We can then use our embedding for visualization, indexing, search, similarity, and community detection.
 
 *Display and interaction
-I will talk about different web mapping options (canvas, svg, and tiled images). I'll also talk about web mapping tools tilemill & leaflet.
+I will talk about different web mapping options (html5 canvas, svg, and image tiling). I'll also talk about web mapping tools tilemill & leaflet.
 
-I'll show the application, and show a map of someone the audience knows.
+At this point i'll show the application in action.
 
 ADDITIONAL NOTES
 SmartTypes is entirely open source software. You can check out the source tree at https://github.com/smarttypes/smarttypes
@@ -73,7 +71,7 @@ I spoke about this (when i was first starting the project) at pyohio in 2011:
 
 http://python.mirocommunity.org/video/4380/pyohio-2011-using-pymc-to-clus
 
-I've since gained a lot of technical insight & direction. I feel like my 2011 pyohio talk was too abstract and philosophical. This talk will be more technical and to the point.
+I've since gained a lot of technical insight & direction. I feel like my 2011 pyohio talk was borderline too abstract and philosophical. This talk will be more technical and to the point.
 
 Here’s what I’m thinking for timing:
 
