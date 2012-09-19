@@ -1,7 +1,9 @@
 
+GIS on HBASE:
+
+https://github.com/hbaseinaction/gis
 
 
-new twitter rate limits:
 
 
 

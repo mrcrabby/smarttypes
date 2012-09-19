@@ -12,7 +12,7 @@ DURATION
 I prefer a 30 minute slot
 
 BRIEF OUTLINE
-Networks, social networks, chaos & complexity, prediction, big data; these are common buzzwords in a technologist's vocab. Social scientists of yore would be thrilled to see the data & tools the average hacker has at their disposal. 
+Networks, social networks, chaos & complexity, prediction, big data; these are common buzzwords in a technologist's vocab. Social scientists 'of yore' would be thrilled to see the data & tools the average hacker has at their disposal. 
 
 This is from a recent DARPA request for proposals:
 
