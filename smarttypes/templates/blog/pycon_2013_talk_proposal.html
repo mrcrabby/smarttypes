@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:py="http://genshi.edgewall.org/"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    lang="en">
+
+<xi:include href="../master.html" />      
+<head>
+
+</head>                    
+<body>
+
+<h2>2013 pycon talk proposal</h2>
+
+<h3>TITLE</h3>
+<p>Mapping our social world (reducing the dimensionality of a network)</p>
+
+<h3>CATEGORY</h3>
+<p>Network analysis</p>
+
+<h3>AUDIENCE LEVEL</h3>
+<p>Intermediate</p>
+
+<h3>DURATION</h3>
+<p>I prefer a 30 minute slot</p>
+
+<h3>BRIEF OUTLINE</h3>
+<p>I will talk about reducing a network to 2 dimensions, and why someone would do such a thing. I will describe network reduction in simple terms. I will talk about alternative methods, and i'll show the algo in action. Finally, i'll talk about spacial indexing, PostGIS and distributing the algo (and cool connections between this and agent based modeling).</p> 
+
+<h3>DETAILED ABSTRACT</h3>
+<p>Networks are a convenient abstraction. At a high level, networks are about objects and relationships between objects. It's surprising what we can do w/ this simple abstraction. I'll focus on social network analysis, keep in mind, the same methods and tools can be applied to networks in general (gene expression networks, the web, percolation of diseases, lexical networks, ...).</p>
+
+<p>*Getting the data</p>
+
+<p>Twitter rate limits have been a popular topic lately. I'll talk about the newest (1.1) version, and differences between this version and the prior (1.0) version. Sad spoiler: we can pull 1/6 of the data. Even so, i'll talk about how it's still possible to get lots of free twitter data.</p>
+
+<p>*Making a social map</p>
+
+<p>Reducing the dimensionality of a network is easy once you understand the adjacency matrix and matrix factorization. I will describe the adjacency matrix and matrix factorization. Then, i will talk about a simple objective that maps node similarity to node distance on our 2d plane.</p>
+
+<p>*Display, interaction, and community detection</p>
+
+<p>At this point i'll show the application in action (<a href="www.smarttypes.org">www.smarttypes.org</a>). I'll talk about different web mapping options &amp; tools (canvas, svg, and image tiling), and the mapping tools i'm using (tilemill &amp; leaflet). I will then talk about using our 2d reduction to identify communities of like minded people.</p>
+
+<p>*Scaling the algo</p>
+
+<p>I will talk about using PostGIS to store and spatially index our reduction, and how this spacial index can be used to scale the algo. I will then talk about Biomimicry, and 'what we can learn from 3.8 billion years of trial &amp; error'. I will then talk about agent based modeling, and how we can use this metaphor to distribute our algo.</p>
+
+<p>Here are two neat quotes about biomimicry and agent based modeling:</p>
+
+<p>"Social insect colonies tend to work as a decentralised system, which is composed of more or less autonomous units; cooperating and distributed in the environment managing ‘local information’." -- Giles Hutchins</p>
+
+<p>"The agent-based approach invites the interpretation of society as a distributed computational device, and in turn the interpretation of social dynamics as a type of computation." -- JOSHUA M. EPSTEIN</p>
+
+<h3>ADDITIONAL NOTES</h3>
+<p>SmartTypes is entirely open source: 
+<a href="https://github.com/smarttypes/smarttypes">
+    https://github.com/smarttypes/smarttypes
+</a>
+</p>
+
+<p>
+I started the project in May 2011. I first spoke (in the project's infant stage) @ PyOhio in 2011:
+
+<a href="http://python.mirocommunity.org/video/4380/pyohio-2011-using-pymc-to-clus">
+http://python.mirocommunity.org/video/4380/pyohio-2011-using-pymc-to-clus
+</a>
+</p>
+
+<p>
+I've since gained a lot of technical insight &amp; direction. 
+I finished the first version of the web app (<a href="www.smarttypes.org">www.smarttypes.org</a>) in August of this year, and am currently working on scaling the algo to make 'one colossal social map' (google maps for our social world).
+</p>
+
+<p>
+Here are some slides from a recent lightening talk:
+<a href="https://docs.google.com/a/smarttypes.org/presentation/d/1-9utXn4BFdXZncXn2fCF2NhQWhr7uvFF3B53eScueO0/edit#slide=id.p">
+https://docs.google.com/a/smarttypes.org/presentation/d/1-9utXn4BFdXZncXn2fCF2NhQWhr7uvFF3B53eScueO0/edit#slide=id.p
+</a>
+</p>
+
+<p>
+Here’s what i’m thinking as far as timing (i can do a 30 or 45 min slot):
+</p>
+
+<h4>Intro (5 min)</h4>
+<ul>
+<li>Hi, i'm Tim, blah blah blah</li>
+<li>What's this all about</li>
+<li>Networks (a handy abstraction)</li>
+<li>Examples of network analysis today</li>
+</ul>
+
+<h4>Getting the data (5 min)</h4>
+<ul>
+<li>Twitter terms of service</li>
+<li>Auth tokens (our key to lots of twitter data)</li>
+<li>Python tools to pull &amp; store twitter info</li>
+</ul>
+
+<h4>Making a social map (5 min)</h4>
+<ul>
+<li>The adjacency matrix</li>
+<li>Dimension reduction</li>
+<li>Why ?</li>
+<li>Similarity</li>
+<li>Community detection</li>
+<li>Storage &amp; indexing</li>
+</ul>
+
+<h4>Display and interaction (5 min)</h4>
+<ul>
+<li>Lets look @ the app</li>
+<li>Web maps</li>
+<li>Canvas, SVG, Image tiling</li>
+<li>Tilemill &amp; Leaflet</li>
+</ul>
+
+<h4>One map to rule them all (5 min)</h4>
+<ul>
+<li>Scaling the algo</li>
+<li>Biomimicry and agent based modeling</li>
+<li>The life of a vertex</li>
+<li>The individual objective, the collective objective</li>
+<li>Dealing w/ incomplete info</li>
+<li>Communication, belief, and influence</li>
+</ul>
+
+
+
+</body>                                    
+</html>
+

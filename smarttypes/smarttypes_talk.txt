@@ -11,10 +11,10 @@ DURATION
 I prefer a 30 minute slot
 
 BRIEF OUTLINE
-I'll talk about reducing a network to 2 dimensions, and why someone would do such a thing. I 'll describe network reduction in simple terms. I will talk about alternative methods, and i'll show the algo in action. Finally, i'll talk about spacial indexing, PostGIS and distributing the algo (and cool connections between this and agent based modeling).
+I will talk about reducing a network to 2 dimensions, and why someone would do such a thing. I will describe network reduction in simple terms. I will talk about alternative methods, and i'll show the algo in action. Finally, i'll talk about spacial indexing, PostGIS and distributing the algo (and cool connections between this and agent based modeling). 
 
 DETAILED ABSTRACT
-Networks are a convenient (fertile) abstraction. At a high level, networks are about objects and relationships between objects. It's surprising what we can do w/ this simple abstraction. I'll focus on social network analysis, keep in mind, the same methods and tools can be applied to networks in general (gene expression networks, the web, percolation of diseases, lexical networks, ...).
+Networks are a convenient abstraction. At a high level, networks are about objects and relationships between objects. It's surprising what we can do w/ this simple abstraction. I'll focus on social network analysis, keep in mind, the same methods and tools can be applied to networks in general (gene expression networks, the web, percolation of diseases, lexical networks, ...).
 
 *Getting the data
 
@@ -22,7 +22,7 @@ Twitter rate limits have been a popular topic lately. I'll talk about the newest
 
 *Making a social map
 
-Reducing the dimensionality of a network is easy once you understand the adjacency matrix and matrix factorization. I will describe the adjacency matrix and matrix factorization. Then, i will talk about a simple objective that maps node similarity to node proximity (on a 2d plane). 
+Reducing the dimensionality of a network is easy once you understand the adjacency matrix and matrix factorization. I will describe the adjacency matrix and matrix factorization. Then, i will talk about a simple objective that maps node similarity to node proximity (on a 2d plane).
 
 *Display, interaction, and community detection
 
@@ -30,7 +30,7 @@ At this point i'll show the application in action (www.smarttypes.org). I'll tal
 
 *Scaling the algo
 
-I will talk about using PostGIS to store and spatially index our reduction, and how this spacial index can be used to scale the algo. I will then talk about Biomimicry, and 'what we can learn from 3.8 billion years of trial & error'. I will then talk about agent based modeling, and how we can use this metaphor to distribute our algo. 
+I will talk about using PostGIS to store and spatially index our reduction, and how this spacial index can be used to scale the algo. I will then talk about Biomimicry, and 'what we can learn from 3.8 billion years of trial & error'. I will then talk about agent based modeling, and how we can use this metaphor to distribute our algo.
 
 Here are two neat quotes about biomimicry and agent based modeling:
 
@@ -39,33 +39,34 @@ Here are two neat quotes about biomimicry and agent based modeling:
 "The agent-based approach invites the interpretation of society as a distributed computational device, and in turn the interpretation of social dynamics as a type of computation." -- JOSHUA M. EPSTEIN
 
 ADDITIONAL NOTES
-SmartTypes is a personal side project, and is entirely open source. Check out the source tree at https://github.com/smarttypes/smarttypes. I began this research & project in May of 2011. I spoke about this first (in it's infant stage) @ PyOhio in 2011:
+SmartTypes is entirely open source:
 
- http://python.mirocommunity.org/video/4380/pyohio-2011-using-pymc-to-clus
+https://github.com/smarttypes/smarttypes
 
-I've since gained a lot of technical insight & direction. I finished the first version of the web app (www.smarttypes.org) in August of this year, and am now focused on scaling the algo to make 'one colossal social map' (think of it like google maps for our social world).
+I started the project in May 2011. I first spoke (in the project's infant stage) @ PyOhio in 2011:
+
+http://python.mirocommunity.org/video/4380/pyohio-2011-using-pymc-to-clus
+
+I've since gained a lot of technical insight & direction. I finished the first version of the web app (www.smarttypes.org) in August of this year, and am currently working on scaling the algo to make 'one colossal social map' (google maps for our social world).
 
 Here are some slides from a recent lightening talk:
 
- https://docs.google.com/a/smarttypes.org/presentation/d/1-9utXn4BFdXZncXn2fCF2NhQWhr7uvFF3B53eScueO0/edit#slide=id.p
+https://docs.google.com/a/smarttypes.org/presentation/d/1-9utXn4BFdXZncXn2fCF2NhQWhr7uvFF3B53eScueO0/edit#slide=id.p
 
 Here’s what i’m thinking as far as timing (i can do a 30 or 45 min slot):
 
 Intro (5 min)
-
 - Hi, i'm Tim, blah blah blah
-- This talk is about my side-project (mapping our social world)
+- What's this all about
 - Networks (a handy abstraction)
 - Examples of network analysis today
 
 Getting the data (5 min)
-
 - Twitter terms of service
 - Auth tokens (our key to lots of twitter data)
 - Python tools to pull & store twitter info
 
 Making a social map (5 min)
-
 - The adjacency matrix
 - Dimension reduction
 - Why ?
@@ -74,20 +75,17 @@ Making a social map (5 min)
 - Storage & indexing
 
 Display and interaction (5 min)
-
 - Lets look @ the app
 - Web maps
 - Canvas, SVG, Image tiling
-- Tilemill
-- Leaflet
+- Tilemill & Leaflet
 
 One map to rule them all (5 min)
-
-- Scaling the algo 
+- Scaling the algo
 - Biomimicry and agent based modeling
 - The life of a vertex
 - The individual objective, the collective objective
-- Dealing w/ incomplete info 
+- Dealing w/ incomplete info
 - Communication, belief, and influence
 
 Questions (5 mins)
