@@ -1,9 +1,8 @@
-
 TITLE
-Mapping our social world
+Mapping our social world (reducing the dimensionality of a network)
 
 CATEGORY
-Social network analysis
+Network analysis
 
 AUDIENCE LEVEL
 Intermediate
@@ -12,103 +11,84 @@ DURATION
 I prefer a 30 minute slot
 
 BRIEF OUTLINE
-Networks, social networks, chaos & complexity, prediction, big data; these are common buzzwords in a technologist's vocab. Social scientists 'of yore' would be thrilled to see the data & tools the average hacker has at their disposal. 
-
-This is from a recent DARPA request for proposals:
-
-https://www.fbo.gov/index?s=opportunity&mode=form&id=6ef12558b44258382452fcf02942396a&tab=core&_cview=0
-
-- Recognize persuasion campaign structures and influence operations across social media sites and communities.
-- Counter messaging of detected adversary influence operations. 
-- Identify participants and intent, and measure effects of persuasion campaigns.
-
-These are a few of the things people, governments, and big business are doing w/ social data today.
-
-I want to talk about my python-based open-source side-project (probably the most hyphenated words i've ever strung together):
-
-http://www.smarttypes.org/
-
-SmartTypes is about mapping our social world.  I don't mean showing where twitter users live on a geographic map (although that would be cool).  I mean reducing a social network to 2 dimensions (network compression). I'll explain more.
-
-Thanks to this project, i've been exposed to a lot of new / interesting libraries and ideas: 
-
-- Twitter data collection (oauth & tweepy)
-- Parallel processing w/ python (multiprocessing)
-- Linear algebra w/ python (numpy & scipy)
-- Network analysis (networkx & igraph)
-- Machine learning w/ python (scikit-learn)
-- GIS (postgis)
-- Web mapping tools (tillmile & leaflet) 
-- Distributed graph analysis (pregel & graphlab) 
-- Graph theory
-- Statistics and probability
-- Agent based modeling
+I'll talk about reducing a network to 2 dimensions, and why someone would do such a thing. I 'll describe network reduction in simple terms. I will talk about alternative methods, and i'll show the algo in action. Finally, i'll talk about spacial indexing, PostGIS and distributing the algo (and cool connections between this and agent based modeling).
 
 DETAILED ABSTRACT
-Networks are a convenient (fertile) abstraction. At a high level, networks are about objects and relationships between objects. It's surprising what can be done w/ this simple abstraction. I'll focus on social network analysis, keep in mind, the same methods and tools can be applied to any network (gene expression networks, the web, percolation of diseases, lexical networks, ...)
-
-There's a lot one can do within the umbrella of network analysis. I'll focus on reducing a network to 2 dimensions (graph embedding), and using this reduction to index communities and similarities.
+Networks are a convenient (fertile) abstraction. At a high level, networks are about objects and relationships between objects. It's surprising what we can do w/ this simple abstraction. I'll focus on social network analysis, keep in mind, the same methods and tools can be applied to networks in general (gene expression networks, the web, percolation of diseases, lexical networks, ...).
 
 *Getting the data
-Twitter rate limits have been a popular topic lately. I'll talk about the newest (1.1) version, and differences between the prior version. Sad spoiler: we can pull 1/6 of the data. Even so, we can still pull a lot of data (thousands and millions of users).
 
-I will also talk about how i'm getting & storing the data.
+Twitter rate limits have been a popular topic lately. I'll talk about the newest (1.1) version, and differences between this version and the prior (1.0) version. Sad spoiler: we can pull 1/6 of the data. Even so, i'll talk about how it's still possible to get lots of free twitter data.
 
 *Making a social map
-Reducing the dimensionality of network is an easy concept once you understand the Adjacency Matrix. I will describe the adjacency matrix, and different methods to reduce the dimensionality of this matrix. Then i will then talk specifically about the forced-based model i settled on. Happy spoiler: our objective function is incredibly simple.
 
-When we're done we'll have a 2D map w/ all our users in their social space. Social space is a proxy for similarity, similar nodes are close together, different nodes are far apart. We can then use our embedding for visualization, indexing, search, similarity, and community detection.
+Reducing the dimensionality of a network is easy once you understand the adjacency matrix and matrix factorization. I will describe the adjacency matrix and matrix factorization. Then, i will talk about a simple objective that maps node similarity to node proximity (on a 2d plane). 
 
-*Display and interaction
-I will talk about different web mapping options (html5 canvas, svg, and image tiling). I'll also talk about web mapping tools tilemill & leaflet.
+*Display, interaction, and community detection
 
-At this point i'll show the application in action.
+At this point i'll show the application in action (www.smarttypes.org). I'll talk about different web mapping options & tools (canvas, svg, and image tiling), and the mapping tools i'm using (tilemill & leaflet). I will then talk about using our 2d reduction to identify communities of like minded people.
+
+*Scaling the algo
+
+I will talk about using PostGIS to store and spatially index our reduction, and how this spacial index can be used to scale the algo. I will then talk about Biomimicry, and 'what we can learn from 3.8 billion years of trial & error'. I will then talk about agent based modeling, and how we can use this metaphor to distribute our algo. 
+
+Here are two neat quotes about biomimicry and agent based modeling:
+
+"Social insect colonies tend to work as a decentralised system, which is composed of more or less autonomous units; cooperating and distributed in the environment managing ‘local information’." -- Giles Hutchins
+
+"The agent-based approach invites the interpretation of society as a distributed computational device, and in turn the interpretation of social dynamics as a type of computation." -- JOSHUA M. EPSTEIN
 
 ADDITIONAL NOTES
-SmartTypes is entirely open source software. You can check out the source tree at https://github.com/smarttypes/smarttypes
+SmartTypes is a personal side project, and is entirely open source. Check out the source tree at https://github.com/smarttypes/smarttypes. I began this research & project in May of 2011. I spoke about this first (in it's infant stage) @ PyOhio in 2011:
 
-I spoke about this (when i was first starting the project) at pyohio in 2011:
+ http://python.mirocommunity.org/video/4380/pyohio-2011-using-pymc-to-clus
 
-http://python.mirocommunity.org/video/4380/pyohio-2011-using-pymc-to-clus
+I've since gained a lot of technical insight & direction. I finished the first version of the web app (www.smarttypes.org) in August of this year, and am now focused on scaling the algo to make 'one colossal social map' (think of it like google maps for our social world).
 
-I've since gained a lot of technical insight & direction. I feel like my 2011 pyohio talk was borderline too abstract and philosophical. This talk will be more technical and to the point.
+Here are some slides from a recent lightening talk:
 
-Here’s what I’m thinking for timing:
+ https://docs.google.com/a/smarttypes.org/presentation/d/1-9utXn4BFdXZncXn2fCF2NhQWhr7uvFF3B53eScueO0/edit#slide=id.p
+
+Here’s what i’m thinking as far as timing (i can do a 30 or 45 min slot):
 
 Intro (5 min)
-- Who am I?
-- What's this talk about
+
+- Hi, i'm Tim, blah blah blah
+- This talk is about my side-project (mapping our social world)
 - Networks (a handy abstraction)
-- Some examples of network analysis today
+- Examples of network analysis today
 
 Getting the data (5 min)
-- Twitters terms of service
-- Auth tokens
-- Pulling & storing twitter info
+
+- Twitter terms of service
+- Auth tokens (our key to lots of twitter data)
+- Python tools to pull & store twitter info
 
 Making a social map (5 min)
-- The adjacency Matrix
+
+- The adjacency matrix
 - Dimension reduction
-- Why 
+- Why ?
 - Similarity
 - Community detection
-- Indexing
+- Storage & indexing
 
 Display and interaction (5 min)
+
+- Lets look @ the app
 - Web maps
-- Canvas -- SVG -- Image tiling
+- Canvas, SVG, Image tiling
 - Tilemill
 - Leaflet
-- A quick look at the UI
 
 One map to rule them all (5 min)
-- Distributed graph analysis 
-- MapReduce & Pregel (similarities & differences)
-- The Bulk Synchronous Parallel (BSP) model
+
+- Scaling the algo 
+- Biomimicry and agent based modeling
 - The life of a vertex
-- The individual objective -- the collective objective
-- Dealing w/ incomplete information 
+- The individual objective, the collective objective
+- Dealing w/ incomplete info 
+- Communication, belief, and influence
 
 Questions (5 mins)
-
 
