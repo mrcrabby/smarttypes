@@ -1,20 +1,36 @@
 
-Graphreduce is designed to reduce a large network to a 2D map.
+Graphreduce is designed to reduce a large network to 2 dimensions.
 
-Think google maps for networks.
-
-We seek an 'accurate' reduction w/ an emphasis on finding communities.
+We seek an 'accurate' reduction.  Specifically, we seek a reduction that minimizes 
+the distance between connected nodes, and maximizes the distance between all nodes. 
 
 We assume the entire network won't fit into memory.
 
-Here are the steps:
+Here's a little more about the method:
 
- 1. Reduce root_node's network using LinLog energy model
+* We need the following pieces of info:
+  - Avg. location of all nodes
+  - Avg. location of followies
+  - Avg. location of followers (the golden rule)
 
- 2. Use DBSCAN to id communities
+* Here's how the algo will work:
+  - Start a superstep
+  - Calculate avg location of all nodes
+  - Partition the stage and hand out tasks to workers
+  - A worker takes 2 args (bounding_box, avg_position_of_all_nodes)
+  - A worker returns a dict that maps node_ids to a new position 
 
- 3. Use NLTK to generate community labels and full_txt_idx
-
- 4. Use TileMill and Mapnik to generate image tiles
+* Here's what a worker does:
+  - The key here is connected nodes get closer over time
+  - Pull useful stuff into memory 
+    + Nodes we need answers for (bounding box)
+    + Nodes likely to be connected to these nodes
+      - 100% of nodes within bounding box
+      - 80% of nodes 10 points away from the bounding box
+      - 60% of nodes 20 points away from the bounding box
+      - etc.. 
+      - The further away we go the less likely 
+  - Iterates over nodes it needs answers for:
+    + Use info in memory to id a new location
 
 

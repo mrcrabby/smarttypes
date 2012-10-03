@@ -13,6 +13,7 @@ from smarttypes.model.twitter_reduction_user import TwitterReductionUser
 from smarttypes.model.twitter_community import TwitterCommunity
 from smarttypes.model.ppygis import Point, MultiPoint
 from smarttypes.utils.postgres_handle import PostgresHandle
+from reduce_big_graph import reduce_with_intelligent_agents
 
 def get_igraph_graph(network):
     print 'load %s users into igraph' % len(network)
@@ -160,7 +161,8 @@ if __name__ == "__main__":
         start_here=start_here, distance=distance)
     g = get_igraph_graph(network)
     member_ids = np.array(g.vs['name'])
-    coordinates = reduce_with_linloglayout(g, root_user)
+    #coordinates = reduce_with_linloglayout(g, root_user)
+    coordinates = reduce_with_intelligent_agents(network)
     
     #id_communities
     vertex_clustering = id_communities(g, coordinates)

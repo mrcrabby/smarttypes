@@ -1,9 +1,10 @@
 
-GIS on HBASE:
 
-https://github.com/hbaseinaction/gis
+Think about what i'll do w/ the social map when it's ready.
 
+Like google maps, but think of a good reason for people to people to sign up.
 
+Focus on a specific niche (area), and think of useful things around that group.
 
 
 
