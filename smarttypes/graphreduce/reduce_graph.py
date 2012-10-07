@@ -42,11 +42,11 @@ def write_to_pajek_file(g):
     g.vs["id"] = network.keys() #need this for pajek format
     print 'write to pajek format'
     root_file_name = root_user.screen_name
-    f = open('io/%s.net' % root_file_name, 'w')
+    f = open('static/%s.net' % root_file_name, 'w')
     g.write(f, format='pajek')
 
 def reduce_with_linloglayout(g, root_user):
-    input_file = open('io/%s.input' % root_user.screen_name, 'w') 
+    input_file = open('static/%s.input' % root_user.screen_name, 'w') 
     for vertex in g.vs:
         for successor in vertex.successors():
             input_file.write('%s %s \n' % (vertex['name'], successor['name']))
@@ -55,10 +55,10 @@ def reduce_with_linloglayout(g, root_user):
     #$ cd smarttypes/smarttypes/graphreduce/LinLogLayout/src/
     #$ javac -d ../bin LinLogLayout.java
     os.system('cd LinLogLayout; java -cp bin LinLogLayout 2 %s %s;' % (
-        '../io/%s.input' % root_user.screen_name,
-        '../io/%s.output' % root_user.screen_name,
+        '../static/%s.input' % root_user.screen_name,
+        '../static/%s.output' % root_user.screen_name,
     ))
-    f = open('io/%s.output' % root_user.screen_name)
+    f = open('static/%s.output' % root_user.screen_name)
     layout_list = [None] * len(g.vs)
     for line in f:
         line_pieces = line.split(' ')
@@ -131,7 +131,7 @@ def get_network_stats(network, g, vertex_clustering):
     return global_pagerank, community_pagerank, community_score
 
 def calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score):
-    hybrid_pagerank = (community_pagerank * 0.5) + (community_score * 0.5) + (global_pagerank * 2.5)
+    hybrid_pagerank = (community_pagerank * 0.2) + (community_score * 0.2) + (global_pagerank * 2.5)
     #hybrid_pagerank = global_pagerank
     hybrid_pagerank = hybrid_pagerank / scoreatpercentile(hybrid_pagerank, 99)
     return hybrid_pagerank
@@ -177,11 +177,11 @@ if __name__ == "__main__":
     global_pagerank, community_pagerank, community_score = network_stats
     hybrid_pagerank = calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score)
 
-    #save reduction
+    print "save reduction"
     reduction = TwitterReduction.create_reduction(root_user.id, [0, 0, 0], False, postgres_handle)
     postgres_handle.connection.commit()
 
-    #save reduction users
+    print "save reduction users"
     reduction_users = []
     for i in range(len(member_ids)):
         tru = TwitterReductionUser(postgres_handle=postgres_handle)
@@ -193,7 +193,7 @@ if __name__ == "__main__":
         reduction_users.append(tru.save())
         postgres_handle.connection.commit()
 
-    #save communities
+    print "save communities"
     communities = []
     for i in range(len(vertex_clustering)):
         member_idxs = vertex_clustering[i]

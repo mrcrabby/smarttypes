@@ -3,7 +3,7 @@ from math import pi,cos,sin,log,exp,atan
 from subprocess import call
 import sys, os
 from Queue import Queue
-import mapnik2
+import mapnik
 import threading
 import argparse
 
@@ -12,7 +12,7 @@ from smarttypes.utils.postgres_handle import PostgresHandle
 from smarttypes.model.twitter_reduction import TwitterReduction
 
 # custom_fonts_dir = '/Library/Fonts/'
-# mapnik2.register_fonts(custom_fonts_dir)
+# mapnik.register_fonts(custom_fonts_dir)
 
 DEG_TO_RAD = pi/180
 RAD_TO_DEG = 180/pi
@@ -61,12 +61,12 @@ class RenderThread:
     def __init__(self, tile_dir, mapfile, q, printLock, maxZoom):
         self.tile_dir = tile_dir
         self.q = q
-        self.m = mapnik2.Map(256, 256)
+        self.m = mapnik.Map(256, 256)
         self.printLock = printLock
         # Load style XML
-        mapnik2.load_map(self.m, mapfile, True)
+        mapnik.load_map(self.m, mapfile, True)
         # Obtain <Map> projection
-        self.prj = mapnik2.Projection(self.m.srs)
+        self.prj = mapnik.Projection(self.m.srs)
         # Projects between tile pixel co-ordinates and LatLong (EPSG:4326)
         self.tileproj = GoogleProjection(maxZoom+1)
 
@@ -81,22 +81,22 @@ class RenderThread:
         l1 = self.tileproj.fromPixelToLL(p1, z);
 
         # Convert to map projection (e.g. mercator co-ords EPSG:900913)
-        c0 = self.prj.forward(mapnik2.Coord(l0[0],l0[1]))
-        c1 = self.prj.forward(mapnik2.Coord(l1[0],l1[1]))
+        c0 = self.prj.forward(mapnik.Coord(l0[0],l0[1]))
+        c1 = self.prj.forward(mapnik.Coord(l1[0],l1[1]))
 
         # Bounding box for the tile
-        if hasattr(mapnik2,'mapnik_version') and mapnik2.mapnik_version() >= 800:
-            bbox = mapnik2.Box2d(c0.x,c0.y, c1.x,c1.y)
+        if hasattr(mapnik,'mapnik_version') and mapnik.mapnik_version() >= 800:
+            bbox = mapnik.Box2d(c0.x,c0.y, c1.x,c1.y)
         else:
-            bbox = mapnik2.Envelope(c0.x,c0.y, c1.x,c1.y)
+            bbox = mapnik.Envelope(c0.x,c0.y, c1.x,c1.y)
         render_size = 256
         self.m.resize(render_size, render_size)
         self.m.zoom_to_box(bbox)
         self.m.buffer_size = 128
 
         # Render image with default Agg renderer
-        im = mapnik2.Image(render_size, render_size)
-        mapnik2.render(self.m, im)
+        im = mapnik.Image(render_size, render_size)
+        mapnik.render(self.m, im)
         im.save(tile_uri, 'png256')
 
 
@@ -120,7 +120,7 @@ class RenderThread:
             if bytes == 103:
                 empty = " Empty Tile "
             self.printLock.acquire()
-            print name, ":", z, x, y, exists, empty
+            #print name, ":", z, x, y, exists, empty
             self.printLock.release()
             self.q.task_done()
 
