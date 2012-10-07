@@ -13,7 +13,7 @@ from smarttypes.model.twitter_reduction_user import TwitterReductionUser
 from smarttypes.model.twitter_community import TwitterCommunity
 from smarttypes.model.ppygis import Point, MultiPoint
 from smarttypes.utils.postgres_handle import PostgresHandle
-from reduce_big_graph import reduce_with_intelligent_agents
+from reduce_big_graph import reduce_with_semi_intelligent_agents
 
 def get_igraph_graph(network):
     print 'load %s users into igraph' % len(network)
@@ -74,6 +74,7 @@ def reproject_to_spherical_mercator(coordinates):
     current_projection_bb = np.array([coordinates.min(0), coordinates.max(0)])
     reprojection = (spherical_mercator_bb / current_projection_bb).min(0)
     return coordinates * reprojection
+    return coordinates
 
 def id_communities(g, coordinates):
     layout_distance = spatial.distance.squareform(spatial.distance.pdist(coordinates))
@@ -130,7 +131,8 @@ def get_network_stats(network, g, vertex_clustering):
     return global_pagerank, community_pagerank, community_score
 
 def calculate_hybrid_pagerank(global_pagerank, community_pagerank, community_score):
-    hybrid_pagerank = (community_pagerank * 1.0) + (community_score * 1.5) + (global_pagerank * 0.5)
+    hybrid_pagerank = (community_pagerank * 0.5) + (community_score * 0.5) + (global_pagerank * 2.5)
+    #hybrid_pagerank = global_pagerank
     hybrid_pagerank = hybrid_pagerank / scoreatpercentile(hybrid_pagerank, 99)
     return hybrid_pagerank
 
@@ -149,8 +151,8 @@ if __name__ == "__main__":
         distance = int(sys.argv[2])
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
     if distance < 1:
+        distance = 20
         #distance = 25000 / len(root_user.following[:1000])
-        distance = 25000 / len(root_user.following[:1000])
 
     #get network and reduce
     if smarttypes.config.IS_PROD:
@@ -162,7 +164,7 @@ if __name__ == "__main__":
     g = get_igraph_graph(network)
     member_ids = np.array(g.vs['name'])
     #coordinates = reduce_with_linloglayout(g, root_user)
-    coordinates = reduce_with_intelligent_agents(network)
+    coordinates = reduce_with_semi_intelligent_agents(g)
     
     #id_communities
     vertex_clustering = id_communities(g, coordinates)
