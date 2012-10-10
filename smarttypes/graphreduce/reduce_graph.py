@@ -38,12 +38,12 @@ def get_igraph_graph(network):
         print 'graph is not connected'
     return g
 
-def write_to_pajek_file(g):
-    g.vs["id"] = network.keys() #need this for pajek format
-    print 'write to pajek format'
+def write_to_graphml_file(root_user, g, network):
+    #g.vs["id"] = network.keys() #need this for pajek format
+    print 'write to graphml file'
     root_file_name = root_user.screen_name
-    f = open('static/%s.net' % root_file_name, 'w')
-    g.write(f, format='pajek')
+    f = open('static/%s.graphml' % root_file_name, 'w')
+    g.write(f, format='graphml')
 
 def reduce_with_linloglayout(g, root_user):
     input_file = open('static/%s.input' % root_user.screen_name, 'w') 
