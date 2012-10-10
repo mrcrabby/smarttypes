@@ -19,8 +19,8 @@ if __name__ == "__main__":
     else:
         start_here = datetime(2012, 8, 1)
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
-    distance = 25000 / len(root_user.following[:1000])
-    #distance = 0
+    #distance = 25000 / len(root_user.following[:1000])
+    distance = 0
     network = TwitterUser.get_rooted_network(root_user, postgres_handle, start_here=start_here, distance=distance)
     print "writing %s nodes to disk" % len(network)
     g = reduce_graph.get_igraph_graph(network)
