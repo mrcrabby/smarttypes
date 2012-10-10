@@ -1,31 +1,9 @@
 
-import smarttypes, sys, csv
+import smarttypes, sys
 from smarttypes.model.twitter_user import TwitterUser
-from smarttypes.model.twitter_tweet import TwitterTweet
 from datetime import datetime, timedelta
 from smarttypes.utils.postgres_handle import PostgresHandle
 from smarttypes.graphreduce import reduce_graph
-
-
-
-def mk_node_attrs_csv(g, file_like, postgres_handle):
-    properties = ['id', 'screen_name', 'location_name', 'description', 'url']
-    try:
-        writer = csv.writer(file_like)
-        writer.writerow(properties)
-        for write_this_id in g.vs['id']:
-            write_this_user = TwitterUser.get_by_id(write_this_id, postgres_handle)
-            write_this = []
-            for x in properties:
-                value = write_this_user.__dict__.get(x, '')
-                if value:
-                    value = value.encode('ascii', 'ignore')
-                    value = value.replace('\r\n', ' ').replace('\n', ' ').replace(',', ' ')
-                write_this.append(value)
-            writer.writerow(write_this)
-    finally:
-        file_like.close()
-
 
 if __name__ == "__main__":
 
@@ -41,8 +19,8 @@ if __name__ == "__main__":
     else:
         start_here = datetime(2012, 8, 1)
     root_user = TwitterUser.by_screen_name(screen_name, postgres_handle)
-    #distance = 25000 / len(root_user.following[:1000])
-    distance = 0
+    distance = 25000 / len(root_user.following[:1000])
+    #distance = 0
     network = TwitterUser.get_rooted_network(root_user, postgres_handle, start_here=start_here, distance=distance)
     print "writing %s nodes to disk" % len(network)
     g = reduce_graph.get_igraph_graph(network)
